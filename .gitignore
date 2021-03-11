@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#Temp folders
+OverlordEngine\.vs
+OverlordEngine\Libs
