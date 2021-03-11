@@ -5,10 +5,14 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 3\TutorialScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="CourseObjects\Week 3\MinionScene.h" />
+    <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
+    <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
   </ItemGroup>
 </Project>

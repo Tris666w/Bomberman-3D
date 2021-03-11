@@ -34,3 +34,8 @@
 #Temp folders
 OverlordEngine/.vs/*
 OverlordEngine/Libs/*
+OverlordEngine/Build/*
+OverlordEngine/OverlordEngine/Debug/*
+OverlordEngine/OverlordEngine/Release/*
+OverlordEngine/OverlordProject/Debug/*
+OverlordEngine/OverlordProject/Release/*

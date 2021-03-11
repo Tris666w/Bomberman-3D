@@ -11,6 +11,8 @@
 
 #ifdef W3
 #include "CourseObjects/Week 3/MinionScene.h"
+#include "CourseObjects/Week 3/PhysicsTestScene.h"
+#include "CourseObjects/Week 3/TutorialScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -30,7 +32,10 @@ void MainGame::Initialize()
 {
 	
 #ifdef W3
+	SceneManager::GetInstance()->AddGameScene(new PhysicsTestScene());
 	SceneManager::GetInstance()->AddGameScene(new MinionScene());
+	SceneManager::GetInstance()->AddGameScene(new TutorialScene());
+	
 #endif
 }
 
