@@ -7,6 +7,7 @@
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\TutorialScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
+    <ClCompile Include="PongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -14,5 +15,6 @@
     <ClInclude Include="CourseObjects\Week 3\MinionScene.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 3\PongScene.h" />
   </ItemGroup>
 </Project>

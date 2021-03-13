@@ -101,6 +101,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
   <ItemGroup>
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
+    <ClCompile Include="PongScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -126,6 +127,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
   <ItemGroup>
     <ClInclude Include="CourseObjects\Week 3\MinionScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 3\PongScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
