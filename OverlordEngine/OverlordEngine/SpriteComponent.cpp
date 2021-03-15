@@ -32,7 +32,7 @@ void SpriteComponent::Update(const GameContext& )
 {
 }
 
-void SpriteComponent::Draw(const GameContext& )
+void SpriteComponent::Draw(const GameContext&)
 {
 	if (!m_pTexture)
 		return;

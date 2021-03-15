@@ -102,12 +102,34 @@ void SpriteRenderer::UpdateBuffer(const GameContext& gameContext)
 
 	//TODO:
 	// if the vertex buffer does not exists, or the number of sprites is bigger then the buffer size
-	//		release the buffer
-	//		update the buffer size (if needed)
-	//		Create a new buffer. Make sure the Usage flag is set to Dynamic, you bind to the vertex buffer
-	//		and you set the cpu access flags to access_write
-	//
-	//		Finally create the buffer. You can use the device in the game context. Be sure to log the HResult!
+	if (!m_pVertexBuffer || m_Sprites.size() > m_BufferSize)
+	{
+		//release the buffer
+		if(m_pVertexBuffer)
+			m_pVertexBuffer->Release();
+		
+		//update the buffer size (if needed)
+		m_BufferSize = m_Sprites.size();
+		
+		//Create a new buffer. Make sure the Usage flag is set to Dynamic, you bind to the vertex buffer
+		//and you set the cpu access flags to access_write
+		D3D11_BUFFER_DESC bufferDesc{};
+		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bufferDesc.ByteWidth = sizeof(SpriteVertex) * static_cast<uint32_t>(m_BufferSize);
+		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bufferDesc.MiscFlags = 0;
+
+		HRESULT result = S_OK;
+		result = gameContext.pDevice->CreateBuffer(&bufferDesc, nullptr, &m_pVertexBuffer);
+		//Finally create the buffer. You can use the device in the game context. Be sure to log the HResult!
+		if (result != S_OK)
+		{
+			Logger::LogHResult(result, L"SpriteRenderer.ccp - UpdateBuffer() - CreateBuffer()");
+			return;
+		}
+		
+	}
 
 	//------------------------
 	//Sort Sprites
@@ -132,9 +154,13 @@ void SpriteRenderer::UpdateBuffer(const GameContext& gameContext)
 
 	//TODO: Fill Buffer
 	// Finally fill the  buffer. You will need to create a D3D11_MAPPED_SUBRESOURCE
+	D3D11_MAPPED_SUBRESOURCE mappedSubResource;
 	// Next you will need to use the device context to map the vertex buffer to the mapped resource
+	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedSubResource);
 	// use memcpy to copy all our sprites to the mapped resource
+	memcpy(mappedSubResource.pData, m_Sprites.data(), sizeof(SpriteVertex) * static_cast<uint32_t>(m_BufferSize));
 	// unmap the vertex buffer
+	gameContext.pDeviceContext->Unmap(m_pVertexBuffer, 0);
 }
 
 void SpriteRenderer::Draw(const GameContext& gameContext)
@@ -191,7 +217,7 @@ void SpriteRenderer::Draw(const GameContext& gameContext)
 }
 
 void SpriteRenderer::Draw(TextureData* pTexture, DirectX::XMFLOAT2 position, DirectX::XMFLOAT4 color,
-                          DirectX::XMFLOAT2 pivot, DirectX::XMFLOAT2 scale, float rotation, float depth)
+						  DirectX::XMFLOAT2 pivot, DirectX::XMFLOAT2 scale, float rotation, float depth)
 {
 	SpriteVertex vertex{};
 
@@ -215,8 +241,8 @@ void SpriteRenderer::Draw(TextureData* pTexture, DirectX::XMFLOAT2 position, Dir
 }
 
 void SpriteRenderer::DrawImmediate(const GameContext& gameContext, ID3D11ShaderResourceView* pSrv,
-                                   DirectX::XMFLOAT2 position, DirectX::XMFLOAT4 color, DirectX::XMFLOAT2 pivot,
-                                   DirectX::XMFLOAT2 scale, float rotation)
+								   DirectX::XMFLOAT2 position, DirectX::XMFLOAT4 color, DirectX::XMFLOAT2 pivot,
+								   DirectX::XMFLOAT2 scale, float rotation)
 {
 	//Create Immediate VB
 	if (!m_pImmediateVertexBuffer)

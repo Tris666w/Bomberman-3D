@@ -52,7 +52,7 @@ UberMaterial::UberMaterial() : Material(L"Resources/Effects/UberShader.fx", L"Wi
 	,m_ColorSpecular({1.f,1.f,1.f,1.f})
 	,m_bSpecularLevelTexture(false)
 	,m_pSpecularLevelTexture(nullptr)
-	,m_Shininess(10)
+	,m_Shininess(2)
 	,m_ColorAmbient({1.f,1.f,1.f,1.f})
 	,m_AmbientIntensity(0.1f)
 	,m_bFlipGreenChannel(false)
@@ -444,7 +444,7 @@ void UberMaterial::UpdateEffectVariables(const GameContext& gameContext, ModelCo
 	m_pUseSpecularLevelTextureVariable->SetBool(m_bSpecularLevelTexture);
 	if (m_pSpecularLevelTexture)
 		m_pSpecularLevelSRVvariable->SetResource(m_pSpecularLevelTexture->GetShaderResourceView());
-	m_pShininessVariable->SetBool(m_Shininess);
+	m_pShininessVariable->SetInt(m_Shininess);
 
 	//AMBIENT
 	//*******

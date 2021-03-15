@@ -288,15 +288,14 @@ struct VS_Output
 
 float3 CalculateSpecularBlinn(float3 viewDirection, float3 normal, float2 texCoord)
 {
-	if (!gUseTextureSpecularIntensity)
-	{
-		return float3(0, 0, 0);
-	}
-	
 	const float3 h = normalize(viewDirection + normal);
 	float cosAngle = saturate(dot(h, viewDirection));
 	
-	float phongExponent = gTextureSpecularIntensity.Sample(gTextureSampler, texCoord).r * gShininess;
+	float phongExponent = 0.1f * gShininess;
+	if (gUseTextureSpecularIntensity)
+	{
+		phongExponent = gTextureSpecularIntensity.Sample(gTextureSampler, texCoord).r * gShininess;
+	}
 	
 	float3 specularColor = gColorSpecular;
 	specularColor *= pow(cosAngle, phongExponent);
@@ -306,15 +305,16 @@ float3 CalculateSpecularBlinn(float3 viewDirection, float3 normal, float2 texCoo
 
 float3 CalculateSpecularPhong(float3 viewDirection, float3 normal, float2 texCoord)
 {
-	if (!gUseTextureSpecularIntensity)
-	{
-		return float3(0, 0, 0);
-	}
 	
 	const float3 r = reflect(-gLightDirection, normal);
 	float cosAngle = saturate(dot(r, viewDirection));
 	
-	float phongExponent = gTextureSpecularIntensity.Sample(gTextureSampler, texCoord).r * gShininess;
+	float phongExponent = 0.5f * gShininess;
+	
+	if (gUseTextureSpecularIntensity)
+	{
+		phongExponent = gTextureSpecularIntensity.Sample(gTextureSampler, texCoord).r * gShininess;
+	}
 	
 	float3 specularColor = gColorSpecular;
 	specularColor *= pow(cosAngle, phongExponent);
@@ -333,7 +333,7 @@ float3 CalculateSpecular(float3 viewDirection, float3 normal, float2 texCoord)
 	
 	if (gUseSpecularPhong)
 	{
-		specColor += CalculateSpecularPhong(viewDirection,normal,texCoord);
+		specColor += CalculateSpecularPhong(viewDirection, normal, texCoord);
 	}
 	return specColor;
 	}

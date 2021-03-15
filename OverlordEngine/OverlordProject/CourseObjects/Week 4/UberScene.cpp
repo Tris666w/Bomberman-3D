@@ -38,7 +38,6 @@ void UberScene::Initialize()
 	m_pMaterial->EnableDiffuseTexture(true);
 	m_pMaterial->SetDiffuseTexture(L"Resources/Textures/Chair_Dark.dds");
 
-	m_pMaterial->EnableSpecularBlinn(true);
 	m_pMaterial->EnableSpecularPhong(true);
 	
 	m_pMaterial->EnableEnvironmentMapping(true);

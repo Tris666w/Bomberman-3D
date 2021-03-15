@@ -29,7 +29,7 @@ void SpriteTestScene::Initialize()
 void SpriteTestScene::Update()
 {
 	const auto gameContext = GetGameContext();
-
+	
 	m_FpsInterval += gameContext.pGameTime->GetElapsed();
 	if (m_FpsInterval >= FPS_COUNTER)
 	{
@@ -41,4 +41,6 @@ void SpriteTestScene::Update()
 }
 
 void SpriteTestScene::Draw()
-{}
+{
+	
+}
