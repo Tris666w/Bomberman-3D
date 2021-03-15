@@ -122,6 +122,8 @@
     <ClInclude Include="BinaryReader.h" />
     <ClInclude Include="Enumerations.h" />
     <ClInclude Include="PhysxHelper.h" />
+    <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="TextureData.h" />
     <ClInclude Include="TextureDataLoader.h" />
     <ClInclude Include="utils.h" />
@@ -173,6 +175,8 @@
     <ClCompile Include="EffectHelper.cpp" />
     <ClCompile Include="BinaryReader.cpp" />
     <ClCompile Include="PhysxHelper.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TextureData.cpp" />
     <ClCompile Include="TextureDataLoader.cpp" />
     <ClCompile Include="VertexHelper.cpp" />

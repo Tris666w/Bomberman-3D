@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W4_A
+#define W4_B
 
 #ifdef W3
 	#include "CourseObjects/Week 3/MinionScene.h"
@@ -19,6 +19,9 @@
 	#include "CourseObjects/Week 4/ModelTestScene.h"
 	#include "CourseObjects/Week 4/SpikeyScene.h"
 	#include "CourseObjects/Week 4/UberScene.h"
+#endif
+#ifdef W4_B
+	#include "CourseObjects/Week 4/SpriteTestScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -45,11 +48,14 @@ void MainGame::Initialize()
 	SceneManager::GetInstance()->SetActiveGameScene(L"MinionScene");
 #endif
 #ifdef W4_A
-	SceneManager::GetInstance()->AddGameScene(new UberScene());
 	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
-
-	//SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"UberScene");
+	SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
+	SceneManager::GetInstance()->AddGameScene(new UberScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"ModelTestScene");
+#endif
+#ifdef W4_B
+	SceneManager::GetInstance()->AddGameScene(new SpriteTestScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"SpriteTestScene");
 #endif
 }
 

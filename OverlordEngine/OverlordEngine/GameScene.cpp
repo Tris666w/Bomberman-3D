@@ -7,6 +7,7 @@
 #include "Components.h"
 #include "DebugRenderer.h"
 #include "RenderTarget.h"
+#include "SpriteRenderer.h"
 #include "PhysxProxy.h"
 #include "SoundManager.h"
 #include <algorithm>
@@ -169,6 +170,7 @@ void GameScene::RootDraw()
 
 	//Draw Debug Stuff
 	DebugRenderer::Draw(m_GameContext);
+	SpriteRenderer::GetInstance()->Draw(m_GameContext);
 }
 
 void GameScene::RootSceneActivated()

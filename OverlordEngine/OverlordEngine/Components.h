@@ -7,3 +7,4 @@
 #include "RigidBodyComponent.h"
 #include "ColliderComponent.h"
 #include "ModelComponent.h"
+#include "SpriteComponent.h"

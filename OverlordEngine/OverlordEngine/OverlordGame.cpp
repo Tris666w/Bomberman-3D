@@ -6,6 +6,7 @@
 #include "PhysxManager.h"
 #include "DebugRenderer.h"
 #include "SoundManager.h"
+#include "SpriteRenderer.h"
 
 GameSettings OverlordGame::m_GameSettings = GameSettings();
 
@@ -38,6 +39,7 @@ OverlordGame::~OverlordGame()
 	//Game Cleanup
 	ContentManager::Release();
 	DebugRenderer::Release();
+	SpriteRenderer::DestroyInstance();
 	SceneManager::DestroyInstance();
 	PhysxManager::DestroyInstance();
 	SoundManager::DestroyInstance();
@@ -286,6 +288,7 @@ HRESULT OverlordGame::InitializeGame()
 	//MANAGER INITIALIZE
 	ContentManager::Initialize(m_pDevice);
 	DebugRenderer::InitRenderer(m_pDevice);
+	SpriteRenderer::GetInstance()->InitRenderer(m_pDevice);
 	SoundManager::GetInstance(); //Constructor calls Initialize
 
 	// Update PP
