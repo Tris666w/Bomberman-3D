@@ -7,13 +7,18 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W3
+#define W4_A
 
 #ifdef W3
-#include "CourseObjects/Week 3/MinionScene.h"
-#include "CourseObjects/Week 3/PhysicsTestScene.h"
-#include "CourseObjects/Week 3/TutorialScene.h"
-#include "CourseObjects/Week 3/PongScene.h"
+	#include "CourseObjects/Week 3/MinionScene.h"
+	#include "CourseObjects/Week 3/TutorialScene.h"
+	#include "CourseObjects/Week 3/ComponentTestScene.h"
+	#include "CourseObjects/Week 3/Pong/PongScene.h"
+#endif
+#ifdef W4_A
+	#include "CourseObjects/Week 4/ModelTestScene.h"
+	#include "CourseObjects/Week 4/SpikeyScene.h"
+	#include "CourseObjects/Week 4/UberScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -31,13 +36,20 @@ void MainGame::OnGamePreparing(GameSettings& gameSettings)
 
 void MainGame::Initialize()
 {
-	
 #ifdef W3
-	SceneManager::GetInstance()->AddGameScene(new PongScene());
-	SceneManager::GetInstance()->AddGameScene(new PhysicsTestScene());
 	SceneManager::GetInstance()->AddGameScene(new MinionScene());
 	SceneManager::GetInstance()->AddGameScene(new TutorialScene());
-	
+	SceneManager::GetInstance()->AddGameScene(new ComponentTestScene());
+	SceneManager::GetInstance()->AddGameScene(new PongScene());
+
+	SceneManager::GetInstance()->SetActiveGameScene(L"MinionScene");
+#endif
+#ifdef W4_A
+	SceneManager::GetInstance()->AddGameScene(new UberScene());
+	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
+
+	//SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"UberScene");
 #endif
 }
 

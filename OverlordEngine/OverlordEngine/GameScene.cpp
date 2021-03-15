@@ -26,6 +26,7 @@ GameScene::~GameScene()
 {
 	SafeDelete(m_GameContext.pGameTime);
 	SafeDelete(m_GameContext.pInput);
+	SafeDelete(m_GameContext.pMaterialManager);
 
 	for (auto pChild : m_pChildren)
 	{
@@ -104,6 +105,8 @@ void GameScene::RootInitialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 	m_GameContext.pInput = new InputManager();
 	InputManager::Initialize();
+
+	m_GameContext.pMaterialManager = new MaterialManager();
 
 	m_GameContext.pDevice = pDevice;
 	m_GameContext.pDeviceContext = pDeviceContext;

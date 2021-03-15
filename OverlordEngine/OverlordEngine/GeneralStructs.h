@@ -2,6 +2,7 @@
 #include "GameTime.h"
 #include "CameraComponent.h"
 #include "InputManager.h"
+#include "MaterialManager.h"
 
 class CameraComponent;
 
@@ -53,4 +54,5 @@ struct GameContext
 	ID3D11Device* pDevice;
 	ID3D11DeviceContext* pDeviceContext;
 	InputManager* pInput;
+	MaterialManager* pMaterialManager;
 };

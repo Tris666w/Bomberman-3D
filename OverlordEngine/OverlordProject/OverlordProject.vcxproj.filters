@@ -7,7 +7,14 @@
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\TutorialScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
-    <ClCompile Include="PongScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 3\PongScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 4\ModelTestScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 4\SpikeyScene.cpp" />
+    <ClCompile Include="Materials\ColorMaterial.cpp" />
+    <ClCompile Include="Materials\SpikeyMaterial.cpp" />
+    <ClCompile Include="Materials\UberMaterial.cpp" />
+    <ClCompile Include="Materials\DiffuseMaterial.cpp" />
+    <ClCompile Include="CourseObjects\Week 4\UberScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -16,5 +23,12 @@
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PongScene.h" />
+    <ClInclude Include="CourseObjects\Week 4\ModelTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 4\SpikeyScene.h" />
+    <ClInclude Include="Materials\ColorMaterial.h" />
+    <ClInclude Include="Materials\SpikeyMaterial.h" />
+    <ClInclude Include="Materials\UberMaterial.h" />
+    <ClInclude Include="Materials\DiffuseMaterial.h" />
+    <ClInclude Include="CourseObjects\Week 4\UberScene.h" />
   </ItemGroup>
 </Project>

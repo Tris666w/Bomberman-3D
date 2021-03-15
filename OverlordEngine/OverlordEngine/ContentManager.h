@@ -28,8 +28,8 @@ public:
 	static void Release();
 
 private:
-	ContentManager();
-	~ContentManager(void);
+	ContentManager() = default;
+	~ContentManager() = default;
 
 	static std::vector<BaseLoader*> m_Loaders;
 	static ID3D11Device* m_pDevice;

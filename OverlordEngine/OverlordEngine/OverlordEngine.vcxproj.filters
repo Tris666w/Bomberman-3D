@@ -98,6 +98,33 @@
     <ClCompile Include="EffectLoader.cpp">
       <Filter>Content</Filter>
     </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshFilterLoader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="PxConvexMeshLoader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="PxTriangleMeshLoader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDataLoader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshFilter.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureData.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -223,6 +250,36 @@
     </ClInclude>
     <ClInclude Include="EffectLoader.h">
       <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFilterLoader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="PxConvexMeshLoader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="PxTriangleMeshLoader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDataLoader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFilter.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureData.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

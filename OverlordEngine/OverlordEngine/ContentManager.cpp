@@ -2,19 +2,14 @@
 
 #include "ContentManager.h"
 #include "EffectLoader.h"
+#include "MeshFilterLoader.h"
+#include "TextureDataLoader.h"
+#include "PxTriangleMeshLoader.h"
+#include "PxConvexMeshLoader.h"
 
 std::vector<BaseLoader*> ContentManager::m_Loaders = std::vector<BaseLoader*>();
 ID3D11Device* ContentManager::m_pDevice = nullptr;
 bool ContentManager::m_IsInitialized = false;
-
-ContentManager::ContentManager()
-{
-}
-
-
-ContentManager::~ContentManager(void)
-{
-}
 
 void ContentManager::Release()
 {
@@ -34,6 +29,10 @@ void ContentManager::Initialize(ID3D11Device* pDevice)
 		m_pDevice = pDevice;
 		m_IsInitialized = true;
 		AddLoader(new EffectLoader());
+		AddLoader(new MeshFilterLoader());
+		AddLoader(new TextureDataLoader());
+		AddLoader(new PxTriangleMeshLoader());
+		AddLoader(new PxConvexMeshLoader());
 	}
 }
 

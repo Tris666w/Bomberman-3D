@@ -97,6 +97,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="MeshFilter.h" />
+    <ClInclude Include="MeshFilterLoader.h" />
+    <ClInclude Include="ModelComponent.h" />
+    <ClInclude Include="PxConvexMeshLoader.h" />
+    <ClInclude Include="PxTriangleMeshLoader.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="InputManager.h" />
@@ -115,6 +122,9 @@
     <ClInclude Include="BinaryReader.h" />
     <ClInclude Include="Enumerations.h" />
     <ClInclude Include="PhysxHelper.h" />
+    <ClInclude Include="TextureData.h" />
+    <ClInclude Include="TextureDataLoader.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="VertexHelper.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="PhysxProxy.h" />
@@ -141,6 +151,13 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="MeshFilter.cpp" />
+    <ClCompile Include="MeshFilterLoader.cpp" />
+    <ClCompile Include="ModelComponent.cpp" />
+    <ClCompile Include="PxConvexMeshLoader.cpp" />
+    <ClCompile Include="PxTriangleMeshLoader.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -156,6 +173,8 @@
     <ClCompile Include="EffectHelper.cpp" />
     <ClCompile Include="BinaryReader.cpp" />
     <ClCompile Include="PhysxHelper.cpp" />
+    <ClCompile Include="TextureData.cpp" />
+    <ClCompile Include="TextureDataLoader.cpp" />
     <ClCompile Include="VertexHelper.cpp" />
     <ClCompile Include="PhysxProxy.cpp" />
     <ClCompile Include="PhysxErrorCallback.cpp" />

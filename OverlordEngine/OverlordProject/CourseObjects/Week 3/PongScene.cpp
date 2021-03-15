@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CourseObjects\Week 3\PongScene.h"
+#include "PongScene.h"
 
 
 
