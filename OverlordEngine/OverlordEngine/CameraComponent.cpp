@@ -5,6 +5,7 @@
 #include "PhysxProxy.h"
 #include "GameObject.h"
 #include "GameScene.h"
+#include "SceneManager.h"
 
 CameraComponent::CameraComponent() :
 	m_FarPlane(2500.0f),
@@ -81,8 +82,40 @@ void CameraComponent::SetActive()
 GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroupFlag ignoreGroups) const
 {
 	UNREFERENCED_PARAMETER(gameContext);
-	UNREFERENCED_PARAMETER(ignoreGroups);
-		
-	//TODO implement
+
+
+	float const halfWidth = static_cast<float>(OverlordGame::GetGameSettings().Window.Width) /2.f;
+	float const halfHeight = static_cast<float>(OverlordGame::GetGameSettings().Window.Height) /2.f;
+	
+	float const xPosNdc = (InputManager::GetMousePosition().x - halfWidth) / halfWidth;
+	float const yPosNdc = (halfHeight - InputManager::GetMousePosition().y) / halfHeight;
+	
+	DirectX::XMFLOAT3 nearPoint = DirectX::XMFLOAT3(xPosNdc,yPosNdc,0.f);
+	DirectX::XMFLOAT3 farPoint = DirectX::XMFLOAT3(xPosNdc,yPosNdc,1.0f);
+	
+	auto nearPointVector = XMLoadFloat3(&nearPoint);
+	auto farPointVector = XMLoadFloat3(&farPoint);
+
+	auto const viewProjInv = XMLoadFloat4x4(&m_ViewProjectionInverse);
+	
+	nearPointVector = XMVector3TransformCoord(nearPointVector,viewProjInv);
+	farPointVector = XMVector3TransformCoord(farPointVector,viewProjInv);
+
+	XMStoreFloat3(&nearPoint, nearPointVector);
+	XMStoreFloat3(&farPoint, farPointVector);
+	
+	physx::PxVec3 const origin = ToPxVec3(nearPoint);
+	physx::PxVec3 const dir = ToPxVec3(DirectX::XMFLOAT3(farPoint.x - nearPoint.x,farPoint.y-nearPoint.y,farPoint.z-nearPoint.z));
+	
+	physx::PxQueryFilterData filterData;
+	filterData.data.word0 = ~static_cast<UINT32>(ignoreGroups);
+	
+	physx::PxRaycastBuffer hit;
+	if (SceneManager::GetInstance()->GetActiveScene()->GetPhysxProxy()->Raycast(origin,dir.getNormalized(),PX_MAX_F32,hit, physx::PxHitFlag::eDEFAULT,filterData))
+	{
+		return static_cast<GameObject*>(hit.block.actor->userData);	
+	}
+	
 	return nullptr;
+	
 }

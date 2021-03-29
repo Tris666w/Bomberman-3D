@@ -16,6 +16,9 @@
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="CourseObjects\Week 4\UberScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\SpriteTestScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\FontTestScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\Character.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\PickScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -32,5 +35,8 @@
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="CourseObjects\Week 4\UberScene.h" />
     <ClInclude Include="CourseObjects\Week 4\SpriteTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 5\FontTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 5\Character.h" />
+    <ClInclude Include="CourseObjects\Week 5\PickScene.h" />
   </ItemGroup>
 </Project>

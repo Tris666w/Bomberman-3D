@@ -7,20 +7,24 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W3
+#define W5_B
 
-#ifdef W3
-	#include "CourseObjects/Week 3/MinionScene.h"
-	#include "CourseObjects/Week 3/TutorialScene.h"
-	#include "CourseObjects/Week 3/PongScene.h"
-#endif
 #ifdef W4_A
-	#include "CourseObjects/Week 4/ModelTestScene.h"
-	#include "CourseObjects/Week 4/SpikeyScene.h"
-	#include "CourseObjects/Week 4/UberScene.h"
+#include "CourseObjects/Week 4/ModelTestScene.h"
+#include "CourseObjects/Week 4/SpriteTestScene.h"
+#include "CourseObjects/Week 4/UberScene.h"
 #endif
+
 #ifdef W4_B
-	#include "CourseObjects/Week 4/SpriteTestScene.h"
+#include "CourseObjects/Week 4/SpikeyScene.h"
+#endif
+
+#ifdef W5_A
+#include "CourseObjects/Week 5/FontTestScene.h"
+#endif
+
+#ifdef W5_B
+#include "CourseObjects/Week 5/PickScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -38,21 +42,26 @@ void MainGame::OnGamePreparing(GameSettings& gameSettings)
 
 void MainGame::Initialize()
 {
-#ifdef W3
-	SceneManager::GetInstance()->AddGameScene(new MinionScene());
-	SceneManager::GetInstance()->AddGameScene(new TutorialScene());
-	SceneManager::GetInstance()->AddGameScene(new PongScene());
-
-	SceneManager::GetInstance()->SetActiveGameScene(L"PongScene");
-#endif
 #ifdef W4_A
-	SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
-	SceneManager::GetInstance()->AddGameScene(new UberScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"UberScene");
-#endif
-#ifdef W4_B
+	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
 	SceneManager::GetInstance()->AddGameScene(new SpriteTestScene());
+	SceneManager::GetInstance()->AddGameScene(new UberScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"SpriteTestScene");
+#endif
+
+#ifdef W4_B
+	SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"SpikeyScene");
+#endif
+
+#ifdef W5_A
+	SceneManager::GetInstance()->AddGameScene(new FontTestScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"FontTestScene");
+#endif
+
+#ifdef W5_B
+	SceneManager::GetInstance()->AddGameScene(new PickScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"PickScene");
 #endif
 }
 

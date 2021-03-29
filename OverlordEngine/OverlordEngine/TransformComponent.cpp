@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TransformComponent.h"
 #include "RigidBodyComponent.h"
+#include "ControllerComponent.h"
 #include "GameObject.h"
 
 enum TransformChanged
@@ -41,6 +42,12 @@ void TransformComponent::UpdateTransforms()
 #pragma region code that should go
 	// TODO: Remove this butt-ugly dependency on other components
 	const auto rigidbody = m_pGameObject->GetComponent<RigidBodyComponent>();
+	const auto controller = m_pGameObject->GetComponent<ControllerComponent>();
+
+	if (rigidbody && controller)
+	{
+		Logger::LogError(L"GameObject cannot have RigidBody and Controller!)");
+	}
 
 	if (rigidbody != nullptr && m_IsInitialized)
 	{
@@ -53,6 +60,13 @@ void TransformComponent::UpdateTransforms()
 			rigidbody->Rotate(m_Rotation);
 		else
 			m_Rotation = rigidbody->GetRotation();
+	}
+	else if (controller != nullptr && m_IsInitialized)
+	{
+		if (m_IsTransformChanged & TransformChanged::TRANSLATION)
+			controller->Translate(m_Position);
+		else
+			m_Position = controller->GetPosition();
 	}
 #pragma endregion
 

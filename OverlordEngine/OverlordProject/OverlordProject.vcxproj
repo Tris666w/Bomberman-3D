@@ -104,6 +104,9 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 4\ModelTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\SpikeyScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\SpriteTestScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\Character.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\FontTestScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 5\PickScene.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="Materials\ColorMaterial.cpp" />
     <ClCompile Include="Materials\SpikeyMaterial.cpp" />
@@ -139,6 +142,9 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 4\ModelTestScene.h" />
     <ClInclude Include="CourseObjects\Week 4\SpikeyScene.h" />
     <ClInclude Include="CourseObjects\Week 4\SpriteTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 5\Character.h" />
+    <ClInclude Include="CourseObjects\Week 5\FontTestScene.h" />
+    <ClInclude Include="CourseObjects\Week 5\PickScene.h" />
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="Materials\ColorMaterial.h" />
     <ClInclude Include="Materials\SpikeyMaterial.h" />

@@ -6,6 +6,7 @@
 #include "TextureDataLoader.h"
 #include "PxTriangleMeshLoader.h"
 #include "PxConvexMeshLoader.h"
+#include "SpriteFontLoader.h"
 
 std::vector<BaseLoader*> ContentManager::m_Loaders = std::vector<BaseLoader*>();
 ID3D11Device* ContentManager::m_pDevice = nullptr;
@@ -33,6 +34,7 @@ void ContentManager::Initialize(ID3D11Device* pDevice)
 		AddLoader(new TextureDataLoader());
 		AddLoader(new PxTriangleMeshLoader());
 		AddLoader(new PxConvexMeshLoader());
+		AddLoader(new SpriteFontLoader());
 	}
 }
 

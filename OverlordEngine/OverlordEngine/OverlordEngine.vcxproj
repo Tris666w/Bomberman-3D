@@ -97,6 +97,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MeshFilter.h" />
@@ -123,7 +124,10 @@
     <ClInclude Include="Enumerations.h" />
     <ClInclude Include="PhysxHelper.h" />
     <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="SpriteFont.h" />
+    <ClInclude Include="SpriteFontLoader.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TextureData.h" />
     <ClInclude Include="TextureDataLoader.h" />
     <ClInclude Include="utils.h" />
@@ -153,6 +157,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="MeshFilter.cpp" />
@@ -176,7 +181,10 @@
     <ClCompile Include="BinaryReader.cpp" />
     <ClCompile Include="PhysxHelper.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="SpriteFont.cpp" />
+    <ClCompile Include="SpriteFontLoader.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TextureData.cpp" />
     <ClCompile Include="TextureDataLoader.cpp" />
     <ClCompile Include="VertexHelper.cpp" />
