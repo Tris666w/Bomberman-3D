@@ -31,6 +31,7 @@
 #ifdef W6
 #include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
 #include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
+#include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
 
 #endif
 
@@ -75,9 +76,11 @@ void MainGame::Initialize()
 	#ifdef W6
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_1());
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_2());
+	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_3());
+	
 
 	
-	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene_2");
+	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene_3");
 #endif
 }
 

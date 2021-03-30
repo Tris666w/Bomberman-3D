@@ -110,6 +110,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 5\FontTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 5\PickScene.cpp" />
     <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_2.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_3.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="Materials\ColorMaterial.cpp" />
     <ClCompile Include="Materials\SpikeyMaterial.cpp" />
@@ -152,6 +153,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 5\FontTestScene.h" />
     <ClInclude Include="CourseObjects\Week 5\PickScene.h" />
     <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_2.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_3.h" />
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="Materials\ColorMaterial.h" />
     <ClInclude Include="Materials\SpikeyMaterial.h" />

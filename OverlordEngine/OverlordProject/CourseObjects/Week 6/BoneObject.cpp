@@ -25,7 +25,7 @@ DirectX::XMFLOAT4X4 BoneObject::GetBindPose() const
 void BoneObject::CalculateBindPose()
 {
 	using namespace DirectX;
-	auto worldMatrix =GetTransform()->GetWorld();
+	auto worldMatrix = GetTransform()->GetWorld();
 
 	auto bindPoseMatrix = XMLoadFloat4x4(&worldMatrix);
 	auto matrixDeterminant =	XMMatrixDeterminant(bindPoseMatrix);
