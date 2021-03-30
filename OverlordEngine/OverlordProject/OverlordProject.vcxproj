@@ -109,12 +109,13 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 5\Character.cpp" />
     <ClCompile Include="CourseObjects\Week 5\FontTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 5\PickScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_2.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="Materials\ColorMaterial.cpp" />
     <ClCompile Include="Materials\SpikeyMaterial.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PongScene.cpp" />
     <ClCompile Include="Materials\UberMaterial.cpp" />
-    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_1.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -150,11 +151,13 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 5\Character.h" />
     <ClInclude Include="CourseObjects\Week 5\FontTestScene.h" />
     <ClInclude Include="CourseObjects\Week 5\PickScene.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_2.h" />
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="Materials\ColorMaterial.h" />
     <ClInclude Include="Materials\SpikeyMaterial.h" />
     <ClInclude Include="Materials\UberMaterial.h" />
-    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_1.h" />
+    <ClInclude Include="CourseObjects\Week 6\SkinnedVertex.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />

@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "SoftwareSkinningScene.h"
+#include "SoftwareSkinningScene_1.h"
 #include "BoneObject.h"
 #include "TransformComponent.h"
 #include "../../Materials/ColorMaterial.h"
 
-SoftwareSkinningScene::SoftwareSkinningScene():GameScene(L"SoftwareSkinningScene")
+SoftwareSkinningScene_1::SoftwareSkinningScene_1():GameScene(L"SoftwareSkinningScene_1")
 	,m_pBone0(nullptr)
 	,m_pBone1(nullptr)
 	,m_BoneRotation(0)
@@ -12,7 +12,7 @@ SoftwareSkinningScene::SoftwareSkinningScene():GameScene(L"SoftwareSkinningScene
 {
 }
 
-void SoftwareSkinningScene::Initialize()
+void SoftwareSkinningScene_1::Initialize()
 {
 	auto *const pColorMat = new ColorMaterial();
 	GetGameContext().pMaterialManager->AddMaterial(pColorMat,0);
@@ -27,7 +27,7 @@ void SoftwareSkinningScene::Initialize()
 	AddChild(pRoot);
 }
 
-void SoftwareSkinningScene::Update()
+void SoftwareSkinningScene_1::Update()
 {
 	m_BoneRotation += m_RotationSign * 45 * GetGameContext().pGameTime->GetElapsed();
 
@@ -41,6 +41,6 @@ void SoftwareSkinningScene::Update()
 	
 }
 
-void SoftwareSkinningScene::Draw()
+void SoftwareSkinningScene_1::Draw()
 {
 }

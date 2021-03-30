@@ -100,6 +100,7 @@ GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroup
 	
 	nearPointVector = XMVector3TransformCoord(nearPointVector,viewProjInv);
 	farPointVector = XMVector3TransformCoord(farPointVector,viewProjInv);
+	
 
 	XMStoreFloat3(&nearPoint, nearPointVector);
 	XMStoreFloat3(&farPoint, farPointVector);

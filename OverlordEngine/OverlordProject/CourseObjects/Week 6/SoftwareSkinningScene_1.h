@@ -2,10 +2,10 @@
 #include <GameScene.h>
 class BoneObject;
 
-class SoftwareSkinningScene final:  public GameScene
+class SoftwareSkinningScene_1 final:  public GameScene
 {
 public:
-	SoftwareSkinningScene();
+	SoftwareSkinningScene_1();
 
 protected:
 	void Initialize() override;

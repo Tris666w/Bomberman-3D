@@ -21,7 +21,8 @@
     <ClCompile Include="CourseObjects\Week 5\PickScene.cpp" />
     <ClCompile Include="CourseObjects\Week 5\CharacterScene.cpp" />
     <ClCompile Include="CourseObjects\Week 6\BoneObject.cpp" />
-    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_1.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -43,6 +44,8 @@
     <ClInclude Include="CourseObjects\Week 5\PickScene.h" />
     <ClInclude Include="CourseObjects\Week 5\CharacterScene.h" />
     <ClInclude Include="CourseObjects\Week 6\BoneObject.h" />
-    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_1.h" />
+    <ClInclude Include="CourseObjects\Week 6\SkinnedVertex.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_2.h" />
   </ItemGroup>
 </Project>
