@@ -99,6 +99,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CourseObjects\Week 6\BoneObject.cpp" />
     <ClCompile Include="CourseObjects\Week 5\CharacterScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
@@ -113,6 +114,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="Materials\SpikeyMaterial.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PongScene.cpp" />
     <ClCompile Include="Materials\UberMaterial.cpp" />
+    <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -137,6 +139,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CourseObjects\Week 6\BoneObject.h" />
     <ClInclude Include="CourseObjects\Week 5\CharacterScene.h" />
     <ClInclude Include="CourseObjects\Week 3\MinionScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
@@ -151,6 +154,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="Materials\ColorMaterial.h" />
     <ClInclude Include="Materials\SpikeyMaterial.h" />
     <ClInclude Include="Materials\UberMaterial.h" />
+    <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />

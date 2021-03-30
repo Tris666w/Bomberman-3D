@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W5_B
+#define W6
 
 #ifdef W4_A
 #include "CourseObjects/Week 4/ModelTestScene.h"
@@ -26,6 +26,10 @@
 #ifdef W5_B
 #include "CourseObjects/Week 5/PickScene.h"
 #include "CourseObjects/Week 5/CharacterScene.h"
+#endif
+
+#ifdef W6
+#include "CourseObjects/Week 6/SoftwareSkinningScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -65,6 +69,11 @@ void MainGame::Initialize()
 	SceneManager::GetInstance()->AddGameScene(new CharacterScene());
 	
 	SceneManager::GetInstance()->SetActiveGameScene(L"CharacterScene");
+#endif
+	#ifdef W6
+	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene());
+	
+	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene");
 #endif
 }
 
