@@ -4,7 +4,7 @@
 class ControllerComponent;
 class CameraComponent;
 
-class Character : public GameObject
+class Character final: public GameObject
 {
 public:
 	enum CharacterMovement : UINT

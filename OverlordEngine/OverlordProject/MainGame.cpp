@@ -25,6 +25,7 @@
 
 #ifdef W5_B
 #include "CourseObjects/Week 5/PickScene.h"
+#include "CourseObjects/Week 5/CharacterScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -61,7 +62,9 @@ void MainGame::Initialize()
 
 #ifdef W5_B
 	SceneManager::GetInstance()->AddGameScene(new PickScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"PickScene");
+	SceneManager::GetInstance()->AddGameScene(new CharacterScene());
+	
+	SceneManager::GetInstance()->SetActiveGameScene(L"CharacterScene");
 #endif
 }
 

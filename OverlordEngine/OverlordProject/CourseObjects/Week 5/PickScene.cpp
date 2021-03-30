@@ -44,7 +44,7 @@ void PickScene::Initialize()
 
 void PickScene::Update()
 {
-	const auto gameContext = GetGameContext();
+	const auto& gameContext = GetGameContext();
 	if(gameContext.pInput->IsMouseButtonDown(VK_RBUTTON) && !gameContext.pInput->IsMouseButtonDown(VK_RBUTTON, true))
 	{
 		GameObject* pickedObject = gameContext.pCamera->Pick(gameContext);

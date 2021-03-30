@@ -4,6 +4,8 @@
 #include "PhysxProxy.h"
 #include "GameObject.h"
 #include "GameScene.h"
+#include "PhysxManager.h"
+#include "SceneManager.h"
 
 #pragma warning(push)
 #pragma warning(disable: 26812)
@@ -21,6 +23,8 @@ ControllerComponent::ControllerComponent(physx::PxMaterial* material, float radi
 }
 #pragma warning(pop)
 
+#pragma warning(push)
+#pragma warning(disable: 4244)
 void ControllerComponent::Initialize(const GameContext&)
 {
 	if (m_Controller != nullptr)
@@ -30,14 +34,28 @@ void ControllerComponent::Initialize(const GameContext&)
 	}
 
 	//TODO: 1. Retrieve the ControllerManager from the PhysX Proxy (PhysxProxy::GetControllerManager();)
+	auto* pControllerManager = m_pGameObject->GetScene()->GetPhysxProxy()->GetControllerManager();
+	
 	//TODO: 2. Create a PxCapsuleControllerDesc (Struct)
 	//  > Call the "setToDefault()" method of the PxCapsuleControllerDesc
 	//	> Fill in all the required fields
 	//  > Radius, Height, ClimbingMode, UpDirection (PxVec3(0,1,0)), ContactOffset (0.1f), Material [See Initializer List]
 	//  > Position -> Use the position of the parent GameObject
 	//  > UserData -> This component
+	physx::PxCapsuleControllerDesc capsuleControllerDesc{};
+	capsuleControllerDesc.setToDefault();
+	
+	capsuleControllerDesc.radius = m_Radius;
+	capsuleControllerDesc.height = m_Height;
+	capsuleControllerDesc.climbingMode = m_ClimbingMode;
+	capsuleControllerDesc.contactOffset = 0.1f;
+	capsuleControllerDesc.upDirection = physx::PxVec3(0.f,1.f,0.f);
+	capsuleControllerDesc.material = m_pMaterial;
+	capsuleControllerDesc.position = ToPxExtendedVec3(GetGameObject()->GetTransform()->GetPosition());
+	capsuleControllerDesc.userData = this;
+	
 	//3. Create the controller object (m_pController), use the ControllerManager to do that (CHECK IF VALID!!)
-
+	m_Controller = pControllerManager->createController(capsuleControllerDesc);
 	if (m_Controller == nullptr)
 	{
 		Logger::LogError(L"[ControllerComponent] Failed to create controller");
@@ -47,12 +65,16 @@ void ControllerComponent::Initialize(const GameContext&)
 	//TODO: 4. Set the controller's name (use the value of m_Name) [PxController::setName]
 	//   > Converting 'wstring' to 'string' > Use one of the constructor's of the string class
 	//	 > Converting 'string' to 'char *' > Use one of the string's methods ;)
-
+	
+	std::string const name = std::string(m_Name.begin(),m_Name.end());
+	m_Controller->getActor()->setName(name.c_str());
+	
 	//TODO: 5. Set the controller's actor's userdata > This Component
-
+	m_Controller->setUserData(this);;
 	SetCollisionGroup(static_cast<CollisionGroupFlag>(m_CollisionGroups.word0));
 	SetCollisionIgnoreGroups(static_cast<CollisionGroupFlag>(m_CollisionGroups.word1));
 }
+#pragma warning(pop)
 
 void ControllerComponent::Update(const GameContext&)
 {

@@ -111,7 +111,7 @@ GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroup
 	filterData.data.word0 = ~static_cast<UINT32>(ignoreGroups);
 	
 	physx::PxRaycastBuffer hit;
-	if (SceneManager::GetInstance()->GetActiveScene()->GetPhysxProxy()->Raycast(origin,dir.getNormalized(),PX_MAX_F32,hit, physx::PxHitFlag::eDEFAULT,filterData))
+	if (m_pGameObject->GetScene()->GetPhysxProxy()->Raycast(origin,dir.getNormalized(),PX_MAX_F32,hit, physx::PxHitFlag::eDEFAULT,filterData))
 	{
 		return static_cast<GameObject*>(hit.block.actor->userData);	
 	}

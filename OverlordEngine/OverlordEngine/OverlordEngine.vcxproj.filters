@@ -133,8 +133,12 @@
     </ClCompile>
     <ClCompile Include="SpriteFont.cpp" />
     <ClCompile Include="SpriteFontLoader.cpp" />
-    <ClCompile Include="TextRenderer.cpp" />
-    <ClCompile Include="ControllerComponent.cpp" />
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -299,8 +303,12 @@
     </ClInclude>
     <ClInclude Include="SpriteFont.h" />
     <ClInclude Include="SpriteFontLoader.h" />
-    <ClInclude Include="TextRenderer.h" />
-    <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

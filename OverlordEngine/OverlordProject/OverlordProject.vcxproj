@@ -99,6 +99,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CourseObjects\Week 5\CharacterScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\MinionScene.cpp" />
     <ClCompile Include="CourseObjects\Week 3\PhysicsTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\ModelTestScene.cpp" />
@@ -136,6 +137,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CourseObjects\Week 5\CharacterScene.h" />
     <ClInclude Include="CourseObjects\Week 3\MinionScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PhysicsTestScene.h" />
     <ClInclude Include="CourseObjects\Week 3\PongScene.h" />

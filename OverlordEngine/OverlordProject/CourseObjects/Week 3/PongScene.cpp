@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "PongScene.h"
 
-
-
 #include "ColliderComponent.h"
 #include "CubePrefab.h"
 #include "GameObject.h"
