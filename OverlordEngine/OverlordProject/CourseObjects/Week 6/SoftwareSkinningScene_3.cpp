@@ -78,9 +78,9 @@ void SoftwareSkinningScene_3::Update()
 	for (size_t index = 0; index < m_SkinnedVertices.size(); index++)
 	{
 		auto const originalVertexPos = XMLoadFloat3(&m_SkinnedVertices[index].OriginalVertex.Position);
-		auto const transformedVertex = XMVector3TransformCoord(originalVertexPos, (index<24)? bone0Matrix : bone1Matrix);
+		auto const transformedVertex = XMVector3TransformCoord(originalVertexPos, (index<=24)? bone0Matrix : bone1Matrix);
 		auto const otherTransformedVertex = XMVector3TransformCoord(originalVertexPos, (index>24)? bone0Matrix : bone1Matrix);
-
+		
 		auto const blendedPos = m_SkinnedVertices[index].BlendWeight1 * transformedVertex + m_SkinnedVertices[index].BlendWeight2 * otherTransformedVertex;
 		XMStoreFloat3(&m_SkinnedVertices[index].TransformedVertex.Position,blendedPos);
 	}
