@@ -3,6 +3,7 @@
 #include "ContentManager.h"
 #include "MeshFilter.h"
 #include "Material.h"
+#include "ModelAnimator.h"
 
 ModelComponent::ModelComponent(std::wstring assetFile):
 	m_AssetFile(std::move(assetFile))
@@ -10,12 +11,17 @@ ModelComponent::ModelComponent(std::wstring assetFile):
 }
 
 ModelComponent::~ModelComponent()
-{}
+{
+	SafeDelete(m_pAnimator);
+}
 
 void ModelComponent::Initialize(const GameContext& gameContext)
 {
 	m_pMeshFilter = ContentManager::Load<MeshFilter>(m_AssetFile);
 	m_pMeshFilter->BuildIndexBuffer(gameContext);
+
+	if (m_pMeshFilter->m_HasAnimations)
+		m_pAnimator = new ModelAnimator(m_pMeshFilter);
 
 	UpdateMaterial(gameContext);
 };
@@ -44,6 +50,9 @@ inline void ModelComponent::UpdateMaterial(const GameContext& gameContext)
 void ModelComponent::Update(const GameContext& gameContext)
 {
 	UpdateMaterial(gameContext);
+
+	if (m_pAnimator)
+		m_pAnimator->Update(gameContext);
 };
 
 void ModelComponent::Draw(const GameContext& gameContext)

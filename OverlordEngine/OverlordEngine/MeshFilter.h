@@ -6,17 +6,18 @@ class MeshFilterLoader;
 class Material;
 struct GameContext;
 class ModelComponent;
+class DerezModelComponent;
 
 struct VertexBufferData
 {
-	VertexBufferData():
+	VertexBufferData() :
 		pDataStart(nullptr),
 		pVertexBuffer(nullptr),
 		BufferSize(0),
 		VertexStride(0),
 		VertexCount(0),
 		IndexCount(0),
-		InputLayoutID(0){}
+		InputLayoutID(0) {}
 
 	void* pDataStart;
 	ID3D11Buffer* pVertexBuffer;
@@ -33,6 +34,22 @@ struct VertexBufferData
 	}
 };
 
+struct AnimationKey
+{
+	float Tick = {};
+	std::vector<DirectX::XMFLOAT4X4> BoneTransforms = {};
+};
+
+struct AnimationClip
+{
+	AnimationClip() = default;
+
+	std::wstring Name = {};
+	float Duration = {};
+	float TicksPerSecond = {};
+	std::vector<AnimationKey> Keys = {};
+};
+
 class MeshFilter final
 {
 public:
@@ -43,11 +60,13 @@ private:
 
 	friend class MeshFilterLoader;
 	friend class ModelComponent;
+	friend class ModelAnimator;
+	friend class DerezModelComponent;
 
 	int GetVertexBufferId(UINT inputLayoutId);
 	void BuildVertexBuffer(const GameContext& gameContext, Material* pMaterial);
 	void BuildIndexBuffer(const GameContext& gameContext);
-	bool HasElement(ILSemantic element) { return (m_HasElement&static_cast<UINT>(element)) > 0 ? true : false; }
+	bool HasElement(ILSemantic element) { return (m_HasElement & static_cast<UINT>(element)) > 0 ? true : false; }
 	const VertexBufferData& GetVertexBufferData(const GameContext& gameContext, Material* pMaterial);
 
 	//VERTEX DATA
@@ -59,6 +78,11 @@ private:
 	std::vector<DirectX::XMFLOAT3> m_Binormals;
 	std::vector<DirectX::XMFLOAT2> m_TexCoords;
 	std::vector<DirectX::XMFLOAT4> m_Colors;
+	std::vector<DirectX::XMFLOAT4> m_BlendIndices;
+	std::vector<DirectX::XMFLOAT4> m_BlendWeights;
+	std::vector<AnimationClip> m_AnimationClips;
+	bool m_HasAnimations;
+	USHORT m_BoneCount;
 
 	//INDEX DATA
 	std::vector<DWORD> m_Indices;
@@ -77,7 +101,6 @@ private:
 	// Disabling default copy constructor and default 
 	// assignment operator.
 	// -------------------------
-	MeshFilter(const MeshFilter &obj);
+	MeshFilter(const MeshFilter& obj);
 	MeshFilter& operator=(const MeshFilter& obj);
 };
-

@@ -19,12 +19,17 @@ MeshFilter::MeshFilter():
 			m_TexCoords(std::vector<DirectX::XMFLOAT2>()),
 			m_Colors(std::vector<DirectX::XMFLOAT4>()),
 			m_Indices(std::vector<DWORD>()),
+			m_BlendIndices(std::vector<DirectX::XMFLOAT4>()),
+			m_BlendWeights(std::vector<DirectX::XMFLOAT4>()),
+			m_AnimationClips(std::vector<AnimationClip>()),
 			m_pIndexBuffer(nullptr),
 			m_VertexBuffers(std::vector<VertexBufferData>()),
 			m_VertexCount(0),
 			m_IndexCount(0),
 			m_TexCoordCount(0),
-			m_HasElement(static_cast<UINT>(ILSemantic::NONE))
+			m_HasElement(static_cast<UINT>(ILSemantic::NONE)),
+			m_HasAnimations(false),
+			m_BoneCount(0)
 {
 }
 
@@ -38,6 +43,9 @@ MeshFilter::~MeshFilter()
 	m_Indices.clear();
 	m_Tangents.clear();
 	m_Binormals.clear();
+	m_BlendIndices.clear();
+	m_BlendWeights.clear();
+	m_AnimationClips.clear();
 
 	for_each(m_VertexBuffers.begin(), m_VertexBuffers.end(), [](VertexBufferData& data)
 	{
@@ -130,6 +138,12 @@ void MeshFilter::BuildVertexBuffer(const GameContext& gameContext, Material* pMa
 				break;
 			case ILSemantic::BINORMAL:
 				memcpy(pDataLocation, HasElement(ilDescription.SemanticType) ? &m_Binormals[i] : &m_DefaultFloat3, ilDescription.Offset);
+				break;
+			case ILSemantic::BLENDINDICES:
+				memcpy(pDataLocation, HasElement(ilDescription.SemanticType) ? &m_BlendIndices[i] : &m_DefaultFloat4, ilDescription.Offset);
+				break;
+			case ILSemantic::BLENDWEIGHTS:
+				memcpy(pDataLocation, HasElement(ilDescription.SemanticType) ? &m_BlendWeights[i] : &m_DefaultFloat4, ilDescription.Offset);
 				break;
 			default:
 				Logger::LogError(L"MeshFilter::BuildVertexBuffer() > Unsupported SemanticType!");

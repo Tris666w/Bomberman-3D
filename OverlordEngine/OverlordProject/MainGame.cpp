@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W6
+#define W7
 
 #ifdef W4_A
 #include "CourseObjects/Week 4/ModelTestScene.h"
@@ -25,14 +25,16 @@
 
 #ifdef W5_B
 #include "CourseObjects/Week 5/PickScene.h"
-#include "CourseObjects/Week 5/CharacterScene.h"
 #endif
 
 #ifdef W6
 #include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
 #include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
 #include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
+#endif
 
+#ifdef W7
+#include "CourseObjects/Week 7/HardwareSkinningScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -49,7 +51,7 @@ void MainGame::OnGamePreparing(GameSettings& gameSettings)
 }
 
 void MainGame::Initialize()
-{
+{	
 #ifdef W4_A
 	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
 	SceneManager::GetInstance()->AddGameScene(new SpriteTestScene());
@@ -69,18 +71,19 @@ void MainGame::Initialize()
 
 #ifdef W5_B
 	SceneManager::GetInstance()->AddGameScene(new PickScene());
-	SceneManager::GetInstance()->AddGameScene(new CharacterScene());
-	
-	SceneManager::GetInstance()->SetActiveGameScene(L"CharacterScene");
+	SceneManager::GetInstance()->SetActiveGameScene(L"PickScene");
 #endif
-	#ifdef W6
+
+#ifdef W6
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_1());
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_2());
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_3());
-	
+	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene_1");
+#endif
 
-	
-	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene_3");
+#ifdef W7
+	SceneManager::GetInstance()->AddGameScene(new HardwareSkinningScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"HardwareSkinningScene");
 #endif
 }
 

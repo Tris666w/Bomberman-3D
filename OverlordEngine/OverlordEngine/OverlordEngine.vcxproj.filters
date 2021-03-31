@@ -139,6 +139,7 @@
     <ClCompile Include="TextRenderer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="ModelAnimator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -309,6 +310,7 @@
     <ClInclude Include="TextRenderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ModelAnimator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

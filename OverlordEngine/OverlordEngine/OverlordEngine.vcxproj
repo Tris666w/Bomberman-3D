@@ -102,6 +102,7 @@
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MeshFilter.h" />
     <ClInclude Include="MeshFilterLoader.h" />
+    <ClInclude Include="ModelAnimator.h" />
     <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="PxConvexMeshLoader.h" />
     <ClInclude Include="PxTriangleMeshLoader.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="MeshFilter.cpp" />
     <ClCompile Include="MeshFilterLoader.cpp" />
+    <ClCompile Include="ModelAnimator.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="PxConvexMeshLoader.cpp" />
     <ClCompile Include="PxTriangleMeshLoader.cpp" />
