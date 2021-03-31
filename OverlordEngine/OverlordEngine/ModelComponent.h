@@ -14,6 +14,8 @@ class ModelComponent : public BaseComponent
 	unsigned int m_MaterialId = 0;
 	bool m_MaterialSet = false;
 
+	bool m_CastShadows = true;
+
 	void UpdateMaterial(const GameContext& gameContext);
 
 public:
@@ -21,7 +23,7 @@ public:
 	ModelComponent(ModelComponent&& other) noexcept = delete;
 	ModelComponent& operator=(const ModelComponent& other) = delete;
 	ModelComponent& operator=(ModelComponent&& other) noexcept = delete;
-	ModelComponent(std::wstring  assetFile);
+	ModelComponent(std::wstring  assetFile, bool castShadows = true);
 	virtual ~ModelComponent();
 
 	void SetMaterial(UINT materialId);
@@ -33,4 +35,5 @@ protected:
 	void Update(const GameContext& gameContext) override;
 	void Draw(const GameContext& gameContext) override;
 	void Initialize(const GameContext& gameContext) override;
+	void DrawShadowMap(const GameContext& gameContext) override;
 };

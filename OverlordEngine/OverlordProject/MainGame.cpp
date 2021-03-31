@@ -7,34 +7,39 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W7
+#define W8
 
+#ifdef W3
+	#include "CourseObjects/Week 3/MinionScene.h"
+	#include "CourseObjects/Week 3/TutorialScene.h"
+	#include "CourseObjects/Week 3/ComponentTestScene.h"
+	#include "CourseObjects/Week 3/Pong/PongScene.h"
+#endif
 #ifdef W4_A
-#include "CourseObjects/Week 4/ModelTestScene.h"
-#include "CourseObjects/Week 4/SpriteTestScene.h"
-#include "CourseObjects/Week 4/UberScene.h"
+	#include "CourseObjects/Week 4/SpriteTestScene.h"
 #endif
-
 #ifdef W4_B
-#include "CourseObjects/Week 4/SpikeyScene.h"
+	#include "CourseObjects/Week 4/ModelTestScene.h"
+	#include "CourseObjects/Week 4/SpikeyScene.h"
+	#include "CourseObjects/Week 4/UberScene.h"
 #endif
-
 #ifdef W5_A
-#include "CourseObjects/Week 5/FontTestScene.h"
+	#include "CourseObjects/Week 5/FontTestScene.h"
 #endif
-
 #ifdef W5_B
-#include "CourseObjects/Week 5/PickScene.h"
+	#include "CourseObjects/Week 5/PickScene.h"
+	#include "CourseObjects/Week 5/CharacterScene.h"
 #endif
-
 #ifdef W6
-#include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
-#include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
-#include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
+	#include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
+	#include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
+	#include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
 #endif
-
 #ifdef W7
-#include "CourseObjects/Week 7/HardwareSkinningScene.h"
+	#include "CourseObjects/Week 7/HardwareSkinningScene.h"
+#endif
+#ifdef W8
+	#include "CourseObjects/Week 8/ShadowMappingScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -51,39 +56,47 @@ void MainGame::OnGamePreparing(GameSettings& gameSettings)
 }
 
 void MainGame::Initialize()
-{	
+{
+#ifdef W3
+	SceneManager::GetInstance()->AddGameScene(new MinionScene());
+	SceneManager::GetInstance()->AddGameScene(new TutorialScene());
+	SceneManager::GetInstance()->AddGameScene(new ComponentTestScene());
+	SceneManager::GetInstance()->AddGameScene(new PongScene());
+
+	SceneManager::GetInstance()->SetActiveGameScene(L"MinionScene");
+#endif
 #ifdef W4_A
-	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
 	SceneManager::GetInstance()->AddGameScene(new SpriteTestScene());
-	SceneManager::GetInstance()->AddGameScene(new UberScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"SpriteTestScene");
 #endif
-
 #ifdef W4_B
+	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
 	SceneManager::GetInstance()->AddGameScene(new SpikeyScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"SpikeyScene");
+	SceneManager::GetInstance()->AddGameScene(new UberScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"ModelTestScene");
 #endif
-
 #ifdef W5_A
 	SceneManager::GetInstance()->AddGameScene(new FontTestScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"FontTestScene");
 #endif
-
 #ifdef W5_B
 	SceneManager::GetInstance()->AddGameScene(new PickScene());
+	SceneManager::GetInstance()->AddGameScene(new CharacterScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"PickScene");
 #endif
-
 #ifdef W6
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_1());
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_2());
 	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_3());
 	SceneManager::GetInstance()->SetActiveGameScene(L"SoftwareSkinningScene_1");
 #endif
-
 #ifdef W7
 	SceneManager::GetInstance()->AddGameScene(new HardwareSkinningScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"HardwareSkinningScene");
+#endif
+#ifdef W8
+	SceneManager::GetInstance()->AddGameScene(new ShadowMappingScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"ShadowMappingScene");
 #endif
 }
 

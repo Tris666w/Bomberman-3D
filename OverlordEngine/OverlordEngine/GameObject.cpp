@@ -98,6 +98,22 @@ void GameObject::RootDraw(const GameContext& gameContext)
 	}
 }
 
+//Components Only
+void GameObject::RootDrawShadowMap(const GameContext& gameContext)
+{
+	//Component Draw
+	for (BaseComponent* pComp : m_pComponents)
+	{
+		pComp->DrawShadowMap(gameContext);
+	}
+
+	//Root-Object Draw
+	for (GameObject* pChild : m_pChildren)
+	{
+		pChild->RootDrawShadowMap(gameContext);
+	}
+}
+
 void GameObject::RootPostDraw(const GameContext& gameContext)
 {
 	//Post-Draw

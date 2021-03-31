@@ -4,9 +4,11 @@
 #include "MeshFilter.h"
 #include "Material.h"
 #include "ModelAnimator.h"
+#include "TransformComponent.h"
 
-ModelComponent::ModelComponent(std::wstring assetFile):
-	m_AssetFile(std::move(assetFile))
+ModelComponent::ModelComponent(std::wstring assetFile, bool castShadows):
+	m_AssetFile(std::move(assetFile)),
+	m_CastShadows(castShadows)
 {
 }
 
@@ -22,6 +24,11 @@ void ModelComponent::Initialize(const GameContext& gameContext)
 
 	if (m_pMeshFilter->m_HasAnimations)
 		m_pAnimator = new ModelAnimator(m_pMeshFilter);
+
+	if (m_CastShadows)
+	{
+		gameContext.pShadowMapper->UpdateMeshFilter(gameContext, m_pMeshFilter);
+	}
 
 	UpdateMaterial(gameContext);
 };
@@ -53,6 +60,14 @@ void ModelComponent::Update(const GameContext& gameContext)
 
 	if (m_pAnimator)
 		m_pAnimator->Update(gameContext);
+};
+
+void ModelComponent::DrawShadowMap(const GameContext& gameContext)
+{
+	if (m_pAnimator)
+		gameContext.pShadowMapper->Draw(gameContext, m_pMeshFilter, GetTransform()->GetWorld(), m_pAnimator->GetBoneTransforms());
+	else
+		gameContext.pShadowMapper->Draw(gameContext, m_pMeshFilter, GetTransform()->GetWorld());
 };
 
 void ModelComponent::Draw(const GameContext& gameContext)
