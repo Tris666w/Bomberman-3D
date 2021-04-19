@@ -158,6 +158,14 @@ void GameScene::RootDraw()
 {
 	//TODO: object-Scene SHADOW_PASS - start by setting the correct render target, render all to shadow map and end by reset default render target
 
+	//Object-Scene DrawShadowMap
+	for (auto pChild : m_pChildren)
+	{
+		pChild->RootDrawShadowMap(m_GameContext);
+	}
+
+	SceneManager::GetInstance()->GetGame()->SetRenderTarget(nullptr);
+	
 	//User-Scene Draw
 	Draw();
 

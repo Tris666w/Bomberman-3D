@@ -44,7 +44,6 @@ void SkinnedDiffuseMaterial::LoadEffectVariables()
 void SkinnedDiffuseMaterial::UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent)
 {
 	UNREFERENCED_PARAMETER(gameContext);
-	UNREFERENCED_PARAMETER(pModelComponent);
 
 	if (m_pDiffuseTexture && m_pDiffuseSRVvariable)
 	{

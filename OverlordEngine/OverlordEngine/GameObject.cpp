@@ -98,7 +98,6 @@ void GameObject::RootDraw(const GameContext& gameContext)
 	}
 }
 
-//Components Only
 void GameObject::RootDrawShadowMap(const GameContext& gameContext)
 {
 	//Component Draw

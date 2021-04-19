@@ -35,7 +35,6 @@ struct VS_INPUT{
 	float2 texCoord : TEXCOORD;
 	float4 blendWeights : BLENDWEIGHTS;
 	float4 blendIndices : BLENDINDICES;
-	
 };
 
 struct VS_OUTPUT{
