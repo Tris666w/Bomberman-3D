@@ -22,7 +22,7 @@ void HardwareSkinningScene::Initialize()
 	skinnedDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/PeasantGirl_Diffuse.png");
 	gameContext.pMaterialManager->AddMaterial(skinnedDiffuseMaterial, 0);
 
-	m_pModel = new ModelComponent(L"./Resources/Meshes/PeasantGirl.ovm");
+	m_pModel = new ModelComponent(L"./Resources/Meshes/PeasantGirl.ovm",false);
 	m_pModel->SetMaterial(0);
 	auto obj = new GameObject();
 	obj->AddComponent(m_pModel);

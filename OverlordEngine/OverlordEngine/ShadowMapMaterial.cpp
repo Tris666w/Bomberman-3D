@@ -37,13 +37,14 @@ void ShadowMapMaterial::Initialize(const GameContext& gameContext)
 		{
 			std::wcout << L"m_pWorldMatrixVariable not valid\n";
 		}
-
-		EffectHelper::BuildInputLayout(gameContext.pDevice, m_pShadowTechs[0], &m_pInputLayouts[0], m_InputLayoutDescriptions[0],
-	                               m_InputLayoutSizes[0], m_InputLayoutIds[0]);
-		EffectHelper::BuildInputLayout(gameContext.pDevice, m_pShadowTechs[1], &m_pInputLayouts[1], m_InputLayoutDescriptions[1],
-	                               m_InputLayoutSizes[1], m_InputLayoutIds[1]);
-
+	
+		EffectHelper::BuildInputLayout(gameContext.pDevice, m_pShadowTechs[static_cast<int>(ShadowGenType::Static)], &m_pInputLayouts[static_cast<int>(ShadowGenType::Static)], 
+			m_InputLayoutDescriptions[static_cast<int>(ShadowGenType::Static)],
+m_InputLayoutSizes[static_cast<int>(ShadowGenType::Static)], m_InputLayoutIds[static_cast<int>(ShadowGenType::Static)]);
 		
+		EffectHelper::BuildInputLayout(gameContext.pDevice, m_pShadowTechs[static_cast<int>(ShadowGenType::Skinned)], &m_pInputLayouts[static_cast<int>(ShadowGenType::Skinned)], 
+			m_InputLayoutDescriptions[static_cast<int>(ShadowGenType::Skinned)],
+m_InputLayoutSizes[static_cast<int>(ShadowGenType::Skinned)], m_InputLayoutIds[static_cast<int>(ShadowGenType::Skinned)]);
 	}
 }
 
