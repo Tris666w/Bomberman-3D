@@ -21,9 +21,9 @@ SamplerComparisonState cmpSampler
 
 SamplerState samLinear
 {
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = Wrap;// or Mirror or Clamp or Border
-    AddressV = Wrap;// or Mirror or Clamp or Border
+	Filter = MIN_MAG_MIP_LINEAR;
+	AddressU = Wrap;// or Mirror or Clamp or Border
+	AddressV = Wrap;// or Mirror or Clamp or Border
 };
 
 struct VS_INPUT
@@ -61,22 +61,72 @@ VS_OUTPUT VS(VS_INPUT input)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
 
-	//TODO: complete Vertex Shader 
-	//Hint: use the previously made shaders PosNormTex3D_Shadow and PosNormTex3D_Skinned as a guide
+	float4 originalPosition = float4(input.pos, 1);
+	float4 transformedPosition = 0;
+	float3 transformedNormal = 0;
+	
+	for (int index = 0; index < 4; ++index)
+	{
+		int boneIndex = input.BoneIndices[index];
+		if (boneIndex > -1)
+		{
+			transformedPosition += input.BoneWeights[index] * mul(float4(input.pos, 1.0f), gBones[boneIndex]);
+			transformedNormal += input.BoneWeights[index] * mul(input.normal, (float3x3) gBones[boneIndex]);
+			transformedPosition.w = 1.f;
+		}
+	}
+	
+	output.pos = mul(transformedPosition, gWorldViewProj);
+	output.normal = normalize(mul(transformedNormal, (float3x3) gWorld));
+	output.texCoord = input.texCoord;
+	output.lPos = mul(transformedPosition, gWorldViewProj_Light);
 	
 	return output;
 }
 
 float2 texOffset(int u, int v)
 {
-	//TODO: return offseted value (our shadow map has the following dimensions: 1280 * 720)
-	return float2(u,v);
+	int width = 1280;
+	int height = 720;
+	
+	float2 offset = float2(width * (1.f / u), height * (1.f / v));
+	return offset;
 }
 
 float EvaluateShadowMap(float4 lpos)
 {
-	//TODO: complete
-	return 1.0f;
+	//Re-homoginize the position
+	lpos.xyz /= lpos.w;
+	
+	//Check if the position is inside the view frustrum
+	if (lpos.x < -1.0f || lpos.x > 1.0f ||
+		lpos.y < -1.0f || lpos.y > 1.0f ||
+		lpos.z < 0.0f || lpos.z > 1.0f)
+		return 0.f;
+	
+	//transform clip space coords to texture space ([-1,1] => [0,1])
+	lpos.x = lpos.x / 2 + 0.5;
+	lpos.y = lpos.y / -2 + 0.5;
+	
+	//Apply shadow map bias
+	lpos.z -= gShadowMapBias;
+	
+	//PCF sampling for shadow map
+	float sum = 0;
+	float x, y;
+ 
+	//perform PCF filtering on a 4 x 4 texel neighborhood
+	for (y = -1.5; y < 1.5; y += 1.0)
+	{
+		for (x = -1.5; x < 1.5; x += 1.0)
+		{
+			sum += gShadowMap.SampleCmpLevelZero(cmpSampler, lpos.xy + texOffset(x, y), lpos.z);
+		}
+	}
+ 
+	float shadowFactor = sum / 16.0;
+	
+	return shadowFactor;
 }
 
 //--------------------------------------------------------------------------------------
@@ -104,14 +154,14 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 //--------------------------------------------------------------------------------------
 technique11 Default
 {
-    pass P0
-    {
+	pass P0
+	{
 		SetRasterizerState(NoCulling);
 		SetDepthStencilState(EnableDepth, 0);
 
 		SetVertexShader( CompileShader( vs_4_0, VS() ) );
 		SetGeometryShader( NULL );
 		SetPixelShader( CompileShader( ps_4_0, PS() ) );
-    }
+	}
 }
 
