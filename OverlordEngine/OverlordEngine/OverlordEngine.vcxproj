@@ -107,7 +107,6 @@
     <ClInclude Include="PxConvexMeshLoader.h" />
     <ClInclude Include="PxTriangleMeshLoader.h" />
     <ClInclude Include="ShadowMapMaterial.h" />
-    <ClInclude Include="ShadowMapRenderer.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="InputManager.h" />
@@ -170,7 +169,6 @@
     <ClCompile Include="PxConvexMeshLoader.cpp" />
     <ClCompile Include="PxTriangleMeshLoader.cpp" />
     <ClCompile Include="ShadowMapMaterial.cpp" />
-    <ClCompile Include="ShadowMapRenderer.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />

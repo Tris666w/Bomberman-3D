@@ -98,24 +98,7 @@ void GameObject::RootDraw(const GameContext& gameContext)
 	}
 }
 
-<<<<<<< HEAD
-void GameObject::RootDrawShadowMap(const GameContext& gameContext)
-{
-	//Component Draw
-	for (BaseComponent* pComp : m_pComponents)
-	{
-		pComp->DrawShadowMap(gameContext);
-	}
 
-	//Root-Object Draw
-	for (GameObject* pChild : m_pChildren)
-	{
-		pChild->RootDrawShadowMap(gameContext);
-	}
-}
-
-=======
->>>>>>> parent of 57deed8 (Week 8 Initial upload)
 void GameObject::RootPostDraw(const GameContext& gameContext)
 {
 	//Post-Draw
