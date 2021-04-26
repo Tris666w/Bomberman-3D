@@ -140,8 +140,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="ModelAnimator.cpp" />
-    <ClCompile Include="ShadowMapMaterial.cpp" />
-    <ClCompile Include="ShadowMapRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -313,8 +311,6 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ModelAnimator.h" />
-    <ClInclude Include="ShadowMapRenderer.h" />
-    <ClInclude Include="ShadowMapMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

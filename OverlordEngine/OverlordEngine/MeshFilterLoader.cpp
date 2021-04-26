@@ -226,9 +226,11 @@ MeshFilter* MeshFilterLoader::LoadContent(const std::wstring& assetFile)
 		break;
 		case MeshDataType::SKELETON:
 		{
+			//TODO: Complete
+			//1. Read/Assign the boneCount (pMesh->m_BoneCount)
+			//2. Move the buffer to the next block position (don't forget that we already moved the reader ;) )
 			pMesh->m_BoneCount = binReader->Read<UINT16>();
-			auto moveAmount = dataOffset - sizeof(UINT16);
-			binReader->MoveBufferPosition(moveAmount);
+			
 				
 		}
 		break;
