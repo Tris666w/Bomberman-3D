@@ -15,98 +15,146 @@ m_AnimationSpeed(1.0f)
 
 void ModelAnimator::SetAnimation(UINT clipNumber)
 {
-	UNREFERENCED_PARAMETER(clipNumber);
-	//TODO: complete
-	//Set m_ClipSet to false
-	//Check if clipNumber is smaller than the actual m_AnimationClips vector size
-	//If not,
-		//	Call Reset
-		//	Log a warning with an appropriate message
-		//	return
-	//else
-		//	Retrieve the AnimationClip from the m_AnimationClips vector based on the given clipNumber
-		//	Call SetAnimation(AnimationClip clip)
+	m_ClipSet = false;
+	if (clipNumber > m_pMeshFilter->m_AnimationClips.size())
+	{
+		Reset();
+		Logger::LogWarning(L" ModelAnimator::SetAnimation(UINT clipNumber) -> clipNumber > m_AnimationClips.size");
+		return;
+	}
+	else
+	{
+		SetAnimation(m_pMeshFilter->m_AnimationClips[clipNumber]);
+	}
 }
 
 void ModelAnimator::SetAnimation(std::wstring clipName)
 {
-	UNREFERENCED_PARAMETER(clipName);
-	//TODO: complete
-	//Set m_ClipSet to false
-	//Iterate the m_AnimationClips vector and search for an AnimationClip with the given name (clipName)
-	//If found,
-	//	Call SetAnimation(Animation Clip) with the found clip
-	//Else
-	//	Call Reset
-	//	Log a warning with an appropriate message
+	m_ClipSet = false;
+	bool foundAnim = false;
+	for (const AnimationClip& animClip : m_pMeshFilter->m_AnimationClips)
+	{
+		if (clipName == animClip.Name)
+		{
+			SetAnimation(animClip);
+		}
+	}
+	if (!foundAnim)
+	{
+		Reset();
+		Logger::LogWarning(L" ModelAnimator::SetAnimation(std::wstring clipName) -> No clip with given name found");
+	}
 }
 
 void ModelAnimator::SetAnimation(AnimationClip clip)
 {
-	UNREFERENCED_PARAMETER(clip);
-	//TODO: complete
-	//Set m_ClipSet to true
-	//Set m_CurrentClip
-
-	//Call Reset(false)
+	m_ClipSet = true;
+	m_CurrentClip = clip;
+	Reset(false);
 }
 
 void ModelAnimator::Reset(bool pause)
 {
-	UNREFERENCED_PARAMETER(pause);
-	//TODO: complete
-	//If pause is true, set m_IsPlaying to false
+	if (pause)
+	{
+		m_IsPlaying = false;
+	}
+	m_TickCount = 0.f;
+	m_AnimationSpeed = 1.0f;
 
-	//Set m_TickCount to zero
-	//Set m_AnimationSpeed to 1.0f
-
-	//If m_ClipSet is true
-	//	Retrieve the BoneTransform from the first Key from the current clip (m_CurrentClip)
-	//	Refill the m_Transforms vector with the new BoneTransforms (have a look at vector::assign)
-	//Else
-	//	Create an IdentityMatrix 
-	//	Refill the m_Transforms vector with this IdenityMatrix (Amount = BoneCount) (have a look at vector::assign)
+	if (m_ClipSet)
+	{
+		auto boneTransformVect = m_CurrentClip.Keys[0].BoneTransforms;
+		m_Transforms.assign(boneTransformVect.begin(),boneTransformVect.end());
+	}
+	else
+	{
+		DirectX::XMFLOAT4X4 identity{};
+		m_Transforms.assign(m_pMeshFilter->m_BoneCount,identity);
+	}
 }
 
 void ModelAnimator::Update(const GameContext& gameContext)
 {
-	UNREFERENCED_PARAMETER(gameContext);
-	//TODO: complete
-	//We only update the transforms if the animation is running and the clip is set
 	if (m_IsPlaying && m_ClipSet)
 	{
-		//1. 
-		//Calculate the passedTicks (see the lab document)
-		//auto passedTicks = ...
-		//Make sure that the passedTicks stay between the m_CurrentClip.Duration bounds (fmod)
+		auto passedTicks = gameContext.pGameTime->GetElapsed() * m_CurrentClip.TicksPerSecond * m_AnimationSpeed;
+		if (passedTicks > m_CurrentClip.Duration)
+		{
+			passedTicks = m_CurrentClip.Duration;
+		}	
 
-		//2. 
-		//IF m_Reversed is true
-		//	Subtract passedTicks from m_TickCount
-		//	If m_TickCount is smaller than zero, add m_CurrentClip.Duration to m_TickCount
-		//ELSE
-		//	Add passedTicks to m_TickCount
-		//	if m_TickCount is bigger than the clip duration, subtract the duration from m_TickCount
+		if (m_Reversed)
+		{
+			m_TickCount -= passedTicks;
+			if (m_TickCount < 0)
+				m_TickCount += m_CurrentClip.Duration;
+		}
+		else
+		{
+			m_TickCount += passedTicks;
+			if (m_TickCount > m_CurrentClip.Duration)
+				m_TickCount -= m_CurrentClip.Duration;
+		}
 
-		//3.
-		//Find the enclosing keys
 		AnimationKey keyA, keyB;
-		//Iterate all the keys of the clip and find the following keys:
-		//keyA > Closest Key with Tick before/smaller than m_TickCount
-		//keyB > Closest Key with Tick after/bigger than m_TickCount
+		float tickDiff = 0;
+		float previousTickDiff = FLT_MAX;
+		for (const AnimationKey& currentKey : m_CurrentClip.Keys)
+		{
+			tickDiff = m_TickCount - currentKey.Tick;
+			if (tickDiff > 0.f)
+			{
+				keyA = currentKey;
+				continue;
+			}
+			tickDiff = currentKey.Tick - m_TickCount;
+			if (tickDiff > 0.f && previousTickDiff > tickDiff)
+			{
+				keyB = currentKey;
+				previousTickDiff = tickDiff;
+			}
+		}
 
 		//4.
 		//Interpolate between keys
 		//Figure out the BlendFactor (See lab document)
+		tickDiff = keyB.Tick - keyA.Tick;
+		float const currentRelativeTick = m_TickCount - keyA.Tick;
+		float blendWeight = (tickDiff / currentRelativeTick) / 100.f;
+
 		//Clear the m_Transforms vector
-		//FOR every boneTransform in a key (So for every bone)
-		//	Retrieve the transform from keyA (transformA)
-		//	auto transformA = ...
-		// 	Retrieve the transform from keyB (transformB)
-		//	auto transformB = ...
-		//	Decompose both transforms
-		//	Lerp between all the transformations (Position, Scale, Rotation)
-		//	Compose a transformation matrix with the lerp-results
-		//	Add the resulting matrix to the m_Transforms vector
+		m_Transforms.clear();
+
+		for (int index = 0 ;index <m_pMeshFilter->m_BoneCount; ++index)
+		{
+			auto const transformA = DirectX::XMLoadFloat4x4(&keyA.BoneTransforms[index]);
+			auto const transformB = DirectX::XMLoadFloat4x4(&keyB.BoneTransforms[index]);
+			
+			DirectX::XMVECTOR positionA {};
+			DirectX::XMVECTOR positionB {};
+			DirectX::XMVECTOR scaleA {};
+			DirectX::XMVECTOR scaleB {};
+			DirectX::XMVECTOR rotationA {};
+			DirectX::XMVECTOR rotationB {};
+
+			DirectX::XMMatrixDecompose(&scaleA,&rotationA,&positionA,transformA);
+			DirectX::XMMatrixDecompose(&scaleB,&rotationB,&positionB,transformB);
+			
+			auto const interpolatedPos = DirectX::XMVectorLerp(positionA,positionB,blendWeight);
+			auto const interpolatedRot = DirectX::XMQuaternionSlerp(rotationA,rotationB,blendWeight);
+			auto const interpolatedScale = DirectX::XMVectorLerp(scaleA,scaleB,blendWeight);
+			
+			auto const translationMatrix = DirectX::XMMatrixTranslationFromVector(interpolatedPos);
+			auto const rotationMatrix = DirectX::XMMatrixRotationQuaternion(interpolatedRot);
+			auto const scaleMatrix = DirectX::XMMatrixScalingFromVector(interpolatedScale);
+
+			auto const transformXMMatrix = rotationMatrix * translationMatrix * scaleMatrix;
+			
+			DirectX::XMFLOAT4X4 transformMatrix{};
+			DirectX::XMStoreFloat4x4(&transformMatrix,transformXMMatrix);
+			m_Transforms.push_back(transformMatrix);
+			
+		}
 	}
 }
