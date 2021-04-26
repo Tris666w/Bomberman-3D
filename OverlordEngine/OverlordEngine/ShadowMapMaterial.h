@@ -6,8 +6,8 @@ class ShadowMapMaterial final
 public:
 	enum ShadowGenType
 	{
-		Static = 0,
-		Skinned = 1
+		Static,
+		Skinned
 	};
 
 	ShadowMapMaterial() = default;

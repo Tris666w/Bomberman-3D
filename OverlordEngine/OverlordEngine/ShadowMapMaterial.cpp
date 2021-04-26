@@ -50,13 +50,11 @@ void ShadowMapMaterial::Initialize(const GameContext& gameContext)
 void ShadowMapMaterial::SetLightVP(DirectX::XMFLOAT4X4 lightVP) const
 {
 	m_pLightVPMatrixVariable->SetMatrix(reinterpret_cast<float*>(&lightVP));
-
 }
 
 void ShadowMapMaterial::SetWorld(DirectX::XMFLOAT4X4 world) const
 {
 	m_pWorldMatrixVariable->SetMatrix(reinterpret_cast<float*>(&world));
-
 }
 
 void ShadowMapMaterial::SetBones(const float* pData, int count) const

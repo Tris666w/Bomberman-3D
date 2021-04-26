@@ -138,6 +138,7 @@ private:
 	void RootUpdate(const GameContext& gameContext);
 	void RootDraw(const GameContext& gameContext);
 	void RootPostDraw(const GameContext& gameContext);
+	void RootDrawShadowMap(const GameContext& gameContext);
 
 	std::vector<GameObject*> m_pChildren;
 	std::vector<BaseComponent*> m_pComponents;

@@ -141,6 +141,7 @@
     </ClCompile>
     <ClCompile Include="ModelAnimator.cpp" />
     <ClCompile Include="ShadowMapMaterial.cpp" />
+    <ClCompile Include="ShadowMapRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -313,6 +314,7 @@
     </ClInclude>
     <ClInclude Include="ModelAnimator.h" />
     <ClInclude Include="ShadowMapMaterial.h" />
+    <ClInclude Include="ShadowMapRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">
