@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 
 #include "MeshFilter.h"
@@ -86,17 +87,12 @@ int MeshFilter::GetVertexBufferId(UINT inputLayoutId)
 
 void MeshFilter::BuildVertexBuffer(const GameContext& gameContext, Material* pMaterial)
 {
-	BuildVertexBuffer(gameContext, pMaterial->m_InputLayoutID, pMaterial->m_pInputLayoutSize, pMaterial->m_pInputLayoutDescriptions);
-}
-
-void MeshFilter::BuildVertexBuffer(const GameContext& gameContext, UINT inputLayoutID, UINT inputLayoutSize, const std::vector<ILDescription>& inputLayoutDescriptions)
-{
 	//Check if VertexBufferInfo already exists with requested InputLayout
-	if (GetVertexBufferId(inputLayoutID) >= 0)
+	if (GetVertexBufferId(pMaterial->m_InputLayoutID) >= 0)
 		return;
 
 	VertexBufferData data;
-	data.VertexStride = inputLayoutSize;
+	data.VertexStride = pMaterial->m_pInputLayoutSize;
 	data.VertexCount = m_VertexCount;
 	data.BufferSize = data.VertexStride * m_VertexCount;
 	data.IndexCount = m_IndexCount;
@@ -109,13 +105,13 @@ void MeshFilter::BuildVertexBuffer(const GameContext& gameContext, UINT inputLay
 	}
 
 	data.pDataStart = pDataLocation;
-	data.InputLayoutID = inputLayoutID;
+	data.InputLayoutID = pMaterial->m_InputLayoutID;
 
 	for (UINT i = 0; i < m_VertexCount; ++i)
 	{
-		for (UINT j = 0; j < inputLayoutDescriptions.size(); ++j)
+		for (UINT j = 0; j < pMaterial->m_pInputLayoutDescriptions.size(); ++j)
 		{
-			auto ilDescription = inputLayoutDescriptions[j];
+			auto ilDescription = pMaterial->m_pInputLayoutDescriptions[j];
 
 			if (i == 0 && !HasElement(ilDescription.SemanticType))
 			{
@@ -187,20 +183,5 @@ const VertexBufferData& MeshFilter::GetVertexBufferData(const GameContext& gameC
 		return m_VertexBuffers.back();
 	}
 
-	return m_VertexBuffers[possibleBuffer];
-}
-
-const VertexBufferData& MeshFilter::GetVertexBufferData(const GameContext& gameContext, UINT inputLayoutId)
-{
-	UNREFERENCED_PARAMETER(gameContext);
-
-	int possibleBuffer = GetVertexBufferId(inputLayoutId);
-	if (possibleBuffer < 0)
-	{
-		Logger::LogError(L"MeshFilter::GetVertexBufferInformation(INPUTLAYOUT_ID) => No VertexBufferInformation for this InputLayoutID found! Initialize before retrieving.");
-
-		//Return last created vertexbufferinformation
-		return m_VertexBuffers.back();
-	}
 	return m_VertexBuffers[possibleBuffer];
 }

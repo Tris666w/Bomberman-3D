@@ -25,8 +25,9 @@ protected:
 	virtual void Update(const GameContext& gameContext) = 0;
 	virtual void Draw(const GameContext& gameContext) = 0;
 	virtual void PostDraw(const GameContext&) {}
-	virtual void DrawShadowMap(const GameContext& gameContext) { UNREFERENCED_PARAMETER(gameContext); }
 
 	GameObject* m_pGameObject;
 	bool m_IsInitialized;
 };
+
+

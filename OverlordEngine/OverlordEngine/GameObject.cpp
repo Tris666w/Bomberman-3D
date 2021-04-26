@@ -98,6 +98,7 @@ void GameObject::RootDraw(const GameContext& gameContext)
 	}
 }
 
+<<<<<<< HEAD
 void GameObject::RootDrawShadowMap(const GameContext& gameContext)
 {
 	//Component Draw
@@ -113,6 +114,8 @@ void GameObject::RootDrawShadowMap(const GameContext& gameContext)
 	}
 }
 
+=======
+>>>>>>> parent of 57deed8 (Week 8 Initial upload)
 void GameObject::RootPostDraw(const GameContext& gameContext)
 {
 	//Post-Draw

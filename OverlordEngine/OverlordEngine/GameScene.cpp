@@ -29,7 +29,6 @@ GameScene::~GameScene()
 	SafeDelete(m_GameContext.pGameTime);
 	SafeDelete(m_GameContext.pInput);
 	SafeDelete(m_GameContext.pMaterialManager);
-	SafeDelete(m_GameContext.pShadowMapper);
 
 	for (auto pChild : m_pChildren)
 	{
@@ -110,13 +109,9 @@ void GameScene::RootInitialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	InputManager::Initialize();
 
 	m_GameContext.pMaterialManager = new MaterialManager();
-	m_GameContext.pShadowMapper = new ShadowMapRenderer();
 
 	m_GameContext.pDevice = pDevice;
 	m_GameContext.pDeviceContext = pDeviceContext;
-
-	//Initialize ShadowMapper
-	m_GameContext.pShadowMapper->Initialize(m_GameContext);
 
 	// Initialize Physx
 	m_pPhysxProxy = new PhysxProxy();
@@ -156,6 +151,7 @@ void GameScene::RootUpdate()
 
 void GameScene::RootDraw()
 {
+<<<<<<< HEAD
 	//TODO: object-Scene SHADOW_PASS - start by setting the correct render target, render all to shadow map and end by reset default render target
 
 	//Object-Scene DrawShadowMap
@@ -166,6 +162,8 @@ void GameScene::RootDraw()
 
 	SceneManager::GetInstance()->GetGame()->SetRenderTarget(nullptr);
 	
+=======
+>>>>>>> parent of 57deed8 (Week 8 Initial upload)
 	//User-Scene Draw
 	Draw();
 

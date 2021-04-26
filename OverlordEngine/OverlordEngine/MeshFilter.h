@@ -6,6 +6,7 @@ class MeshFilterLoader;
 class Material;
 struct GameContext;
 class ModelComponent;
+class DerezModelComponent;
 
 struct VertexBufferData
 {
@@ -60,15 +61,13 @@ private:
 	friend class MeshFilterLoader;
 	friend class ModelComponent;
 	friend class ModelAnimator;
-	friend class ShadowMapRenderer;
+	friend class DerezModelComponent;
 
 	int GetVertexBufferId(UINT inputLayoutId);
-	void BuildVertexBuffer(const GameContext& gameContext, UINT inputLayoutID, UINT inputLayoutSize, const std::vector<ILDescription>& inputLayoutDescriptions);
 	void BuildVertexBuffer(const GameContext& gameContext, Material* pMaterial);
 	void BuildIndexBuffer(const GameContext& gameContext);
 	bool HasElement(ILSemantic element) { return (m_HasElement & static_cast<UINT>(element)) > 0 ? true : false; }
 	const VertexBufferData& GetVertexBufferData(const GameContext& gameContext, Material* pMaterial);
-	const VertexBufferData& GetVertexBufferData(const GameContext& gameContext, UINT inputLayoutId);
 
 	//VERTEX DATA
 	UINT m_VertexCount, m_IndexCount, m_TexCoordCount;

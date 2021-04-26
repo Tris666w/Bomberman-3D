@@ -3,7 +3,6 @@
 #include "CameraComponent.h"
 #include "InputManager.h"
 #include "MaterialManager.h"
-#include "ShadowMapRenderer.h"
 
 class CameraComponent;
 
@@ -56,5 +55,4 @@ struct GameContext
 	ID3D11DeviceContext* pDeviceContext;
 	InputManager* pInput;
 	MaterialManager* pMaterialManager;
-	ShadowMapRenderer* pShadowMapper;
 };
