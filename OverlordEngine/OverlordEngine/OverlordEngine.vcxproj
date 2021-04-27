@@ -104,6 +104,8 @@
     <ClInclude Include="MeshFilterLoader.h" />
     <ClInclude Include="ModelAnimator.h" />
     <ClInclude Include="ModelComponent.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitterComponent.h" />
     <ClInclude Include="PxConvexMeshLoader.h" />
     <ClInclude Include="PxTriangleMeshLoader.h" />
     <ClInclude Include="ShadowMapMaterial.h" />
@@ -167,6 +169,8 @@
     <ClCompile Include="MeshFilterLoader.cpp" />
     <ClCompile Include="ModelAnimator.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleEmitterComponent.cpp" />
     <ClCompile Include="PxConvexMeshLoader.cpp" />
     <ClCompile Include="PxTriangleMeshLoader.cpp" />
     <ClCompile Include="ShadowMapMaterial.cpp" />
