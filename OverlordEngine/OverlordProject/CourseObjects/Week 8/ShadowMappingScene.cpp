@@ -22,10 +22,10 @@ void ShadowMappingScene::Initialize()
 	//Materials
 	//*********
 	//auto diffMat = new DiffuseMaterial_Shadow();
-	/*auto diffMat = new SkinnedDiffuseMaterial_Shadow();
+	auto diffMat = new SkinnedDiffuseMaterial_Shadow();
 	diffMat->SetDiffuseTexture(L"./Resources/Textures/Knight.jpg");
 	diffMat->SetLightDirection(gameContext.pShadowMapper->GetLightDirection());
-	gameContext.pMaterialManager->AddMaterial(diffMat, 0);*/
+	gameContext.pMaterialManager->AddMaterial(diffMat, 0);
 	
 	auto diffMat2 = new DiffuseMaterial_Shadow();
 	diffMat2->SetDiffuseTexture(L"./Resources/Textures/GroundBrick.jpg");
@@ -45,16 +45,16 @@ void ShadowMappingScene::Initialize()
 
 	//Character Mesh
 	//**************
-	//m_pModel = new ModelComponent(L"./Resources/Meshes/Knight.ovm");
-	//m_pModel->SetMaterial(0);
-	//auto obj = new GameObject();
-	//obj->AddComponent(m_pModel);
-	//AddChild(obj);
-	//obj->GetTransform()->Scale(0.1f, 0.1f, 0.1f);
+	m_pModel = new ModelComponent(L"./Resources/Meshes/Knight.ovm");
+	m_pModel->SetMaterial(0);
+	auto obj = new GameObject();
+	obj->AddComponent(m_pModel);
+	AddChild(obj);
+	obj->GetTransform()->Scale(0.1f, 0.1f, 0.1f);
 
-	//auto pAnimator = m_pModel->GetAnimator();
-	//if (pAnimator)
-	//	pAnimator->Play();
+	auto pAnimator = m_pModel->GetAnimator();
+	if (pAnimator)
+		pAnimator->Play();
 
 	//Input
 	//*****

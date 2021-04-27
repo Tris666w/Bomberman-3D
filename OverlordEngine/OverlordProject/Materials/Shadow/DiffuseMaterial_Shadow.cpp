@@ -59,13 +59,22 @@ void DiffuseMaterial_Shadow::LoadEffectVariables()
 	}
 }
 
-void DiffuseMaterial_Shadow::UpdateEffectVariables(const GameContext& , ModelComponent* )
+void DiffuseMaterial_Shadow::UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent)
 {
-	//TODO: update all the necessary shader variables
-	
 	if (m_pDiffuseTexture && m_pDiffuseSRVvariable)
 	{
 		m_pDiffuseSRVvariable->SetResource(m_pDiffuseTexture->GetShaderResourceView());
 	}
 	m_pLightDirectionVariable->SetFloatVector(&m_LightDirection.x);
+	
+	using namespace DirectX;
+	XMMATRIX const world = XMLoadFloat4x4(&pModelComponent->GetTransform()->GetWorld());
+	auto const lightVP = gameContext.pShadowMapper->GetLightVP();
+	XMMATRIX const vp = XMLoadFloat4x4(&lightVP);
+	XMMATRIX const wvp = world * vp;
+	XMFLOAT4X4 lightWorldViewProjection{};
+	XMStoreFloat4x4(&lightWorldViewProjection,wvp);
+	m_pLightWVPvariable->SetMatrix(&lightWorldViewProjection._11);
+	;
+	m_pShadowSRVvariable->SetResource(gameContext.pShadowMapper->GetShadowMap());
 }

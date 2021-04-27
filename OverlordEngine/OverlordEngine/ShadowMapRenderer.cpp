@@ -6,10 +6,14 @@
 #include "MeshFilter.h"
 #include "SceneManager.h"
 #include "OverlordGame.h"
+#include "GameScene.h"
 
 ShadowMapRenderer::~ShadowMapRenderer()
 {
 	//TODO: make sure you don't have memory leaks and/or resource leaks :) -> Figure out if you need to do something here
+	//SafeDelete(m_pShadowMat);
+	SafeDelete(m_pShadowRT);
+
 }
 
 void ShadowMapRenderer::Initialize(const GameContext& gameContext)
@@ -17,7 +21,6 @@ void ShadowMapRenderer::Initialize(const GameContext& gameContext)
 	if (m_IsInitialized)
 		return;
 
-	UNREFERENCED_PARAMETER(gameContext);
 	//TODO: create shadow generator material + initialize it
 	//TODO: create a rendertarget with the correct settings (hint: depth only) for the shadow generator using a RENDERTARGET_DESC
 
@@ -26,9 +29,10 @@ void ShadowMapRenderer::Initialize(const GameContext& gameContext)
 
 	m_pShadowRT = new RenderTarget(gameContext.pDevice);
 	RENDERTARGET_DESC descriptor{};
-	descriptor.Width = int(m_Size);
-	descriptor.Height = int(m_Size);
-	
+	auto window = OverlordGame::GetGameSettings().Window;
+	descriptor.Width = window.Width;
+	descriptor.Height = window.Height;
+
 	descriptor.EnableDepthBuffer = true;
 	descriptor.EnableDepthSRV = true;
 	descriptor.EnableColorBuffer = false;
@@ -135,9 +139,9 @@ void ShadowMapRenderer::UpdateMeshFilter(const GameContext& gameContext, MeshFil
 	
 	int type = -1;
 	if (pMeshFilter->m_HasAnimations)
-		type = 0;
+		type =  ShadowMapMaterial::ShadowGenType::Skinned;
 	else
-		type = 1;
+		type =  ShadowMapMaterial::ShadowGenType::Static;
 
 	pMeshFilter->BuildVertexBuffer(gameContext,m_pShadowMat->m_InputLayoutIds[type],
 		m_pShadowMat->m_InputLayoutSizes[type],m_pShadowMat->m_InputLayoutDescriptions[type]);
@@ -146,6 +150,6 @@ void ShadowMapRenderer::UpdateMeshFilter(const GameContext& gameContext, MeshFil
 ID3D11ShaderResourceView* ShadowMapRenderer::GetShadowMap() const
 {
 	//TODO: return the depth shader resource view of the shadow generator render target
-	return m_pShadowRT->GetShaderResourceView();
+	return m_pShadowRT->GetDepthShaderResourceView();
 
 }

@@ -7,6 +7,18 @@
 ShadowMapMaterial::~ShadowMapMaterial()
 {
 	//TODO: make sure you don't have memory leaks and/or resource leaks :) -> Figure out if you need to do something here
+	SafeRelease(m_pWorldMatrixVariable);
+	SafeRelease(m_pBoneTransforms);
+	SafeRelease(m_pLightVPMatrixVariable);
+	
+	
+	for (auto& technique : m_pShadowTechs)
+		SafeRelease(technique);
+
+
+	for (auto& inputLayout : m_pInputLayouts)
+			SafeRelease(inputLayout);
+
 }
 
 void ShadowMapMaterial::Initialize(const GameContext& gameContext)
