@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W9
+#define W10
 
 #ifdef W3
 	#include "CourseObjects/Week 3/MinionScene.h"
@@ -43,6 +43,9 @@
 #endif
 #ifdef W9
 	#include "CourseObjects/Week 9/ParticleScene.h"
+#endif
+#ifdef W10
+	#include "CourseObjects/Week 10/PostProcessingScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -104,6 +107,10 @@ void MainGame::Initialize()
 #ifdef W9
 	SceneManager::GetInstance()->AddGameScene(new ParticleScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"ParticleScene");
+#endif
+#ifdef W10
+	SceneManager::GetInstance()->AddGameScene(new PostProcessingScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"PostProcessingScene");
 #endif
 }
 
