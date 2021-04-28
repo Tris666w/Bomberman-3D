@@ -132,6 +132,26 @@ inline void Clamp(T& value, T hi, T lo)
 	if (value < lo)
 		value = lo;
 }
+
+//String conversion source : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
+//Comment by user "zumalifeguard"
+
+inline std::string WstringToString(const std::wstring& s)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.to_bytes(s);
+}
+
+
+inline std::wstring StringToWString(const std::string& s)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.from_bytes(s);
+}
 #pragma endregion Templates & Macros
 
 #include "GeneralStructs.h"

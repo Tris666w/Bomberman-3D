@@ -11,8 +11,8 @@
 #include "TextRenderer.h"
 
 #include "../../Materials/DiffuseMaterial.h"
-#include "PostBlur.h"
-#include "PostGrayscale.h"
+#include "../../Materials/Post/PostBlur.h"
+#include "../../Materials/Post/PostGrayscale.h"
 
 PostProcessingScene::PostProcessingScene(void) :
 	GameScene(L"PostProcessingScene"),
@@ -37,8 +37,8 @@ void PostProcessingScene::Initialize()
 
 	m_pFont = ContentManager::Load<SpriteFont>(L"./Resources/SpriteFonts/Consolas_32.fnt");
 
-	//AddPostProcessingEffect(new PostBlur());
-	//AddPostProcessingEffect(new PostGrayscale());
+	AddPostProcessingEffect(new PostBlur());
+	AddPostProcessingEffect(new PostGrayscale());
 }
 
 void PostProcessingScene::Update()

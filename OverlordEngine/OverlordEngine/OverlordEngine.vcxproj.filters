@@ -158,6 +158,7 @@
     <ClCompile Include="ParticleEmitterComponent.cpp">
       <Filter>Particles</Filter>
     </ClCompile>
+    <ClCompile Include="PostProcessingMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -347,6 +348,7 @@
     <ClInclude Include="ParticleEmitterComponent.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="PostProcessingMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

@@ -1,5 +1,6 @@
 #pragma once
 
+class PostProcessingMaterial;
 class GameObject;
 class SceneManager;
 class CameraComponent;
@@ -23,6 +24,11 @@ public:
 	PhysxProxy* GetPhysxProxy() const { return m_pPhysxProxy; }
 	void SetActiveCamera(CameraComponent* pCameraComponent);
 
+	//Update PP
+	void AddPostProcessingEffect(PostProcessingMaterial* effect);
+	void RemovePostProcessingEffect(PostProcessingMaterial* effect);
+	
+
 protected:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
@@ -31,6 +37,7 @@ protected:
 	virtual void SceneActivated() {}
 	virtual void SceneDeactivated() {}
 
+	std::vector<PostProcessingMaterial*>m_PostProcessingEffects{};
 private:
 	friend class SceneManager;
 

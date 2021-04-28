@@ -248,6 +248,7 @@ bool InputManager::IsMouseButtonDown_unsafe(int button, bool previousFrame)
 {
 	if (previousFrame)
 		return (m_pOldKeyboardState[button] & 0xF0) != 0;
+	
 	return (m_pCurrKeyboardState[button] & 0xF0) != 0;
 }
 

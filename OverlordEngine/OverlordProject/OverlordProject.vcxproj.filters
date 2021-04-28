@@ -30,6 +30,9 @@
     <ClCompile Include="Materials\Shadow\DiffuseMaterial_Shadow.cpp" />
     <ClCompile Include="Materials\Shadow\SkinnedDiffuseMaterial_Shadow.cpp" />
     <ClCompile Include="CourseObjects\Week 9\ParticleScene.cpp" />
+    <ClCompile Include="Materials\Post\PostBlur.cpp" />
+    <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
+    <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -61,5 +64,8 @@
     <ClInclude Include="Materials\Shadow\DiffuseMaterial_Shadow.h" />
     <ClInclude Include="Materials\Shadow\SkinnedDiffuseMaterial_Shadow.h" />
     <ClInclude Include="CourseObjects\Week 9\ParticleScene.h" />
+    <ClInclude Include="Materials\Post\PostBlur.h" />
+    <ClInclude Include="Materials\Post\PostGrayscale.h" />
+    <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
   </ItemGroup>
 </Project>

@@ -96,6 +96,8 @@ void MainGS(point VS_DATA vertex[1], inout TriangleStream<GS_DATA> triStream)
 	float rotation = vertex[0].TransformData.w; //Extract the rotation data from the VS_DATA vertex struct
 	float2 pivot = vertex[0].TransformData2.xy; //Extract the pivot data from the VS_DATA vertex struct
 	float2 scale = vertex[0].TransformData2.zw; //Extract the scale data from the VS_DATA vertex struct
+	float4 color = vertex[0].Color; //Extract the color data from the VS_DATA vertex struct
+	
 	float2 texCoord = float2(0, 0); //Initial Texture Coordinate
 	float2 pivotOffset = float2(0, 0);
 	float2 rotCosSin = float2(0, 0);
@@ -116,25 +118,25 @@ void MainGS(point VS_DATA vertex[1], inout TriangleStream<GS_DATA> triStream)
 	pivotOffset = pivot * scale * gTextureSize;
 	
 	//VERTEX 1 [LT]
-	CreateVertex(triStream, position, float4(1, 1, 1, 1), texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
+	CreateVertex(triStream, position, color, texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
 
 	//VERTEX 2 [RT]
 	position.x += (scale.x * gTextureSize.x);
 	texCoord = float2(1.f, 0.f);
 	
-	CreateVertex(triStream, position, float4(1, 0, 0, 1), texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
+	CreateVertex(triStream, position, color, texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
 
 	//VERTEX 3 [LB]
 	texCoord = float2(0.f, 1.f);
 	position.x -= (scale.x * gTextureSize.x);
 	position.y += (scale.y * gTextureSize.y);
 	
-	CreateVertex(triStream, position, float4(0, 1, 0, 1), texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
+	CreateVertex(triStream, position, color, texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
 
 	//VERTEX 4 [RB]
 	texCoord = float2(1.f, 1.f);
 	position.x += (scale.x * gTextureSize.x);
-	CreateVertex(triStream, position, float4(0, 0, 1, 1), texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
+	CreateVertex(triStream, position, color, texCoord, rotation, rotCosSin, offset, pivotOffset); //Change the color data too!
 }
 
 //PIXEL SHADER
