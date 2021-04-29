@@ -99,6 +99,9 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -150,6 +153,9 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />

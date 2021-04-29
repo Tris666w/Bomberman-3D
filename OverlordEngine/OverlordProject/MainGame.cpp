@@ -7,13 +7,12 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define W10
+#define EXAM
 
 #ifdef W3
 	#include "CourseObjects/Week 3/MinionScene.h"
 	#include "CourseObjects/Week 3/TutorialScene.h"
-	#include "CourseObjects/Week 3/ComponentTestScene.h"
-	#include "CourseObjects/Week 3/Pong/PongScene.h"
+	#include "CourseObjects/Week 3/PongScene.h"
 #endif
 #ifdef W4_A
 	#include "CourseObjects/Week 4/SpriteTestScene.h"
@@ -47,7 +46,9 @@
 #ifdef W10
 	#include "CourseObjects/Week 10/PostProcessingScene.h"
 #endif
-
+#ifdef EXAM
+	#include "CourseObjects/Examproject/BombermanScene.h"
+#endif
 MainGame::MainGame(void)
 {}
 
@@ -66,10 +67,9 @@ void MainGame::Initialize()
 #ifdef W3
 	SceneManager::GetInstance()->AddGameScene(new MinionScene());
 	SceneManager::GetInstance()->AddGameScene(new TutorialScene());
-	SceneManager::GetInstance()->AddGameScene(new ComponentTestScene());
 	SceneManager::GetInstance()->AddGameScene(new PongScene());
 
-	SceneManager::GetInstance()->SetActiveGameScene(L"MinionScene");
+	SceneManager::GetInstance()->SetActiveGameScene(L"PongScene");
 #endif
 #ifdef W4_A
 	SceneManager::GetInstance()->AddGameScene(new SpriteTestScene());
@@ -111,6 +111,10 @@ void MainGame::Initialize()
 #ifdef W10
 	SceneManager::GetInstance()->AddGameScene(new PostProcessingScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"PostProcessingScene");
+#endif
+#ifdef EXAM
+	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"BombermanScene");
 #endif
 }
 

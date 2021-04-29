@@ -33,6 +33,9 @@
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -67,5 +70,8 @@
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
   </ItemGroup>
 </Project>

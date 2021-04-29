@@ -18,7 +18,6 @@ void PongScene::Initialize()
 {
 	const auto& gameContext = GetGameContext();
 
-
 	//Camera
 	auto camEmpty = new GameObject();
 	auto cam = new CameraComponent();
