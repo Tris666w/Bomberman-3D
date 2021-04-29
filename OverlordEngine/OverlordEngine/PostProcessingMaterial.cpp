@@ -26,10 +26,7 @@ PostProcessingMaterial::PostProcessingMaterial(std::wstring effectFile, unsigned
 
 PostProcessingMaterial::~PostProcessingMaterial()
 {
-	//TODO: delete and/or release necessary objects and/or resources
 	SafeRelease(m_pInputLayout);
-	SafeRelease(m_pTechnique);
-	SafeRelease(m_pEffect);
 	SafeRelease(m_pVertexBuffer);
 	SafeRelease(m_pIndexBuffer);
 	SafeDelete(m_pRenderTarget);
@@ -39,7 +36,6 @@ void PostProcessingMaterial::Initialize(const GameContext& gameContext)
 {
 	if (!m_IsInitialized)
 	{
-		//TODO: complete
 		//1. LoadEffect (LoadEffect(...))
 		LoadEffect(gameContext,m_effectFile);
 		
@@ -167,7 +163,7 @@ void PostProcessingMaterial::CreateVertexBuffer(const GameContext& gameContext)
 	m_VertexBufferStride = sizeof(VertexPosTex);
 	
 	//create a ID3D10Buffer in graphics memory containing the vertex info
-	auto hr = gameContext.pDevice->CreateBuffer(&desc,&initialData,&m_pVertexBuffer);
+	auto const hr = gameContext.pDevice->CreateBuffer(&desc,&initialData,&m_pVertexBuffer);
 	Logger::LogHResult(hr, L"PostProcessingMaterial::CreateVertexBuffer()");
 	
 }

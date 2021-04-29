@@ -21,7 +21,6 @@ void ShadowMappingScene::Initialize()
 
 	//Materials
 	//*********
-	//auto diffMat = new DiffuseMaterial_Shadow();
 	auto diffMat = new SkinnedDiffuseMaterial_Shadow();
 	diffMat->SetDiffuseTexture(L"./Resources/Textures/Knight.jpg");
 	diffMat->SetLightDirection(gameContext.pShadowMapper->GetLightDirection());
