@@ -99,6 +99,8 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
@@ -153,6 +155,8 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
     <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />

@@ -36,6 +36,8 @@
     <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -73,5 +75,7 @@
     <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
   </ItemGroup>
 </Project>

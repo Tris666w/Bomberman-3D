@@ -2,13 +2,16 @@
 #include "BombermanCharPrefab.h"
 #include "PhysxManager.h"
 #include "Components.h"
-#include "ModelAnimator.h"
-#include "..\..\Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
+#include "BombManager.h"
+#include"BombPrefab.h"
+#include "GameScene.h"
 
-BombermanCharPrefab::BombermanCharPrefab(float radius, float height, float moveSpeed)
+BombermanCharPrefab::BombermanCharPrefab( int blockSize, float radius, float height,float stepOffset, float moveSpeed)
 	:m_Radius(radius),
 	m_Height(height),
+	m_StepOffset(stepOffset),
 	m_MoveSpeed(moveSpeed),
+	m_BlockSize(blockSize),
 	m_pController(nullptr),
 	//Running
 	m_MaxRunVelocity(50.0f), 
@@ -26,13 +29,16 @@ BombermanCharPrefab::BombermanCharPrefab(float radius, float height, float moveS
 
 void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 {
-	//TODO: Create controller
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
-	auto* pControllerComponent = new ControllerComponent(physx->createMaterial(0.f,0.f,0.f),m_Radius,m_Height);
+	auto* pControllerComponent = new ControllerComponent(physx->createMaterial(0.f,0.f,0.f),m_Radius,m_Height,m_StepOffset,L"Bomberman"	);
 	m_pController = pControllerComponent;
 	AddComponent(pControllerComponent);
 
-	//TODO: Register all Input Actions
+	//Add 1 bomb per player
+	auto* pBomb = new BombPrefab();
+	GetScene()->AddChild(pBomb);
+	BombManager::GetInstance()->AddBomb(pBomb);
+
 	auto inputAction = InputAction(CharacterMovement::LEFT, InputTriggerState::Down, VK_LEFT);
 	gameContext.pInput->AddInputAction(inputAction);
 	inputAction = InputAction(CharacterMovement::RIGHT, InputTriggerState::Down, VK_RIGHT);
@@ -41,6 +47,9 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	gameContext.pInput->AddInputAction(inputAction);
 	inputAction = InputAction(CharacterMovement::FORWARD, InputTriggerState::Down, VK_UP);
 	gameContext.pInput->AddInputAction(inputAction);
+	inputAction = InputAction(CharacterMovement::DROP_BOMB, InputTriggerState::Pressed, VK_SPACE);
+	gameContext.pInput->AddInputAction(inputAction);
+
 }
 
 void BombermanCharPrefab::PostInitialize(const GameContext& )
@@ -49,6 +58,18 @@ void BombermanCharPrefab::PostInitialize(const GameContext& )
 
 void BombermanCharPrefab::Update(const GameContext& gameContext)
 {
+	if (gameContext.pInput->IsActionTriggered(CharacterMovement::DROP_BOMB))
+	{
+		auto* pBomb = BombManager::GetInstance()->GetBomb();
+		if (!pBomb)
+			Logger::LogWarning(L"No bombs available?");
+		else
+		{
+			pBomb->Activate(CalculateBombSpawnPos());
+		}
+		
+	}
+
 	using namespace DirectX;
 	auto move = XMFLOAT2(0, 0);
 	if (gameContext.pInput->IsActionTriggered(CharacterMovement::LEFT))
@@ -96,4 +117,15 @@ void BombermanCharPrefab::Update(const GameContext& gameContext)
 	XMFLOAT3 moveVelocity {};
 	XMStoreFloat3(&moveVelocity,velocity);
 	m_pController->Move(moveVelocity);
+}
+
+DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
+{
+	DirectX::XMFLOAT3 spawnPos = {0,GetTransform()->GetWorldPosition().y - m_Height/3.f,0 };
+	DirectX::XMFLOAT3 const worldPos = {GetTransform()->GetWorldPosition()};
+
+	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / m_BlockSize) * m_BlockSize) + m_BlockSize/2.f;
+	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / m_BlockSize) * m_BlockSize) + m_BlockSize/2.f;
+
+	return spawnPos;
 }

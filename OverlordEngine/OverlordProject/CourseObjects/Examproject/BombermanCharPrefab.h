@@ -4,6 +4,7 @@
 class ControllerComponent;
 class CameraComponent;
 class ModelComponent;
+class BombPrefab;
 
 class BombermanCharPrefab : public GameObject
 {
@@ -13,10 +14,11 @@ public:
 		LEFT = 0,
 		RIGHT = 1,
 		FORWARD = 2,
-		BACKWARD = 3
+		BACKWARD = 3,
+		DROP_BOMB = 4
 	};
 	
-	BombermanCharPrefab(float radius = 2, float height = 5, float moveSpeed = 100);
+	BombermanCharPrefab(int blockSize, float radius = 2, float height = 5,float stepOffset = 0.5f, float moveSpeed = 100);
 	virtual ~BombermanCharPrefab() = default;
 
 	BombermanCharPrefab(const BombermanCharPrefab& other) = delete;
@@ -32,10 +34,9 @@ public:
 protected:
 	ControllerComponent* m_pController;
 	ModelComponent* m_pModel = nullptr;
-
 	float m_MoveSpeed;
-	float m_Radius, m_Height;
-
+	float m_Radius, m_Height, m_StepOffset;
+	const int m_BlockSize;
 	//Running
 	float m_MaxRunVelocity, 
 		m_TerminalVelocity,
@@ -49,6 +50,8 @@ protected:
 
 	DirectX::XMFLOAT3 m_Velocity;
 	
-	
+
+	//Methods
+	DirectX::XMFLOAT3 CalculateBombSpawnPos()const;
 };
 

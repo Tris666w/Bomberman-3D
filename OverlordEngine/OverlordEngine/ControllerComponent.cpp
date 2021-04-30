@@ -9,10 +9,11 @@
 
 #pragma warning(push)
 #pragma warning(disable: 26812)
-ControllerComponent::ControllerComponent(physx::PxMaterial* material, float radius, float height, std::wstring name,
+ControllerComponent::ControllerComponent(physx::PxMaterial* material, float radius, float height, float stepOffset, std::wstring name,
 										 physx::PxCapsuleClimbingMode::Enum climbingMode)
 	: m_Radius(radius),
 	  m_Height(height),
+	  m_StepOffset(stepOffset),
 	  m_Name(std::move(name)),
 	  m_Controller(nullptr),
 	  m_ClimbingMode(climbingMode),
@@ -49,11 +50,12 @@ void ControllerComponent::Initialize(const GameContext&)
 	capsuleControllerDesc.height = m_Height;
 	capsuleControllerDesc.climbingMode = m_ClimbingMode;
 	capsuleControllerDesc.contactOffset = 0.1f;
+	capsuleControllerDesc.stepOffset = m_StepOffset;
 	capsuleControllerDesc.upDirection = physx::PxVec3(0.f,1.f,0.f);
 	capsuleControllerDesc.material = m_pMaterial;
 	capsuleControllerDesc.position = ToPxExtendedVec3(GetGameObject()->GetTransform()->GetPosition());
 	capsuleControllerDesc.userData = this;
-	
+
 	//3. Create the controller object (m_pController), use the ControllerManager to do that (CHECK IF VALID!!)
 	m_Controller = pControllerManager->createController(capsuleControllerDesc);
 	if (m_Controller == nullptr)

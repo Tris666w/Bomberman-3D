@@ -9,7 +9,7 @@ public:
 	ControllerComponent& operator=(const ControllerComponent& other) = delete;
 	ControllerComponent& operator=(ControllerComponent&& other) noexcept = delete;
 
-	ControllerComponent(physx::PxMaterial* material, float radius = 2, float height = 5, std::wstring name = L"Character",
+	ControllerComponent(physx::PxMaterial* material, float radius = 2, float height = 5, float stepOffset = 0.5f, std::wstring name = L"Character",
 	                    physx::PxCapsuleClimbingMode::Enum climbingMode = physx::PxCapsuleClimbingMode::eEASY);
 	virtual ~ControllerComponent() = default;
 
@@ -30,7 +30,7 @@ protected:
 
 private:
 
-	float m_Radius, m_Height;
+	float m_Radius, m_Height, m_StepOffset;
 	std::wstring m_Name;
 	physx::PxController* m_Controller;
 	physx::PxCapsuleClimbingMode::Enum m_ClimbingMode;
