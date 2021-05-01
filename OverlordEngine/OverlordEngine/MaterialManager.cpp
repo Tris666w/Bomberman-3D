@@ -70,3 +70,27 @@ void MaterialManager::AddMaterial(Material *pMaterial, UINT materialId)
 
 	m_pMaterials[materialId] = pMaterial;
 }
+
+UINT MaterialManager::AddMaterial(Material* pMaterial)
+{
+	bool hasFoundNewID = false;
+	UINT newID = 0;
+	while (!hasFoundNewID)
+	{
+		if (std::find_if(m_pMaterials.begin(),m_pMaterials.end(),
+			[&newID](const std::pair<UINT,Material*>& pair){
+				if (pair.first == newID)
+					return true;
+				else
+					return false;
+			}) == m_pMaterials.end())
+		{
+			hasFoundNewID = true;
+		}
+		else
+			++newID;
+		
+	}
+	AddMaterial(pMaterial,newID);
+	return newID;
+}

@@ -9,6 +9,17 @@ class CameraComponent: public BaseComponent
 	DirectX::XMFLOAT4X4 m_View, m_Projection, m_ViewInverse, m_ViewProjection, m_ViewProjectionInverse;
 	float m_FarPlane, m_NearPlane, m_FOV, m_Size;
 	bool m_IsActive, m_PerspectiveProjection;
+	
+	//Camera shake
+	DirectX::XMFLOAT3 m_ShakeStartPos;
+	float m_ShakeTimer;
+	float m_ShakeIntensity;
+	bool m_IsShaking;
+	float m_ShakeTime;
+
+	void Shake(float elapsedSec);
+	
+
 public:
 	CameraComponent(const CameraComponent& other) = delete;
 	CameraComponent(CameraComponent&& other) noexcept = delete;
@@ -35,6 +46,9 @@ public:
 	const DirectX::XMFLOAT4X4& GetViewProjectionInverse() const {return m_ViewProjectionInverse;}
 
 	GameObject* Pick(const GameContext& gameContext, CollisionGroupFlag ignoreGroups = static_cast<CollisionGroupFlag>(0)) const;
+
+	void ShakeCamera(float duration, float intensity);
+	
 
 protected:
 	

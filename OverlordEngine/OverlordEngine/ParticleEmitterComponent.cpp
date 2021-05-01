@@ -17,7 +17,8 @@ ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int 
 	m_ParticleCount(particleCount),
 	m_ActiveParticles(0),
 	m_LastParticleInit(0.0f),
-	m_AssetFile(std::move(assetFile))
+	m_AssetFile(std::move(assetFile)),
+	m_Particles()
 {
 	for (int i = 0; i < m_ParticleCount; ++i)
 		m_Particles.push_back(new Particle(m_Settings));
@@ -28,9 +29,27 @@ ParticleEmitterComponent::~ParticleEmitterComponent()
 	for (auto& particle: m_Particles)
 		delete particle;
 
+	for (auto& pBurst: m_Bursts)
+		delete pBurst;
+	
 	SafeRelease(m_pInputLayout);
 	SafeRelease(m_pVertexBuffer);
 	
+}
+
+void ParticleEmitterComponent::AddBurst(Burst* pBurst)
+{
+	if (std::find(m_Bursts.begin(),m_Bursts.end(),pBurst) != m_Bursts.end())
+	{
+		Logger::LogWarning(L"ParticleEmitterComponent::AddBurst, this burst is already in use");
+	}
+	m_Bursts.push_back(pBurst);
+}
+
+void ParticleEmitterComponent::RemoveBurst(Burst* pBurst)
+{
+	SafeDelete(pBurst);
+	std::_Erase_remove(m_Bursts,pBurst);
 }
 
 void ParticleEmitterComponent::Initialize(const GameContext& gameContext)
@@ -86,14 +105,51 @@ void ParticleEmitterComponent::CreateVertexBuffer(const GameContext& gameContext
 	
 }
 
+void ParticleEmitterComponent::UpdateBursts(const GameContext& gameContext)
+{
+	for(auto& pBurst:m_Bursts)
+	{
+		if (pBurst->PassedCycles >= pBurst->Cycles && pBurst->Cycles != -1)
+			continue;
+
+			//Check if enough we can start the burst
+			pBurst->TotalTimePast += gameContext.pGameTime->GetElapsed();
+			if (pBurst->TotalTimePast < pBurst->TriggerTime)
+				continue;
+
+			//Check if enough we can start the next interval
+			pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
+			if (pBurst->PassedIntervalTime < pBurst->IntervalTime)
+				continue;
+			
+			++pBurst->PassedCycles;
+			pBurst->PassedIntervalTime = 0.f;
+
+			auto it = m_Particles.begin();
+			int amountOfParticlesSpawned = 0;
+			
+			//Loop over all particles until we reach the end of the vector or we have spawned enough particles
+			while (it != m_Particles.end() && amountOfParticlesSpawned < pBurst->Count)
+			{
+				//If the particle is inactive, spawn a new one and increase the counter
+				if (!(*it)->IsActive())
+				{
+					(*it)->Init(GetTransform()->GetPosition());
+					++amountOfParticlesSpawned;
+				}
+				++it;
+			}
+	}
+}
+
 void ParticleEmitterComponent::Update(const GameContext& gameContext)
 {
-	float const particleInterval = ((m_Settings.MaxEnergy + m_Settings.MinEnergy) * 0.5f) / static_cast<float>(m_ParticleCount)
-;
 	m_LastParticleInit += gameContext.pGameTime->GetElapsed();
 	
 	m_ActiveParticles = 0;
-	//BUFFER MAPPING CODE [PARTIAL :)]
+
+	UpdateBursts(gameContext);
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	auto* pBuffer = (ParticleVertex*) mappedResource.pData;
@@ -106,7 +162,7 @@ void ParticleEmitterComponent::Update(const GameContext& gameContext)
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();
 			++m_ActiveParticles;
 		}
-		else if(m_LastParticleInit >= particleInterval)
+		else if(m_LastParticleInit >= (1.f/m_Settings.EmitRate))
 		{
 			particle->Init(GetTransform()->GetPosition());
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();

@@ -14,6 +14,7 @@ public:
 	~MaterialManager();
 
 	void AddMaterial(Material *pMaterial, UINT materialId);
+	UINT [[nodiscard]] AddMaterial(Material *pMaterial);
 	void RemoveMaterial(UINT materialId);
 	Material* GetMaterial(UINT materialId) const;
 

@@ -44,4 +44,6 @@ private:
 	float m_SizeGrow;
 	//Initial size of the particle
 	float m_InitSize;
+	//Initial size of the particle
+	DirectX::XMFLOAT3 m_MoveDirection;
 };

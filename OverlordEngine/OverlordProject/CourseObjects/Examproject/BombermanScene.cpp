@@ -15,6 +15,8 @@
 #include "ModelComponent.h"
 #include "..\..\Materials\SkyBoxMaterial.h"
 #include "LinkGameObjectPosComponent.h"
+#include "..\..\Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
+#include "ModelAnimator.h"
 
 BombermanScene::BombermanScene(): GameScene(L"BombermanScene")
 {
@@ -30,7 +32,8 @@ void BombermanScene::Initialize()
 	GetPhysxProxy()->EnablePhysxDebugRendering(true);
 	const auto gameContext = GetGameContext();
 	
-	GameObject* pCharacter = new BombermanCharPrefab(m_BlockSize, 2.0f,5.0f,0.01f,50.f);
+	GameObject* pCharacter = new BombermanCharPrefab(L"./Resources/Meshes/PeasantGirl.ovm",L"./Resources/Textures/PeasantGirl_Diffuse.png",
+		m_BlockSize, 2.0f,5.0f,0.01f,50.f);
 	pCharacter->GetTransform()->Translate(0,100,0);
 	AddChild(pCharacter);
 	
@@ -55,11 +58,21 @@ void BombermanScene::Initialize()
 
 	CreateSkybox();
 	CreateFloor(10);
+
+	gameContext.pInput->AddInputAction(InputAction(10, InputTriggerState::Released, VK_SHIFT));
 	
 }
 
 void BombermanScene::Update()
 {
+	if (GetGameContext().pInput->IsActionTriggered(10))
+	{
+		float const duration = 2.f;
+		float const intensity = .05f;
+		Logger::LogInfo(L"Shaking camera for " + std::to_wstring(duration) + L" with an intensity of "  + std::to_wstring(intensity));
+		GetGameContext().pCamera->ShakeCamera(duration,intensity);
+	}
+	
 }
 
 void BombermanScene::Draw()
@@ -138,8 +151,8 @@ void BombermanScene::CreateSkybox()
 	//Create and assign material
 	auto* pDiffuseMat = new SkyBoxMaterial();
 	pDiffuseMat->SetCubeMapTexture(L"Resources/Textures/Skybox/Night.dds");
-	gameContext.pMaterialManager->AddMaterial(pDiffuseMat, 5);
-	pModelComponent->SetMaterial(5);
+	auto const matID =  gameContext.pMaterialManager->AddMaterial(pDiffuseMat);
+	pModelComponent->SetMaterial(matID);
 	
 	AddChild(skyboxGameObject);
 }

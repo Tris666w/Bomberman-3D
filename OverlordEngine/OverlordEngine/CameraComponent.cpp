@@ -7,13 +7,46 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 
+void CameraComponent::Shake(float elapsedSec)
+{
+	m_ShakeTimer += elapsedSec;
+	if (m_ShakeTimer >= m_ShakeTime)
+	{
+		GetTransform()->Translate(m_ShakeStartPos);
+		m_IsShaking = false;
+		return;
+	}
+	int const plusOrMinus{ rand() };
+	auto pos = GetTransform()->GetPosition();
+	if (plusOrMinus % 2 == 0)
+	{
+		pos.x += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+		pos.y += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+		pos.z += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+									
+	}								
+	else							
+	{								
+		pos.x -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+		pos.y -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+		pos.z -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
+	}
+
+	GetTransform()->Translate(pos);
+}
+
 CameraComponent::CameraComponent() :
 	m_FarPlane(2500.0f),
 	m_NearPlane(0.1f),
 	m_FOV(DirectX::XM_PIDIV4),
 	m_Size(25.0f),
 	m_IsActive(true),
-	m_PerspectiveProjection(true)
+	m_PerspectiveProjection(true),
+	m_ShakeStartPos(),
+	m_ShakeTimer(0),
+	m_ShakeIntensity(0),
+	m_ShakeTime(0),
+	m_IsShaking(false)
 {
 	XMStoreFloat4x4(&m_Projection, DirectX::XMMatrixIdentity());
 	XMStoreFloat4x4(&m_View, DirectX::XMMatrixIdentity());
@@ -24,7 +57,7 @@ CameraComponent::CameraComponent() :
 
 void CameraComponent::Initialize(const GameContext&) {}
 
-void CameraComponent::Update(const GameContext&)
+void CameraComponent::Update(const GameContext& gameContext)
 {
 	// see https://stackoverflow.com/questions/21688529/binary-directxxmvector-does-not-define-this-operator-or-a-conversion
 	using namespace DirectX;
@@ -56,6 +89,11 @@ void CameraComponent::Update(const GameContext&)
 	XMStoreFloat4x4(&m_ViewInverse, viewInv);
 	XMStoreFloat4x4(&m_ViewProjection, view * projection);
 	XMStoreFloat4x4(&m_ViewProjectionInverse, viewProjectionInv);
+
+	if (m_IsShaking)
+	{
+		Shake(gameContext.pGameTime->GetElapsed());
+	}
 }
 
 void CameraComponent::Draw(const GameContext&) {}
@@ -119,4 +157,13 @@ GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroup
 	
 	return nullptr;
 	
+}
+
+void CameraComponent::ShakeCamera(float duration, float intensity)
+{
+	m_IsShaking = true;
+	m_ShakeIntensity = intensity;
+	m_ShakeTime = duration;
+	m_ShakeTimer = 0;
+	m_ShakeStartPos = GetTransform()->GetWorldPosition();
 }

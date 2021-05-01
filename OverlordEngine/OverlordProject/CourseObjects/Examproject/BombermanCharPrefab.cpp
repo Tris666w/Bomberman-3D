@@ -5,14 +5,17 @@
 #include "BombManager.h"
 #include"BombPrefab.h"
 #include "GameScene.h"
+#include "ModelAnimator.h"
+#include "../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 
-BombermanCharPrefab::BombermanCharPrefab( int blockSize, float radius, float height,float stepOffset, float moveSpeed)
+BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, int blockSize, float radius, float height,float stepOffset, float moveSpeed)
 	:m_Radius(radius),
 	m_Height(height),
 	m_StepOffset(stepOffset),
 	m_MoveSpeed(moveSpeed),
 	m_BlockSize(blockSize),
 	m_pController(nullptr),
+
 	//Running
 	m_MaxRunVelocity(50.0f), 
 	m_TerminalVelocity(20),
@@ -23,7 +26,12 @@ BombermanCharPrefab::BombermanCharPrefab( int blockSize, float radius, float hei
 	m_JumpAcceleration(m_Gravity/m_JumpAccelerationTime), 
 	m_RunVelocity(0), 
 	m_JumpVelocity(0),
-	m_Velocity(0,0,0)
+	m_Velocity(0,0,0),
+
+	//File paths
+	m_MeshFilePath(meshFilePath),
+	m_MaterialFilePath(materialFilePath)
+
 {
 }
 
@@ -39,6 +47,21 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	GetScene()->AddChild(pBomb);
 	BombManager::GetInstance()->AddBomb(pBomb);
 
+
+	auto skinnedDiffuseMaterial = new SkinnedDiffuseMaterial_Shadow();
+	skinnedDiffuseMaterial->SetDiffuseTexture(m_MaterialFilePath);
+	auto const matID =  gameContext.pMaterialManager->AddMaterial(skinnedDiffuseMaterial);
+
+	m_pModel = new ModelComponent(m_MeshFilePath,true);
+	m_pModel->SetMaterial(matID);
+	auto obj = new GameObject();
+	obj->AddComponent(m_pModel);
+	AddChild(obj);
+	m_pModel->GetTransform()->Scale(0.05f,0.05f,0.05f);
+	m_pModel->GetTransform()->Translate(0,-m_Height/2 - m_Radius,0);
+
+
+	//Input
 	auto inputAction = InputAction(CharacterMovement::LEFT, InputTriggerState::Down, VK_LEFT);
 	gameContext.pInput->AddInputAction(inputAction);
 	inputAction = InputAction(CharacterMovement::RIGHT, InputTriggerState::Down, VK_RIGHT);
@@ -54,6 +77,8 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 
 void BombermanCharPrefab::PostInitialize(const GameContext& )
 {
+	m_pModel->GetAnimator()->SetAnimation(0);
+	m_pModel->GetAnimator()->Play();
 }
 
 void BombermanCharPrefab::Update(const GameContext& gameContext)
