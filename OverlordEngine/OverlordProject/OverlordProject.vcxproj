@@ -104,6 +104,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\LinkGameObjectPosComponent.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -131,6 +132,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 3\PongScene.cpp" />
     <ClCompile Include="Materials\UberMaterial.cpp" />
     <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_1.cpp" />
+    <ClCompile Include="Materials\SkyBoxMaterial.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -160,6 +162,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\LinkGameObjectPosComponent.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
@@ -188,6 +191,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="Materials\UberMaterial.h" />
     <ClInclude Include="CourseObjects\Week 6\SoftwareSkinningScene_1.h" />
     <ClInclude Include="CourseObjects\Week 6\SkinnedVertex.h" />
+    <ClInclude Include="Materials\SkyBoxMaterial.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />

@@ -9,7 +9,6 @@ class CameraComponent: public BaseComponent
 	DirectX::XMFLOAT4X4 m_View, m_Projection, m_ViewInverse, m_ViewProjection, m_ViewProjectionInverse;
 	float m_FarPlane, m_NearPlane, m_FOV, m_Size;
 	bool m_IsActive, m_PerspectiveProjection;
-
 public:
 	CameraComponent(const CameraComponent& other) = delete;
 	CameraComponent(CameraComponent&& other) noexcept = delete;

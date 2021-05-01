@@ -11,7 +11,7 @@ public:
 
 	void SetDiffuseTexture(const std::wstring& assetFile);
 	void SetLightDirection(DirectX::XMFLOAT3 dir);
-
+	
 protected:
 	void LoadEffectVariables() override;
 	void UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent) override;

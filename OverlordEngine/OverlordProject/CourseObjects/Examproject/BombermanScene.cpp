@@ -13,7 +13,8 @@
 #include "ContentManager.h"
 #include "CubePrefab.h"
 #include "ModelComponent.h"
-#include "..\..\Materials/Shadow/DiffuseMaterial_Shadow.h"
+#include "..\..\Materials\SkyBoxMaterial.h"
+#include "LinkGameObjectPosComponent.h"
 
 BombermanScene::BombermanScene(): GameScene(L"BombermanScene")
 {
@@ -52,31 +53,7 @@ void BombermanScene::Initialize()
 
 	gameContext.pShadowMapper->SetLight({ -95.6139526f,66.1346436f,-41.1850471f }, { 0.740129888f, -0.597205281f, 0.309117377f });
 
-	
-	//Level
-	/*auto levelGameObject =new GameObject();
-	auto* pModelComponent = new ModelComponent(L"Resources/Meshes/Level.ovm");
-	levelGameObject->AddComponent(pModelComponent);
-
-	auto* pDiffuseMat = new DiffuseMaterial_Shadow();
-	pDiffuseMat->SetDiffuseTexture(L"Resources/Textures/Chair_Dark.dds");
-	gameContext.pMaterialManager->AddMaterial(pDiffuseMat, 0);
-	pDiffuseMat->SetLightDirection(gameContext.pShadowMapper->GetLightDirection());
-	pModelComponent->SetMaterial(0);
-	
-	
-	auto rb = new RigidBodyComponent(true);
-	
-	levelGameObject->AddComponent(rb);
-	
-	physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Level.ovpc");
-
-	std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
-	auto cc= new ColliderComponent(meshGeometry,*bouncyMaterial);
-	levelGameObject->AddComponent(cc);*/
-	
-	//AddChild(levelGameObject);
-
+	CreateSkybox();
 	CreateFloor(10);
 	
 }
@@ -142,4 +119,27 @@ void BombermanScene::CreateFloor(int const size)
 			AddChild(pWall);
 		}
 	}
+}
+
+void BombermanScene::CreateSkybox()
+{
+	const auto gameContext = GetGameContext();
+
+	//Create game object and model
+	auto const skyboxGameObject =new GameObject();
+	auto* const pModelComponent = new ModelComponent(L"Resources/Meshes/Sphere.ovm");
+	skyboxGameObject->AddComponent(pModelComponent);
+
+	//Link geometry to camera (position) and scale the mesh
+	auto* linkComp = new LinkGameObjectPosComponent(gameContext.pCamera->GetGameObject());
+	skyboxGameObject->AddComponent(linkComp);
+	skyboxGameObject->GetTransform()->Scale(10,20,10);
+
+	//Create and assign material
+	auto* pDiffuseMat = new SkyBoxMaterial();
+	pDiffuseMat->SetCubeMapTexture(L"Resources/Textures/Skybox/Night.dds");
+	gameContext.pMaterialManager->AddMaterial(pDiffuseMat, 5);
+	pModelComponent->SetMaterial(5);
+	
+	AddChild(skyboxGameObject);
 }

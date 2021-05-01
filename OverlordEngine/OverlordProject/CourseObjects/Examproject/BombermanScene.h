@@ -20,5 +20,6 @@ private:
 	
 	//Init methods
 	void CreateFloor(int const size);
+	void CreateSkybox();
 };
 

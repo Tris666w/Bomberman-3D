@@ -73,5 +73,7 @@ void BombPrefab::Explode()
 {
 	m_IsActive = false;
 	m_ExplodeTimer = 0.f;
+	m_pRigigdBody->GetTransform()->Translate(-10000,-10000,-10000);
+	
 	Logger::Log(LogLevel::Info,L"Bomb exploded");
 }

@@ -123,9 +123,8 @@ DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
 {
 	DirectX::XMFLOAT3 spawnPos = {0,GetTransform()->GetWorldPosition().y - m_Height/3.f,0 };
 	DirectX::XMFLOAT3 const worldPos = {GetTransform()->GetWorldPosition()};
-
-	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / m_BlockSize) * m_BlockSize) + m_BlockSize/2.f;
-	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / m_BlockSize) * m_BlockSize) + m_BlockSize/2.f;
+	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / m_BlockSize) * m_BlockSize) + static_cast<float>(m_BlockSize)/2.f;
+	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / m_BlockSize) * m_BlockSize) + static_cast<float>(m_BlockSize)/2.f;
 
 	return spawnPos;
 }
