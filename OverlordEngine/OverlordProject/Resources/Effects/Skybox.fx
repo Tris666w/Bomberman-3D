@@ -20,13 +20,15 @@ AddressV = WRAP;
 AddressW = WRAP;
 };
 
+
 //Camera pos
 float3 gCameraPosition;
 
 //Rasterizer States 
 RasterizerState gRS_NoCulling
 {
-CullMode = NONE;
+	CullMode = NONE;
+
 };
 
 //In- and Output structs
@@ -54,9 +56,9 @@ VS_OUTPUT MainVS(VS_INPUT input)
 };
 
 //PixelShader
-float3 MainPS(VS_OUTPUT input) : SV_Target
+float4 MainPS(VS_OUTPUT input) : SV_Target
 {
-	float3 color = gTextureEnv.Sample(gSamplerEnvMap, input.texcoord);
+	float4 color = gTextureEnv.Sample(gSamplerEnvMap, input.texcoord);
 	return color;
 };
 
@@ -68,5 +70,7 @@ technique10 DefaultTechnique
 		SetRasterizerState(gRS_NoCulling);
 		SetVertexShader(CompileShader(vs_4_0, MainVS())); 
 		SetPixelShader(CompileShader(ps_4_0, MainPS()));
+
+
 	}
 }

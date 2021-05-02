@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BombManager.h"
 #include "BombPrefab.h"
+#include "TransformComponent.h"
 
 BombManager::~BombManager()
 {
@@ -12,7 +13,6 @@ void BombManager::AddBomb(BombPrefab* pBomb)
 		Logger::LogWarning(L"BombManager::AddBomb, Trying to add bomb that is already in the manager ");
 	else
 		m_pBombs.push_back(pBomb);
-	
 }
 
 BombPrefab* BombManager::GetBomb()

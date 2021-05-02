@@ -8,17 +8,17 @@
 #include "RigidBodyComponent.h"
 #include"TransformComponent.h"
 #include "BombermanCharPrefab.h"
-#include "BombermanHelpers.h"
 #include "BombManager.h"
 #include "ContentManager.h"
-#include "CubePrefab.h"
 #include "ModelComponent.h"
-#include "..\..\Materials\SkyBoxMaterial.h"
 #include "LinkGameObjectPosComponent.h"
+#include "..\..\Materials\SkyBoxMaterial.h"
 #include "..\..\Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
+#include "..\..\Materials/Post/PostBloom.h"
+#include "..\..\Materials/Post/PostGrayscale.h"
+
 #include "..\..\Materials/Shadow/DiffuseMaterial_Shadow.h"
 #include "BombermanGameSettings.h"
-#include "ModelAnimator.h"
 
 BombermanScene::BombermanScene() : GameScene(L"BombermanScene")
 {
@@ -31,10 +31,9 @@ BombermanScene::~BombermanScene()
 
 void BombermanScene::Initialize()
 {
-	GetPhysxProxy()->EnablePhysxDebugRendering(true);
 
 	const auto gameContext = GetGameContext();
-
+	
 	GameObject* pCharacter = new BombermanCharPrefab(L"./Resources/Meshes/PeasantGirl.ovm", L"./Resources/Textures/PeasantGirl_Diffuse.png",
 		2.0f, 5.0f, 0.01f, 50.f);
 	pCharacter->GetTransform()->Translate(0, 100, 0);
@@ -59,8 +58,14 @@ void BombermanScene::Initialize()
 
 	gameContext.pShadowMapper->SetLight({ -95.6139526f,100,-41.1850471f }, { 0.740129888f, -0.597205281f, 0.309117377f });
 
-	CreateSkybox();
 	CreateFloor(10);
+	CreateSkybox();
+
+	auto const bloomPP = new PostBloom();
+	bloomPP->SetIntensity(0.35f);
+	AddPostProcessingEffect(bloomPP);
+
+	
 }
 
 void BombermanScene::Update()

@@ -2,10 +2,14 @@
 #include "FixedCamera.h"
 #include "TransformComponent.h"
 
-void FixedCamera::Initialize(const GameContext& )
+FixedCamera::FixedCamera(DirectX::XMFLOAT3 initialPos)
+	:m_InitialPos(initialPos)
+{
+}
+
+void FixedCamera::Initialize(const GameContext&)
 {
 	AddComponent(new CameraComponent());
 
-	//TODO: remove magic transform/value
-	GetTransform()->Translate(0,0,-10);
+	GetTransform()->Translate(m_InitialPos);
 }

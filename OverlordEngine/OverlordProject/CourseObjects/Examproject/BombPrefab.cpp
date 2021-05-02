@@ -72,6 +72,9 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 	obj->AddComponent(m_pSmokeEmitter);
 	m_pSmokeEmitter->GetTransform()->Translate(0, 2.5f, 0);
 	AddChild(obj);
+
+	m_pRigidBody->GetTransform()->Translate(-10000, -10000, -10000);
+
 }
 
 void BombPrefab::PostInitialize(const GameContext&)
@@ -144,6 +147,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 
 void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 spawnPos)
 {
+	//Todo Make this more optimized (Object pool)
 	auto* pObj = new Explosion();
 	pObj->GetTransform()->Translate(spawnPos);
 	AddChild(pObj);

@@ -14,7 +14,7 @@
 #include <algorithm>
 #include "PostProcessingMaterial.h"
 
-GameScene::GameScene(std::wstring sceneName):
+GameScene::GameScene(std::wstring sceneName) :
 	m_pChildren(std::vector<GameObject*>()),
 	m_GameContext(GameContext()),
 	m_IsInitialized(false),
@@ -38,7 +38,7 @@ GameScene::~GameScene()
 	}
 	SafeDelete(m_pPhysxProxy);
 
-	for (auto& ppMaterial:m_PostProcessingEffects)
+	for (auto& ppMaterial : m_PostProcessingEffects)
 		delete ppMaterial;
 }
 
@@ -136,9 +136,9 @@ void GameScene::RootInitialize(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	}
 
 	//Init all PP effects
-	for (auto& ppMaterial:m_PostProcessingEffects)
+	for (auto& ppMaterial : m_PostProcessingEffects)
 		ppMaterial->Initialize(m_GameContext);
-	
+
 	m_IsInitialized = true;
 }
 
@@ -159,12 +159,12 @@ void GameScene::RootUpdate()
 		pChild->RootUpdate(m_GameContext);
 	}
 
-	std::sort(m_PostProcessingEffects.begin(),m_PostProcessingEffects.end(),
+	std::sort(m_PostProcessingEffects.begin(), m_PostProcessingEffects.end(),
 		[](PostProcessingMaterial* a, PostProcessingMaterial* b)->bool
-	{
-		return a->GetRenderIndex() < b->GetRenderIndex();
-	});
-	
+		{
+			return a->GetRenderIndex() < b->GetRenderIndex();
+		});
+
 	m_pPhysxProxy->Update(m_GameContext);
 }
 
@@ -178,7 +178,7 @@ void GameScene::RootDraw()
 	}
 	m_GameContext.pShadowMapper->End(m_GameContext);
 
-	
+
 	//User-Scene Draw
 	Draw();
 
@@ -208,16 +208,16 @@ void GameScene::RootDraw()
 
 	//2. Get the current(=INIT_RT)rendertarget from the game (OVerlordGame::GetRenderTarget...);
 	auto const INIT_RT = SceneManager::GetInstance()->GetGame()->GetRenderTarget();
-	
+
 	//3. Create a new variable to hold our previous rendertarget (= PREV_RT) that holds the content of the previous draw call and
 	//want to use as a ShaderResources (Texture) for the next PP effect.
 	RenderTarget* PREV_RT = nullptr;
 
 	//4. Set PREV_RT = INIT_RT (The first pp effect uses the contents from the default rendertarget)
-	 PREV_RT = INIT_RT;
+	PREV_RT = INIT_RT;
 
 	//4.For each effect
-	for(auto& CURR_MAT:m_PostProcessingEffects)
+	for (auto& CURR_MAT : m_PostProcessingEffects)
 	{
 		//4.1 Get the RT from CURR_MAT (=TEMP_RT)
 		auto const TEMP_RT = CURR_MAT->GetRenderTarget();
@@ -226,7 +226,7 @@ void GameScene::RootDraw()
 		SceneManager::GetInstance()->GetGame()->SetRenderTarget(TEMP_RT);
 
 		//4.3 Draw CURR_MAT (PREV_MAT provides the Texture used in the PPEffect)
-		CURR_MAT->Draw(m_GameContext,PREV_RT);
+		CURR_MAT->Draw(m_GameContext, PREV_RT);
 
 		//4.4 Change PREV_MAT to TEMP_MAT
 		PREV_RT = TEMP_RT;
@@ -236,7 +236,7 @@ void GameScene::RootDraw()
 	SceneManager::GetInstance()->GetGame()->SetRenderTarget(INIT_RT);
 
 	//6. Use SpriteRenderer:::DrawImmediate to draw the content of the last post processed rendertarget > PREV_RT
-	SpriteRenderer::GetInstance()->DrawImmediate(m_GameContext,PREV_RT->GetShaderResourceView(),DirectX::XMFLOAT2(0,0));
+	SpriteRenderer::GetInstance()->DrawImmediate(m_GameContext, PREV_RT->GetShaderResourceView(), DirectX::XMFLOAT2(0, 0));
 }
 
 void GameScene::RootSceneActivated()
@@ -274,7 +274,7 @@ void GameScene::SetActiveCamera(CameraComponent* pCameraComponent)
 
 void GameScene::AddPostProcessingEffect(PostProcessingMaterial* effect)
 {
-	if (std::find(m_PostProcessingEffects.begin(),m_PostProcessingEffects.end(),effect) != m_PostProcessingEffects.end())
+	if (std::find(m_PostProcessingEffects.begin(), m_PostProcessingEffects.end(), effect) != m_PostProcessingEffects.end())
 	{
 		return;
 	}
@@ -284,5 +284,5 @@ void GameScene::AddPostProcessingEffect(PostProcessingMaterial* effect)
 
 void GameScene::RemovePostProcessingEffect(PostProcessingMaterial* effect)
 {
-	std::_Erase_remove(m_PostProcessingEffects,effect);
+	std::_Erase_remove(m_PostProcessingEffects, effect);
 }

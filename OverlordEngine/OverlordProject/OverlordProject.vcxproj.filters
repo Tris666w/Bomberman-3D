@@ -42,6 +42,7 @@
     <ClCompile Include="CourseObjects\Examproject\LinkGameObjectPosComponent.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
+    <ClCompile Include="Materials\Post\PostBloom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -85,5 +86,6 @@
     <ClInclude Include="CourseObjects\Examproject\LinkGameObjectPosComponent.h" />
     <ClInclude Include="CourseObjects\Examproject\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
+    <ClInclude Include="Materials\Post\PostBloom.h" />
   </ItemGroup>
 </Project>

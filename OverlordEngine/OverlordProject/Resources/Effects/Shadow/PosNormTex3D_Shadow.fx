@@ -35,7 +35,7 @@ SamplerState samPoint
 RasterizerState Solid
 {
 	FillMode = SOLID;
-	CullMode = FRONT;
+	CullMode = BACK;
 };
 
 struct VS_INPUT

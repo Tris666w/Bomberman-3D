@@ -15,7 +15,7 @@ public:
 		LEAVE
 	};
 
-	typedef std::function<void (GameObject* triggerobject, GameObject* otherobject, TriggerAction action)> PhysicsCallback;
+	typedef std::function<void(GameObject* triggerobject, GameObject* otherobject, TriggerAction action)> PhysicsCallback;
 
 	GameObject();
 	virtual ~GameObject();
@@ -124,8 +124,8 @@ public:
 #pragma endregion Template Methods
 
 protected:
-	virtual void Initialize(const GameContext& ) {}
-	virtual void PostInitialize(const GameContext& ) {}
+	virtual void Initialize(const GameContext&) {}
+	virtual void PostInitialize(const GameContext&) {}
 	virtual void Draw(const GameContext&) {}
 	virtual void PostDraw(const GameContext&) {}
 	virtual void Update(const GameContext&) {}

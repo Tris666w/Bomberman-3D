@@ -14,25 +14,22 @@ ID3DX11EffectVectorVariable* DiffuseMaterial_Shadow::m_pLightDirectionVariable =
 ID3DX11EffectMatrixVariable* DiffuseMaterial_Shadow::m_pLightWVPvariable = nullptr;
 
 DiffuseMaterial_Shadow::DiffuseMaterial_Shadow() : Material(L"./Resources/Effects/Shadow/PosNormTex3D_Shadow.fx"),
-	m_pDiffuseTexture(nullptr)
+m_pDiffuseTexture(nullptr)
 {}
 
 void DiffuseMaterial_Shadow::SetDiffuseTexture(const std::wstring& assetFile)
 {
-	//TODO: store the diffuse texture in the appropriate member
-	m_pDiffuseTexture =ContentManager::Load<TextureData>(assetFile);
-	
+	m_pDiffuseTexture = ContentManager::Load<TextureData>(assetFile);
+
 }
 
 void DiffuseMaterial_Shadow::SetLightDirection(DirectX::XMFLOAT3 dir)
 {
-	//TODO: store the light direction in the appropriate member
 	m_LightDirection = dir;
 }
 
 void DiffuseMaterial_Shadow::LoadEffectVariables()
 {
-	//TODO: load all the necessary shader variables
 	m_pDiffuseSRVvariable = GetEffect()->GetVariableByName("gDiffuseMap")->AsShaderResource();
 	if (!m_pDiffuseSRVvariable->IsValid())
 	{
@@ -66,14 +63,14 @@ void DiffuseMaterial_Shadow::UpdateEffectVariables(const GameContext& gameContex
 		m_pDiffuseSRVvariable->SetResource(m_pDiffuseTexture->GetShaderResourceView());
 	}
 	m_pLightDirectionVariable->SetFloatVector(&m_LightDirection.x);
-	
+
 	using namespace DirectX;
 	XMMATRIX const world = XMLoadFloat4x4(&pModelComponent->GetTransform()->GetWorld());
 	auto const lightVP = gameContext.pShadowMapper->GetLightVP();
 	XMMATRIX const vp = XMLoadFloat4x4(&lightVP);
 	XMMATRIX const wvp = world * vp;
 	XMFLOAT4X4 lightWorldViewProjection{};
-	XMStoreFloat4x4(&lightWorldViewProjection,wvp);
+	XMStoreFloat4x4(&lightWorldViewProjection, wvp);
 	m_pLightWVPvariable->SetMatrix(&lightWorldViewProjection._11);
 	;
 	m_pShadowSRVvariable->SetResource(gameContext.pShadowMapper->GetShadowMap());
