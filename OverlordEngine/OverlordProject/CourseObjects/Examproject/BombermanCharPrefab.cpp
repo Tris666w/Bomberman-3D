@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "BombermanCharPrefab.h"
+
+#include "BombermanGameSettings.h"
 #include "PhysxManager.h"
 #include "Components.h"
 #include "BombManager.h"
@@ -8,12 +10,11 @@
 #include "ModelAnimator.h"
 #include "../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 
-BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, int blockSize, float radius, float height,float stepOffset, float moveSpeed)
+BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, float radius, float height,float stepOffset, float moveSpeed)
 	:m_Radius(radius),
 	m_Height(height),
 	m_StepOffset(stepOffset),
 	m_MoveSpeed(moveSpeed),
-	m_BlockSize(blockSize),
 	m_pController(nullptr),
 
 	//Running
@@ -148,8 +149,10 @@ DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
 {
 	DirectX::XMFLOAT3 spawnPos = {0,GetTransform()->GetWorldPosition().y - m_Height/3.f,0 };
 	DirectX::XMFLOAT3 const worldPos = {GetTransform()->GetWorldPosition()};
-	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / m_BlockSize) * m_BlockSize) + static_cast<float>(m_BlockSize)/2.f;
-	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / m_BlockSize) * m_BlockSize) + static_cast<float>(m_BlockSize)/2.f;
+	auto const blockSize = BombermanGameSettings::BlockSize;
+	
+	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / blockSize) * blockSize) + static_cast<float>(blockSize)/2.f;
+	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / blockSize) * blockSize) + static_cast<float>(blockSize)/2.f;
 
 	return spawnPos;
 }

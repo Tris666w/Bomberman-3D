@@ -6,6 +6,7 @@
 #include "TextureDataLoader.h"
 #include "Particle.h"
 #include "TransformComponent.h"
+#include "GameObject.h"
 
 ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int particleCount):
 	m_pVertexBuffer(nullptr),
@@ -18,7 +19,8 @@ ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int 
 	m_ActiveParticles(0),
 	m_LastParticleInit(0.0f),
 	m_AssetFile(std::move(assetFile)),
-	m_Particles()
+	m_Particles(),
+	m_IsActive(false)
 {
 	for (int i = 0; i < m_ParticleCount; ++i)
 		m_Particles.push_back(new Particle(m_Settings));
@@ -50,6 +52,12 @@ void ParticleEmitterComponent::RemoveBurst(Burst* pBurst)
 {
 	SafeDelete(pBurst);
 	std::_Erase_remove(m_Bursts,pBurst);
+}
+
+void ParticleEmitterComponent::ResetBursts()
+{
+	for (auto& pBurst: m_Bursts)
+		pBurst->Reset();
 }
 
 void ParticleEmitterComponent::Initialize(const GameContext& gameContext)
@@ -114,11 +122,12 @@ void ParticleEmitterComponent::UpdateBursts(const GameContext& gameContext)
 
 			//Check if enough we can start the burst
 			pBurst->TotalTimePast += gameContext.pGameTime->GetElapsed();
+			pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
+		
 			if (pBurst->TotalTimePast < pBurst->TriggerTime)
 				continue;
 
 			//Check if enough we can start the next interval
-			pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
 			if (pBurst->PassedIntervalTime < pBurst->IntervalTime)
 				continue;
 			
@@ -162,7 +171,11 @@ void ParticleEmitterComponent::Update(const GameContext& gameContext)
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();
 			++m_ActiveParticles;
 		}
-		else if(m_LastParticleInit >= (1.f/m_Settings.EmitRate))
+		else if (m_Settings.EmitRate == 0)
+		{
+			continue;
+		}
+		else if(m_LastParticleInit >= (1.f/m_Settings.EmitRate) && m_IsActive)
 		{
 			particle->Init(GetTransform()->GetPosition());
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();

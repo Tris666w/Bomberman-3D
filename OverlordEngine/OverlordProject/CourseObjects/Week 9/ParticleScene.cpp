@@ -24,7 +24,6 @@ void ParticleScene::Initialize()
 
 	auto obj = new GameObject();
 
-	
 	m_pParticleEmitter = new ParticleEmitterComponent(L"./Resources/Textures/smoke_04.png", 150);
 	m_pParticleEmitter->SetEmitRate(20);
 	m_pParticleEmitter->SetVelocity(6.f);

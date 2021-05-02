@@ -16,8 +16,6 @@ protected:
 private:
 	CameraComponent* m_pCamera = nullptr;
 
-	int const m_BlockSize = 6;
-	
 	//Init methods
 	void CreateFloor(int const size);
 	void CreateSkybox();

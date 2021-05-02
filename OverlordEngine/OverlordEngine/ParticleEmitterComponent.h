@@ -19,6 +19,14 @@ struct Burst
 	{
 		
 	}
+
+	//Reset PassedCycles, TotalTime and PassedIntervalTime
+	void Reset()
+	{
+		PassedCycles = 0;
+		PassedIntervalTime = 0.f;
+		TotalTimePast = 0.f;
+	}
 	//Amount of particles to spawn at a burst
 	int Count;
 	//How often to repeat, -1 for infinite
@@ -139,7 +147,8 @@ class ParticleEmitterComponent : public BaseComponent
 	float m_LastParticleInit;
 	//string containing the path to the particle texture
 	std::wstring m_AssetFile;
-
+	//Bool to check if the system is active
+	bool m_IsActive;
 	//Method to load effect-related stuff
 	void LoadEffect(const GameContext& gameContext);
 	//Method to create the vertex buffer
@@ -171,9 +180,11 @@ public:
 	void SetEndingColor(DirectX::XMFLOAT4 color) { m_Settings.EndingColor = color; }
 	void SetShape(EmitterShape shape) { m_Settings.m_Shape = shape; }
 	void SetConeMoveDirection(DirectX::XMFLOAT3 moveDir) { m_Settings.MoveDirection = moveDir; }
+	void SetIsActive(bool isActive) {m_IsActive = isActive;};
+
 	void AddBurst(Burst* pBurst);
 	void RemoveBurst(Burst* pBurst);
-	
+	void ResetBursts();
 
 protected:
 	void Initialize(const GameContext& gameContext) override;

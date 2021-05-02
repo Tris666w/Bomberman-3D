@@ -40,6 +40,8 @@
     <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
     <ClCompile Include="Materials\SkyBoxMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\LinkGameObjectPosComponent.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Explosion.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -81,5 +83,7 @@
     <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
     <ClInclude Include="Materials\SkyBoxMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\LinkGameObjectPosComponent.h" />
+    <ClInclude Include="CourseObjects\Examproject\Explosion.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
   </ItemGroup>
 </Project>

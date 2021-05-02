@@ -18,7 +18,7 @@ public:
 		DROP_BOMB = 4
 	};
 	
-	BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, int blockSize, float radius = 2, float height = 5,float stepOffset = 0.5f, float moveSpeed = 100);
+	BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, float radius = 2, float height = 5,float stepOffset = 0.5f, float moveSpeed = 100);
 	virtual ~BombermanCharPrefab() = default;
 
 	BombermanCharPrefab(const BombermanCharPrefab& other) = delete;
@@ -36,7 +36,6 @@ protected:
 	ModelComponent* m_pModel = nullptr;
 	float m_MoveSpeed;
 	float m_Radius, m_Height, m_StepOffset;
-	const int m_BlockSize;
 	
 	//Running
 	float m_MaxRunVelocity, 
