@@ -10,16 +10,16 @@
 #pragma warning(push)
 #pragma warning(disable: 26812)
 ControllerComponent::ControllerComponent(physx::PxMaterial* material, float radius, float height, float stepOffset, std::wstring name,
-										 physx::PxCapsuleClimbingMode::Enum climbingMode)
+	physx::PxCapsuleClimbingMode::Enum climbingMode)
 	: m_Radius(radius),
-	  m_Height(height),
-	  m_StepOffset(stepOffset),
-	  m_Name(std::move(name)),
-	  m_Controller(nullptr),
-	  m_ClimbingMode(climbingMode),
-	  m_pMaterial(material),
-	  m_CollisionFlag(physx::PxControllerCollisionFlags()),
-	  m_CollisionGroups(physx::PxFilterData(static_cast<UINT32>(CollisionGroupFlag::Group0), 0, 0, 0))
+	m_Height(height),
+	m_StepOffset(stepOffset),
+	m_Name(std::move(name)),
+	m_Controller(nullptr),
+	m_ClimbingMode(climbingMode),
+	m_pMaterial(material),
+	m_CollisionFlag(physx::PxControllerCollisionFlags()),
+	m_CollisionGroups(physx::PxFilterData(static_cast<UINT32>(CollisionGroupFlag::Group0), 0, 0, 0))
 {
 }
 #pragma warning(pop)
@@ -36,7 +36,7 @@ void ControllerComponent::Initialize(const GameContext&)
 
 	//TODO: 1. Retrieve the ControllerManager from the PhysX Proxy (PhysxProxy::GetControllerManager();)
 	auto* pControllerManager = m_pGameObject->GetScene()->GetPhysxProxy()->GetControllerManager();
-	
+
 	//TODO: 2. Create a PxCapsuleControllerDesc (Struct)
 	//  > Call the "setToDefault()" method of the PxCapsuleControllerDesc
 	//	> Fill in all the required fields
@@ -45,13 +45,13 @@ void ControllerComponent::Initialize(const GameContext&)
 	//  > UserData -> This component
 	physx::PxCapsuleControllerDesc capsuleControllerDesc{};
 	capsuleControllerDesc.setToDefault();
-	
+
 	capsuleControllerDesc.radius = m_Radius;
 	capsuleControllerDesc.height = m_Height;
 	capsuleControllerDesc.climbingMode = m_ClimbingMode;
 	capsuleControllerDesc.contactOffset = 0.1f;
 	capsuleControllerDesc.stepOffset = m_StepOffset;
-	capsuleControllerDesc.upDirection = physx::PxVec3(0.f,1.f,0.f);
+	capsuleControllerDesc.upDirection = physx::PxVec3(0.f, 1.f, 0.f);
 	capsuleControllerDesc.material = m_pMaterial;
 	capsuleControllerDesc.position = ToPxExtendedVec3(GetGameObject()->GetTransform()->GetPosition());
 	capsuleControllerDesc.userData = this;
@@ -67,10 +67,11 @@ void ControllerComponent::Initialize(const GameContext&)
 	//TODO: 4. Set the controller's name (use the value of m_Name) [PxController::setName]
 	//   > Converting 'wstring' to 'string' > Use one of the constructor's of the string class
 	//	 > Converting 'string' to 'char *' > Use one of the string's methods ;)
-	
-	std::string const name = std::string(m_Name.begin(),m_Name.end());
+
+	std::string const name = std::string(m_Name.begin(), m_Name.end());
 	m_Controller->getActor()->setName(name.c_str());
-	
+	m_Controller->getActor()->userData = GetGameObject();
+
 	//TODO: 5. Set the controller's actor's userdata > This Component
 	m_Controller->setUserData(this);;
 	SetCollisionGroup(static_cast<CollisionGroupFlag>(m_CollisionGroups.word0));
@@ -137,7 +138,7 @@ void ControllerComponent::SetCollisionIgnoreGroups(const CollisionGroupFlag igno
 	{
 		const auto actor = m_Controller->getActor();
 		const auto numShapes = actor->getNbShapes();
-		const auto shapes = new PxShape*[numShapes];
+		const auto shapes = new PxShape * [numShapes];
 
 		const auto numPointers = actor->getShapes(shapes, numShapes);
 		for (PxU32 i = 0; i < numPointers; i++)
@@ -163,7 +164,7 @@ void ControllerComponent::SetCollisionGroup(const CollisionGroupFlag group)
 	{
 		const auto actor = m_Controller->getActor();
 		const auto numShapes = actor->getNbShapes();
-		const auto shapes = new PxShape*[numShapes];
+		const auto shapes = new PxShape * [numShapes];
 
 		const auto numPointers = actor->getShapes(shapes, numShapes);
 		for (PxU32 i = 0; i < numPointers; i++)

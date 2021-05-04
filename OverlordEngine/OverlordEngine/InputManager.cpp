@@ -64,6 +64,28 @@ bool InputManager::IsActionTriggered(int actionID)
 	return m_InputActions[actionID].IsTriggered;
 }
 
+int InputManager::GetAvailableActionID()const
+{
+	bool hasFoundNewID = false;
+	int newID = 0;
+	while (!hasFoundNewID)
+	{
+		if (std::find_if(m_InputActions.begin(),m_InputActions.end(),
+			[&newID](const std::pair<int,InputAction>& pair){
+				if (pair.first == newID)
+					return true;
+				else
+					return false;
+			}) == m_InputActions.end())
+		{
+			hasFoundNewID = true;
+		}
+		else
+			++newID;
+	}
+	return newID;
+}
+
 void InputManager::RefreshControllerConnections()
 {
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)

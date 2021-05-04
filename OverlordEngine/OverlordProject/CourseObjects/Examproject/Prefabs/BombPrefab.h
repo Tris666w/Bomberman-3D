@@ -22,6 +22,9 @@ public:
 	 * \return m_IsActive
 	 */
 	bool GetIsActive()const { return m_IsActive; }
+
+	/// @brief Immediately explode this bomb
+	void Explode();
 protected:
 	void Initialize(const ::GameContext&) override;
 	void PostInitialize(const GameContext&) override;
@@ -35,12 +38,12 @@ private:
 	float m_ExplodeTimer = 0.f;
 	int const m_ExplosionReach = 3;
 	DirectX::XMFLOAT3 m_ExplodePos = {};
+	bool m_IsExploding = false;
 
 	ModelComponent* m_pModelComponent = nullptr;
 	RigidBodyComponent* m_pRigidBody = nullptr;
 	ParticleEmitterComponent* m_pSmokeEmitter = nullptr;
 
-	void Explode();
 
 	/// @brief Function to create explosions
 	/// @param direction of the explosion

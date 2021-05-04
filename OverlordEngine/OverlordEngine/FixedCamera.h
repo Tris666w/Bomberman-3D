@@ -14,4 +14,5 @@ protected:
 
 private:
 	DirectX::XMFLOAT3 m_InitialPos;
+	CameraComponent* m_pCameraComponent;
 };

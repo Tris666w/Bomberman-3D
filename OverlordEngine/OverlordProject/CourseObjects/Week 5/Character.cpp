@@ -57,11 +57,11 @@ void Character::Initialize(const GameContext& gameContext)
 	gameContext.pInput->AddInputAction(inputAction);
 }
 
-void Character::PostInitialize(const GameContext& gameContext)
+void Character::PostInitialize(const GameContext&)
 {
-	UNREFERENCED_PARAMETER(gameContext);
 	// We need to do this in the PostInitialize because child game objects only get initialized after the Initialize of the current object finishes
 	m_pCamera->SetActive();
+
 }
 
 void Character::Update(const GameContext& gameContext)
@@ -102,7 +102,6 @@ void Character::Update(const GameContext& gameContext)
 
 
 	m_pCamera->GetTransform()->Rotate(m_TotalPitch, m_TotalYaw, 0);
-	//m_pCamera->GetTransform()->Translate(currPos);
 
 	//***********
 	//CONTROLLER

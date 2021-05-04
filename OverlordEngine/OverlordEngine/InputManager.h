@@ -59,6 +59,7 @@ public:
 	void Update();
 	bool AddInputAction(InputAction action);
 	bool IsActionTriggered(int actionID);
+	[[nodiscard]] int GetAvailableActionID()const;
 	static void ForceMouseToCenter(bool force);
 	static void SetEnabled(bool enabled) { m_Enabled = enabled; }
 

@@ -34,6 +34,8 @@ public:
 	const std::wstring& GetTag() const { return m_Tag; }
 	void SetTag(const std::wstring& tag) { m_Tag = tag; }
 
+	void Deactivate() { m_IsActive = false; }
+
 	TransformComponent* GetTransform() const { return m_pTransform; }
 
 	GameScene* GetScene();

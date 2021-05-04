@@ -33,16 +33,17 @@
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\BombermanScene.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\BombermanCharPrefab.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\BombPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\BombermanScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Prefabs\BombPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
-    <ClCompile Include="Materials\SkyBoxMaterial.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\LinkGameObjectPosComponent.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\Explosion.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Components\LinkGameObjectPosComponent.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
-    <ClCompile Include="Materials\Post\PostBloom.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostBloom.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Components\DestroyableWallComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -77,15 +78,16 @@
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
-    <ClInclude Include="CourseObjects\Examproject\BombermanScene.h" />
-    <ClInclude Include="CourseObjects\Examproject\BombermanCharPrefab.h" />
-    <ClInclude Include="CourseObjects\Examproject\BombPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\BombermanScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\Prefabs\BombPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
-    <ClInclude Include="Materials\SkyBoxMaterial.h" />
-    <ClInclude Include="CourseObjects\Examproject\LinkGameObjectPosComponent.h" />
-    <ClInclude Include="CourseObjects\Examproject\Explosion.h" />
+    <ClInclude Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.h" />
+    <ClInclude Include="CourseObjects\Examproject\Components\LinkGameObjectPosComponent.h" />
+    <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
-    <ClInclude Include="Materials\Post\PostBloom.h" />
+    <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostBloom.h" />
+    <ClInclude Include="CourseObjects\Examproject\Components\DestroyableWallComponent.h" />
   </ItemGroup>
 </Project>
