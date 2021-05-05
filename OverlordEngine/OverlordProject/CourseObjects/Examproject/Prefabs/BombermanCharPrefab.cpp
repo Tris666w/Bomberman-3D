@@ -6,8 +6,12 @@
 #include "Components.h"
 #include "../BombManager.h"
 #include"BombPrefab.h"
+#include "ContentManager.h"
 #include "GameScene.h"
 #include "ModelAnimator.h"
+#include "SpriteFont.h"
+#include "TextRenderer.h"
+#include "OverlordGame.h"
 #include "../../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 #include "../Components/DestroyableWallComponent.h"
 
@@ -87,7 +91,6 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	m_ActionIDs.push_back(gameContext.pInput->GetAvailableActionID());
 	inputAction = InputAction(m_ActionIDs[4], InputTriggerState::Pressed, m_InputKeys[4], 0, 0, m_PlayerIndex);
 	gameContext.pInput->AddInputAction(inputAction);
-
 }
 
 void BombermanCharPrefab::PostInitialize(const GameContext&)
@@ -188,4 +191,8 @@ DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
 	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / blockSize) * blockSize) + static_cast<float>(blockSize) / 2.f;
 
 	return spawnPos;
+}
+
+void BombermanCharPrefab::Draw(const GameContext&)
+{
 }

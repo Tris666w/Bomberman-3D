@@ -142,8 +142,7 @@ void MainGS(point VS_DATA vertex[1], inout TriangleStream<GS_DATA> triStream)
 //PIXEL SHADER
 //************
 float4 MainPS(GS_DATA input) : SV_TARGET {
-
-	return gSpriteTexture.Sample(samPoint, input.TexCoord) * input.Color;	
+	return gSpriteTexture.Sample(samPoint, input.TexCoord) * input.Color;
 }
 
 // Default Technique
@@ -152,7 +151,7 @@ technique11 Default {
 	pass p0 {
 		SetRasterizerState(BackCulling);
 		SetBlendState(EnableBlending,float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
-		//SetDepthStencilState(NoDepth,0);
+		SetDepthStencilState(NoDepth, 0);
 		SetVertexShader(CompileShader(vs_4_0, MainVS()));
 		SetGeometryShader(CompileShader(gs_4_0, MainGS()));
 		SetPixelShader(CompileShader(ps_4_0, MainPS()));

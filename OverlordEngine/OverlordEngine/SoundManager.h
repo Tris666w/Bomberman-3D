@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#define MAX_CHANNELS 32
 
 class SoundManager: public Singleton<SoundManager>
 {

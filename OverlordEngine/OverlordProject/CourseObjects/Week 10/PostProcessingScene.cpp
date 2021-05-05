@@ -13,7 +13,6 @@
 #include "../../Materials/DiffuseMaterial.h"
 #include "../../Materials/Post/PostBlur.h"
 #include "../../Materials/Post/PostGrayscale.h"
-#include "../../Materials/Post/PostBloom.h"
 
 PostProcessingScene::PostProcessingScene(void) :
 	GameScene(L"PostProcessingScene"),
@@ -40,9 +39,6 @@ void PostProcessingScene::Initialize()
 
 	AddPostProcessingEffect(new PostBlur());
 	AddPostProcessingEffect(new PostGrayscale());
-	//auto const bloomPP = new PostBloom();
-	//bloomPP->SetIntensity(0.25f);
-	//AddPostProcessingEffect(bloomPP);
 }
 
 void PostProcessingScene::Update()

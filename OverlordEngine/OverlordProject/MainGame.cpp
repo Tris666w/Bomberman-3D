@@ -7,47 +7,50 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define EXAM
+#define TEST
 
 #ifdef W3
-	#include "CourseObjects/Week 3/MinionScene.h"
-	#include "CourseObjects/Week 3/TutorialScene.h"
-	#include "CourseObjects/Week 3/PongScene.h"
+#include "CourseObjects/Week 3/MinionScene.h"
+#include "CourseObjects/Week 3/TutorialScene.h"
+#include "CourseObjects/Week 3/PongScene.h"
 #endif
 #ifdef W4_A
-	#include "CourseObjects/Week 4/SpriteTestScene.h"
+#include "CourseObjects/Week 4/SpriteTestScene.h"
 #endif
 #ifdef W4_B
-	#include "CourseObjects/Week 4/ModelTestScene.h"
-	#include "CourseObjects/Week 4/SpikeyScene.h"
-	#include "CourseObjects/Week 4/UberScene.h"
+#include "CourseObjects/Week 4/ModelTestScene.h"
+#include "CourseObjects/Week 4/SpikeyScene.h"
+#include "CourseObjects/Week 4/UberScene.h"
 #endif
 #ifdef W5_A
-	#include "CourseObjects/Week 5/FontTestScene.h"
+#include "CourseObjects/Week 5/FontTestScene.h"
 #endif
 #ifdef W5_B
-	#include "CourseObjects/Week 5/PickScene.h"
-	#include "CourseObjects/Week 5/CharacterScene.h"
+#include "CourseObjects/Week 5/PickScene.h"
+#include "CourseObjects/Week 5/CharacterScene.h"
 #endif
 #ifdef W6
-	#include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
-	#include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
-	#include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
+#include "CourseObjects/Week 6/SoftwareSkinningScene_1.h"
+#include "CourseObjects/Week 6/SoftwareSkinningScene_2.h"
+#include "CourseObjects/Week 6/SoftwareSkinningScene_3.h"
 #endif
 #ifdef W7
-	#include "CourseObjects/Week 7/HardwareSkinningScene.h"
+#include "CourseObjects/Week 7/HardwareSkinningScene.h"
 #endif
 #ifdef W8
-	#include "CourseObjects/Week 8/ShadowMappingScene.h"
+#include "CourseObjects/Week 8/ShadowMappingScene.h"
 #endif
 #ifdef W9
-	#include "CourseObjects/Week 9/ParticleScene.h"
+#include "CourseObjects/Week 9/ParticleScene.h"
 #endif
 #ifdef W10
-	#include "CourseObjects/Week 10/PostProcessingScene.h"
+#include "CourseObjects/Week 10/PostProcessingScene.h"
 #endif
 #ifdef EXAM
-	#include "CourseObjects/Examproject/BombermanScene.h"
+#include "CourseObjects/Examproject/Scenes/BombermanScene.h"
+#endif
+#ifdef TEST
+#include "CourseObjects/Examproject/TestScene.h"
 #endif
 MainGame::MainGame(void)
 {}
@@ -116,6 +119,10 @@ void MainGame::Initialize()
 	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"BombermanScene");
 #endif
+#ifdef TEST
+	SceneManager::GetInstance()->AddGameScene(new TestScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"TestScene");
+#endif
 }
 
 LRESULT MainGame::WindowProcedureHook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -127,34 +134,34 @@ LRESULT MainGame::WindowProcedureHook(HWND hWnd, UINT message, WPARAM wParam, LP
 
 	switch (message)
 	{
-		case WM_KEYUP:
-		{
-			if ((lParam & 0x80000000) != 0x80000000)
-				return -1;
+	case WM_KEYUP:
+	{
+		if ((lParam & 0x80000000) != 0x80000000)
+			return -1;
 
-			//NextScene
-			if (wParam == VK_F3)
-			{
-				SceneManager::GetInstance()->NextScene();
-				return 0;
-			}
-			//PreviousScene
-			else if (wParam == VK_F2)
-			{
-				SceneManager::GetInstance()->PreviousScene();
-				return 0;
-			}
-			else if (wParam == VK_F4)
-			{
-				DebugRenderer::ToggleDebugRenderer();
-				return 0;
-			}
-			else if (wParam == VK_F6)
-			{
-				auto activeScene = SceneManager::GetInstance()->GetActiveScene();
-				activeScene->GetPhysxProxy()->NextPhysXFrame();
-			}
+		//NextScene
+		if (wParam == VK_F3)
+		{
+			SceneManager::GetInstance()->NextScene();
+			return 0;
 		}
+		//PreviousScene
+		else if (wParam == VK_F2)
+		{
+			SceneManager::GetInstance()->PreviousScene();
+			return 0;
+		}
+		else if (wParam == VK_F4)
+		{
+			DebugRenderer::ToggleDebugRenderer();
+			return 0;
+		}
+		else if (wParam == VK_F6)
+		{
+			auto activeScene = SceneManager::GetInstance()->GetActiveScene();
+			activeScene->GetPhysxProxy()->NextPhysXFrame();
+		}
+	}
 	}
 
 	return -1;

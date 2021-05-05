@@ -17,8 +17,6 @@ private:
 	
 	ID3DX11EffectShaderResourceVariable* m_pCubeMapVariable = nullptr;	
 	ID3DX11EffectMatrixVariable* m_pWVPVariable = nullptr;
-	ID3DX11EffectMatrixVariable* m_pWorldVariable = nullptr;
-	ID3DX11EffectVectorVariable* m_pCameraPosVariable = nullptr;
 	
 };
 

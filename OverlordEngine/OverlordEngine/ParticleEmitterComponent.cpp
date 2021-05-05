@@ -20,7 +20,7 @@ ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int 
 	m_LastParticleInit(0.0f),
 	m_AssetFile(std::move(assetFile)),
 	m_Particles(),
-	m_IsActive(false)
+	m_IsActive(true)
 {
 	for (int i = 0; i < m_ParticleCount; ++i)
 		m_Particles.push_back(new Particle(m_Settings));

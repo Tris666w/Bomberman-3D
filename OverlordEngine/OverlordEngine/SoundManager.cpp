@@ -28,6 +28,7 @@ bool SoundManager::ErrorCheck(FMOD_RESULT res)
 
 	return true;
 }
+
 #pragma warning(pop)
 
 void SoundManager::Initialize()
@@ -59,7 +60,7 @@ void SoundManager::Initialize()
 	}
 	else
 	{
-		result = m_pFmodSystem->init(32, FMOD_INIT_NORMAL, nullptr);
+		result = m_pFmodSystem->init(MAX_CHANNELS, FMOD_INIT_NORMAL, nullptr);
 		ErrorCheck(result);
 	}
 

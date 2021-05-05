@@ -1,76 +1,74 @@
-//Skybox.fx 
-//FirstName: Tristan 
-//LastName: Wauthier 
-//Class: 2DAE02
-
-//Matrix Variables
-float4x4 gMatrixWVP: WORLDVIEWPROJECTION;
-float4x4 gWorld : WORLD;
-
-//cubemap Variables
-TextureCube gTextureEnv <
-string UIName = "Env Map";
-string ResourceType = "Cube";
->;
-SamplerState gSamplerEnvMap
+SamplerState samLinear
 {
-Filter = MIN_MAG_MIP_LINEAR;
-AddressU = WRAP;
-AddressV = WRAP;
-AddressW = WRAP;
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
+TextureCube m_CubeMap : CubeMap;
 
-//Camera pos
-float3 gCameraPosition;
+cbuffer cbChangesEveryFrame
+{
+	matrix matWorldViewProj : WorldViewProjection;
+}
 
-//Rasterizer States 
-RasterizerState gRS_NoCulling
+struct VS_IN
+{
+	float3 posL : POSITION;
+};
+
+struct VS_OUT
+{
+	float4 posH : SV_POSITION;
+	float3 texC : TEXCOORD;
+};
+
+//--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+VS_OUT VS( VS_IN vIn )
+{
+
+	VS_OUT vOut = (VS_OUT)0;
+
+	// set z = w so that z/w = 1 (i.e., skydome always on far plane).
+	vOut.posH = mul( float4(vIn.posL,0.0f), matWorldViewProj).xyww;
+
+	// use local vertex position as cubemap lookup vector
+	vOut.texC = vIn.posL;
+
+	return vOut;
+}
+//--------------------------------------------------------------------------------------
+// Pixel XMeshShader
+//--------------------------------------------------------------------------------------
+float4 PS( VS_OUT pIn): SV_Target
+{
+	return m_CubeMap.Sample(samLinear, pIn.texC);
+}
+
+RasterizerState NoCull
 {
 	CullMode = NONE;
-
 };
 
-//In- and Output structs
-struct VS_INPUT
+DepthStencilState LessEqualDSS
 {
-	float3 position : POSITION;
+	// Make sure the depth function is LESS_EQUAL and not just LESS.
+    // Otherwise, the normalized depth values at z = 1 (NDC) will
+    // fail the depth test if the depth buffer was cleared to 1.
+	DepthFunc = LESS_EQUAL;
 };
 
-struct VS_OUTPUT
+
+technique10 Render
 {
-	float4 position : SV_POSITION;
-	float3 texcoord : TEXCOORD0;
-};
-
-//Vertex shader
-VS_OUTPUT MainVS(VS_INPUT input)
-{
-	VS_OUTPUT output = (VS_OUTPUT) 0;
-	output.position = mul(float4(input.position,1.f), gMatrixWVP);
- 
-	float4 VertexPosition = mul(float4(input.position,1.f), gWorld);
-	output.texcoord = VertexPosition.xyz - gCameraPosition;
-	
-	return output;
-};
-
-//PixelShader
-float4 MainPS(VS_OUTPUT input) : SV_Target
-{
-	float4 color = gTextureEnv.Sample(gSamplerEnvMap, input.texcoord);
-	return color;
-};
-
-//Default Technique for DirectX10
-technique10 DefaultTechnique
-{
-	pass P0 
-	{
-		SetRasterizerState(gRS_NoCulling);
-		SetVertexShader(CompileShader(vs_4_0, MainVS())); 
-		SetPixelShader(CompileShader(ps_4_0, MainPS()));
-
-
-	}
+    pass P0
+    {
+        SetVertexShader( CompileShader( vs_4_0, VS() ) );
+        SetGeometryShader( NULL );
+        SetPixelShader( CompileShader( ps_4_0, PS() ) );
+		SetRasterizerState(NoCull);
+		SetDepthStencilState(LessEqualDSS,0);
+    }
 }

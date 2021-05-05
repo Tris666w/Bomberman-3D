@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BombManager.h"
-#include "BombPrefab.h"
-#include "TransformComponent.h"
+#include "Prefabs/BombPrefab.h"
 
 BombManager::~BombManager()
 {

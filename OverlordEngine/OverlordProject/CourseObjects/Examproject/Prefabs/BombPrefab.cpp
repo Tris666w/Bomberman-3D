@@ -15,6 +15,7 @@
 #include "Explosion.h"
 #include "PhysxProxy.h"
 #include "BombermanCharPrefab.h"
+#include "SoundManager.h"
 #include "..//Components/DestroyableWallComponent.h"
 
 BombPrefab::BombPrefab() :GameObject()
@@ -36,7 +37,7 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto pDiffuseMaterial = new DiffuseMaterial();
 	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Bomb.jpg");
-	auto matID = gameContext.pMaterialManager->AddMaterial(pDiffuseMaterial);
+	auto const matID = gameContext.pMaterialManager->AddMaterial(pDiffuseMaterial);
 
 
 	m_pModelComponent = new ModelComponent(L"./Resources/Meshes/Bomb.ovm");
@@ -76,6 +77,13 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 
 	m_pRigidBody->GetTransform()->Translate(-10000, -10000, -10000);
 
+	//Sound
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/Explosion.wav", FMOD_DEFAULT, 0, &m_pSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	m_pSound->setMode(FMOD_LOOP_OFF);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+
 }
 
 void BombPrefab::PostInitialize(const GameContext&)
@@ -95,7 +103,10 @@ void BombPrefab::Update(const::GameContext& gameContext)
 
 	m_ExplodeTimer += gameContext.pGameTime->GetElapsed();
 	if (m_ExplodeTimer >= m_ExplodeTime)
+	{
+		gameContext.pCamera->ShakeCamera(0.5f,0.15f);
 		Explode();
+	}
 
 
 }
@@ -105,7 +116,9 @@ void BombPrefab::Explode()
 {
 	if (m_IsExploding)
 		return;
-
+	
+	SoundManager::GetInstance()->GetSystem()->playSound(m_pSound,nullptr,false,&m_pChannel);
+	
 	m_IsExploding = true;
 	m_IsActive = false;
 	m_ExplodeTimer = 0.f;
@@ -152,17 +165,14 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 			}
 			if (pOther->GetTag() == BombermanGameSettings::bomb_tag)
 			{
-				Logger::LogInfo(L"Explosion hit other bomb!");
 				static_cast<BombPrefab*>(pOther)->Explode();
 			}
 			if (pOther->GetTag() == BombermanGameSettings::player_tag)
 			{
-				Logger::LogInfo(L"Explosion hit a player!");
 				static_cast<BombermanCharPrefab*>(pOther)->KillPlayer();
 			}
 			if (pOther->GetTag() == BombermanGameSettings::destructible_tag)
 			{
-				Logger::LogInfo(L"Explosion hit a destructible!");
 				auto* pComp = pOther->GetComponent<DestroyableWallComponent>();
 				if (pComp == nullptr)
 				{

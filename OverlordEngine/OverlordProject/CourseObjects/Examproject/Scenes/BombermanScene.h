@@ -10,18 +10,23 @@ protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
-	void SceneActivated() override;
-	void SceneDeactivated() override;
 
 private:
 	CameraComponent* m_pCamera = nullptr;
 
-	/// @brief prints the character controls
-	void PrintControls()const;
+	/// @brief Creates the level
+	void CreateLevel();
+
+	/// @brief Create grass
+	void CreateGrass();
+
 	/// @brief Creates the floor grid
 	/// @param size The size of the grid with width: size and height: size
-	void CreateFloor(int const size);
+	void CreateGridFloor(int const size);
 
+	/// @brief Creates the floor plane
+	void CreateFloor();
+	
 	/// @brief Create the walls of the floor
 	/// @param size the size of the grid with width: size and height: size
 	/// @param wallHeight heighht of the walls in units (will be multiplied with blockSize)

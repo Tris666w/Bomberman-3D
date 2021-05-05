@@ -5,6 +5,8 @@ class ControllerComponent;
 class CameraComponent;
 class ModelComponent;
 class BombPrefab;
+class SpriteFont;
+class SpriteComponent;
 
 class BombermanCharPrefab : public GameObject
 {
@@ -29,9 +31,12 @@ public:
 	void Initialize(const GameContext& gameContext) override;
 	void PostInitialize(const GameContext& gameContext) override;
 	void Update(const GameContext& gameContext) override;
+	void Draw(const GameContext&) override;
 
 	void KillPlayer();
 
+	bool GetCanSpawnBomb()const {return m_CanSpawnBomb;}
+	GamepadIndex GetPlayerIndex()const {return m_PlayerIndex;}
 protected:
 	bool m_IsDead;
 	ControllerComponent* m_pController;
@@ -63,5 +68,9 @@ protected:
 
 	//Methods
 	DirectX::XMFLOAT3 CalculateBombSpawnPos()const;
+
+	//UI
+	SpriteFont* m_pFont = nullptr;
+	SpriteComponent* m_pSprite = nullptr;
 };
 

@@ -39,11 +39,14 @@
     <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\Components\LinkGameObjectPosComponent.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostBloom.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Components\DestroyableWallComponent.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\BombermanUI.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -84,10 +87,13 @@
     <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.h" />
-    <ClInclude Include="CourseObjects\Examproject\Components\LinkGameObjectPosComponent.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostBloom.h" />
     <ClInclude Include="CourseObjects\Examproject\Components\DestroyableWallComponent.h" />
+    <ClInclude Include="CourseObjects\Examproject\BombermanUI.h" />
+    <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
+    <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
   </ItemGroup>
 </Project>

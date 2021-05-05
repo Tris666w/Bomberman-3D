@@ -44,7 +44,9 @@ private:
 	RigidBodyComponent* m_pRigidBody = nullptr;
 	ParticleEmitterComponent* m_pSmokeEmitter = nullptr;
 
-
+	FMOD::Channel* m_pChannel = nullptr;
+	FMOD::Sound* m_pSound = nullptr;
+	
 	/// @brief Function to create explosions
 	/// @param direction of the explosion
 	/// @param reach  Distance of the explosion (in units)

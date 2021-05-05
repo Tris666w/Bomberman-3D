@@ -38,6 +38,6 @@ private:
 	//LIGHT
 	DirectX::XMFLOAT3 m_LightPosition = {}, m_LightDirection = {};
 	DirectX::XMFLOAT4X4 m_LightVP = {};
-	const float m_Size = 100.0f;
+	const float m_Size = 200.f;
 };
 
