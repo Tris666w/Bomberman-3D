@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define TEST
+#define EXAM
 
 #ifdef W3
 #include "CourseObjects/Week 3/MinionScene.h"

@@ -4,7 +4,8 @@
 
 PostBloom::PostBloom()
 	: PostProcessingMaterial(L"./Resources/Effects/Post/Bloom.fx", 3),
-	m_pTextureMapVariable(nullptr)
+	m_pTextureMapVariable(nullptr),
+	m_pIntensityVariable(nullptr)
 {
 }
 

@@ -47,6 +47,7 @@
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -95,5 +96,6 @@
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
   </ItemGroup>
 </Project>

@@ -139,6 +139,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 6\SoftwareSkinningScene_1.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostBloom.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -205,6 +206,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 6\SkinnedVertex.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostBloom.h" />
+    <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />

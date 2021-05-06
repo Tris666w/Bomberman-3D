@@ -10,7 +10,7 @@ public:
 	ControllerComponent& operator=(ControllerComponent&& other) noexcept = delete;
 
 	ControllerComponent(physx::PxMaterial* material, float radius = 2, float height = 5, float stepOffset = 0.5f, std::wstring name = L"Character",
-	                    physx::PxCapsuleClimbingMode::Enum climbingMode = physx::PxCapsuleClimbingMode::eEASY);
+	                    physx::PxCapsuleClimbingMode::Enum climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED);
 	virtual ~ControllerComponent() = default;
 
 	void Translate(const DirectX::XMFLOAT3& position) const;

@@ -95,7 +95,7 @@ float4 PS(PS_INPUT input): SV_Target
 
 //TECHNIQUE
 //---------
-technique11 Blur
+technique11 Bloom
 {
 	pass P0
 	{

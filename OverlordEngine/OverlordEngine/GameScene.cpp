@@ -206,7 +206,7 @@ void GameScene::RootDraw()
 	if (m_PostProcessingEffects.empty())
 		return;
 
-	//2. Get the current(=INIT_RT)rendertarget from the game (OVerlordGame::GetRenderTarget...);
+	//2. Get the current(=INIT_RT)rendertarget from the game (OverlordGame::GetRenderTarget...);
 	auto const INIT_RT = SceneManager::GetInstance()->GetGame()->GetRenderTarget();
 
 	//3. Create a new variable to hold our previous rendertarget (= PREV_RT) that holds the content of the previous draw call and
@@ -233,7 +233,10 @@ void GameScene::RootDraw()
 	}
 
 	//5. Restore the current rendertarget with INIT_RT
+	ID3D11ShaderResourceView* null[] = { nullptr, nullptr };
+	GetGameContext().pDeviceContext->PSSetShaderResources(0, 2, null);
 	SceneManager::GetInstance()->GetGame()->SetRenderTarget(INIT_RT);
+
 
 	//6. Use SpriteRenderer:::DrawImmediate to draw the content of the last post processed rendertarget > PREV_RT
 	SpriteRenderer::GetInstance()->DrawImmediate(m_GameContext, PREV_RT->GetShaderResourceView(), DirectX::XMFLOAT2(0, 0));

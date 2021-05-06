@@ -14,12 +14,14 @@
 #include "../BombManager.h"
 #include "../BombermanUI.h"
 #include "../BombermanGameSettings.h"
+#include "../Prefabs/BonfirePrefab.h"
 #include "../Prefabs/BombermanCharPrefab.h"
 #include "../Components/DestroyableWallComponent.h"
 
 #include "../Materials/GrassMaterial.h"
 #include "../Materials/SkyBoxMaterial.h"
 #include "../Materials/Post/PostBloom.h"
+#include "../Materials/Post/PostColorGrading.h"
 #include "../../../Materials/Post/PostGrayscale.h"
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
 
@@ -41,7 +43,7 @@ void BombermanScene::Initialize()
 	//Spawn the camera
 	DirectX::XMFLOAT3 const cameraPos = { BombermanGameSettings::grid_size * BombermanGameSettings::block_size / 1.98f
 									,BombermanGameSettings::grid_size / 3.f * (BombermanGameSettings::wall_height + 2) * BombermanGameSettings::block_size,
-										-BombermanGameSettings::block_size * BombermanGameSettings::grid_size /3.f };
+										-BombermanGameSettings::block_size * BombermanGameSettings::grid_size / 3.f };
 	DirectX::XMFLOAT3 const cameraRot = { 60,0,0 };
 	CreateAndActivateCamera(cameraPos, cameraRot);
 
@@ -51,9 +53,15 @@ void BombermanScene::Initialize()
 	CreatePlayers();
 	CreateLevel();
 
-	auto const bloomPp = new PostBloom();
-	bloomPp->SetIntensity(0.35f);
-	AddPostProcessingEffect(bloomPp);
+	//auto const bloomPp = new PostBloom();
+	//bloomPp->SetIntensity(0.35f);
+	//AddPostProcessingEffect(bloomPp);
+	auto* pp = new PostColorGrading();
+	pp->SetContribution(1.f);
+	pp->SetLUT(L"Resources/Textures/NeutralLUT.png");
+	AddPostProcessingEffect(pp);
+	//AddPostProcessingEffect(new PostGrayscale());
+
 }
 
 void BombermanScene::Update()
@@ -73,7 +81,8 @@ void BombermanScene::CreateLevel()
 	CreateSkybox();
 	CreateFloor();
 	//CreateGrass();
-	
+	CreateCampSite();
+
 }
 
 void BombermanScene::CreateGrass()
@@ -89,8 +98,8 @@ void BombermanScene::CreateGrass()
 	pMat->SetWeightTexture(L"Resources/Textures/Grass/Weight.png");
 	pMat->SetAddedColorTexture(L"Resources/Textures/Grass/AddColor.png");
 	pMat->SetDirectionTexture(L"Resources/Textures/Grass/Direction.png");
-	pMat->SetLightDirection( GetGameContext().pShadowMapper->GetLightDirection());
-	pObj->GetTransform()->Translate(25,0,0);
+	pMat->SetLightDirection(GetGameContext().pShadowMapper->GetLightDirection());
+	pObj->GetTransform()->Translate(25, 0, 0);
 	AddChild(pObj);
 }
 
@@ -166,11 +175,11 @@ void BombermanScene::CreateFloor()
 	pObj->AddComponent(pModel);
 	pModel->SetMaterial(matId);
 	AddChild(pObj);
-	pObj->GetTransform()->Translate(31,0,50);
-	
+	pObj->GetTransform()->Translate(31, 0, 50);
+
 }
 
-void BombermanScene::CreateWalls(int const size, int const wallHeight)
+void BombermanScene::CreateWalls(int const size, int const)
 {
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
@@ -181,36 +190,35 @@ void BombermanScene::CreateWalls(int const size, int const wallHeight)
 	float startZ = -blockSize / 2.f;
 
 	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
+	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Log.png");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
 
 	for (int z = 0; z < 2; ++z)
 	{
-		for (int y = 0; y < wallHeight; ++y)
+		for (int x = 0; x < size + 2; ++x)
 		{
-			for (int x = 0; x < size + 2; ++x)
-			{
-				float const offsetX = static_cast<float>(x) * blockSize;
-				auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
-				pModelComponent->SetMaterial(matId);
+			float const offsetX = static_cast<float>(x) * blockSize;
+			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Fence.ovm");
+			pModelComponent->SetMaterial(matId);
 
-				auto* pWall = new GameObject();
-				pWall->AddComponent(pModelComponent);
+			auto* pWall = new GameObject();
+			pWall->AddComponent(pModelComponent);
 
-				pWall->GetTransform()->Translate(startX + offsetX, static_cast<float>(y) * blockSize, startZ);
+			pWall->GetTransform()->Translate(startX + offsetX, blockSize, startZ);
 
-				auto const rb = new RigidBodyComponent(true);
-				rb->SetCollisionGroup(CollisionGroupFlag::Group0);
-				pWall->AddComponent(rb);
+			auto const rb = new RigidBodyComponent();
+			rb->SetKinematic(true);
+			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
+			pWall->AddComponent(rb);
 
-				physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Cube.ovpc");
-				std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
+			physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Cube.ovpc");
+			std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
 
-				auto const cc = new ColliderComponent(meshGeometry, *bouncyMaterial);
-				pWall->AddComponent(cc);
-				AddChild(pWall);
+			auto const cc = new ColliderComponent(meshGeometry, *bouncyMaterial);
+			pWall->AddComponent(cc);
+			AddChild(pWall);
+			pWall->GetTransform()->Rotate(0, 90, 0);
 
-			}
 		}
 		startZ += (static_cast<float>(size) + 1.f) * blockSize;
 	}
@@ -218,18 +226,17 @@ void BombermanScene::CreateWalls(int const size, int const wallHeight)
 	startZ = blockSize / 2;
 	for (int x = 0; x < 2; ++x)
 	{
-		for (int y = 0; y < wallHeight; ++y)
 		{
 			for (int z = 0; z < size; ++z)
 			{
 				float const offsetZ = z * blockSize;
-				auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
+				auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Fence.ovm");
 				pModelComponent->SetMaterial(matId);
 
 				auto* pWall = new GameObject();
 				pWall->AddComponent(pModelComponent);
 
-				pWall->GetTransform()->Translate(startX, static_cast<float>(y) * blockSize, startZ + offsetZ);
+				pWall->GetTransform()->Translate(startX, blockSize, startZ + offsetZ);
 
 				auto const rb = new RigidBodyComponent(true);
 				rb->SetCollisionGroup(CollisionGroupFlag::Group0);
@@ -260,6 +267,7 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
+	auto const halfSize = blockSize / 2.f;
 
 	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
 	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
@@ -274,7 +282,6 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 
 			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
 			pModelComponent->SetMaterial(matId);
-
 			auto* pWall = new GameObject();
 			pWall->AddComponent(pModelComponent);
 
@@ -284,10 +291,9 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
 			pWall->AddComponent(rb);
 
-			physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Cube.ovpc");
-			std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
+			std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(halfSize, halfSize, halfSize));
+			auto* cc = new ColliderComponent(geometry, *bouncyMaterial, physx::PxTransform(physx::PxQuat(DirectX::XM_PIDIV2, physx::PxVec3(0, 0, 1))));
 
-			auto cc = new ColliderComponent(meshGeometry, *bouncyMaterial);
 			pWall->AddComponent(cc);
 			AddChild(pWall);
 		}
@@ -305,12 +311,12 @@ void BombermanScene::CreateDestructibleWalls(int const size)
 	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
 	auto const blockSize = BombermanGameSettings::block_size;
+	auto const halfSize = blockSize / 2.f;
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
-
 	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Barrel.png");
+	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/TreeStump.png");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
 
 	for (int x = 0; x < size; ++x)
@@ -342,11 +348,11 @@ void BombermanScene::CreateDestructibleWalls(int const size)
 
 			auto* pWall = new GameObject();
 
-			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Barrel.ovm");
+			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/TreeStump.ovm");
 			pModelComponent->SetMaterial(matId);
 			pWall->AddComponent(pModelComponent);
 
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), BombermanGameSettings::block_size, static_cast<float>(startZ + offsetZ));
+			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * BombermanGameSettings::block_size / 2.f, static_cast<float>(startZ + offsetZ));
 
 			auto const dc = new DestroyableWallComponent();
 			pWall->AddComponent(dc);
@@ -356,14 +362,12 @@ void BombermanScene::CreateDestructibleWalls(int const size)
 			rb->SetKinematic(true);
 			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
 			pWall->AddComponent(rb);
-			
-			physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Barrel.ovpc");
-			std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
 
-			auto const cc = new ColliderComponent(meshGeometry, *bouncyMaterial);
+			std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(halfSize, halfSize, halfSize));
+			auto* cc = new ColliderComponent(geometry, *bouncyMaterial, physx::PxTransform(physx::PxQuat(DirectX::XM_PIDIV2, physx::PxVec3(0, 0, 1))));
+
 			pWall->AddComponent(cc);
 			AddChild(pWall);
-			
 			rb->GetPxRigidBody()->userData = pWall;
 		}
 	}
@@ -385,7 +389,7 @@ void BombermanScene::CreateSkybox()
 	pModelComponent->SetMaterial(matID);
 
 	AddChild(skyboxGameObject);
-	skyboxGameObject->GetTransform()->Translate(0,-250,0);
+	skyboxGameObject->GetTransform()->Translate(0, -250, 0);
 }
 
 void BombermanScene::CreateAndActivateCamera(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 rot)
@@ -397,14 +401,13 @@ void BombermanScene::CreateAndActivateCamera(DirectX::XMFLOAT3 pos, DirectX::XMF
 	SetActiveCamera(pFixedCamera);
 	obj->GetTransform()->Translate(pos);
 	obj->GetTransform()->Rotate(rot);
-	//pFixedCamera->SetFieldOfView(1.f);
 	AddChild(obj);
 }
 
 void BombermanScene::CreatePlayers()
 {
-	auto const pWindow =  OverlordGame::GetGameSettings().Window;
-	
+	auto const pWindow = OverlordGame::GetGameSettings().Window;
+
 	std::wstring const meshPath = L"./Resources/Meshes/PeasantGirl.ovm";
 	float const playerRadius = BombermanGameSettings::block_size / 2.5f;
 	float const playerHeight = 5.0f;
@@ -412,30 +415,30 @@ void BombermanScene::CreatePlayers()
 	float const playerMoveSpeed = 25.f;
 
 	float const uiNearXPos = pWindow.Width / 30.f;
-	float const uiNearYPos = pWindow.Height / 20.f;	
+	float const uiNearYPos = pWindow.Height / 20.f;
 	float const uiFarXPos = static_cast<float>(pWindow.Width) - pWindow.Width / 8.f;
-	float const uiFarYPos = static_cast<float>(pWindow.Height) - pWindow.Height / 10.f;	
+	float const uiFarYPos = static_cast<float>(pWindow.Height) - pWindow.Height / 10.f;
 
 	float const startX = BombermanGameSettings::grid_size * BombermanGameSettings::block_size - BombermanGameSettings::block_size / 2.f;
 	float const startY = BombermanGameSettings::block_size * 1.5f;
 	float const startZ = BombermanGameSettings::grid_size * BombermanGameSettings::block_size - BombermanGameSettings::block_size / 2.f;
-	
+
 	//Create player 1
 	std::vector<int> const char1Controls{ 'A', 'D', 'W', 'S', 32 };
 	auto* pCharacter1 = new BombermanCharPrefab(meshPath, L"./Resources/Textures/PeasantGirl_Diffuse.png",
 		playerRadius, playerHeight, playerStepOffset, playerMoveSpeed, char1Controls, GamepadIndex::PlayerOne);
 	AddChild(pCharacter1);
 	pCharacter1->GetTransform()->Translate(BombermanGameSettings::block_size / 2.f, startY, startZ);
-	auto* pUi = new BombermanUi(pCharacter1,DirectX::XMFLOAT2{uiNearXPos,uiNearYPos});
+	auto* pUi = new BombermanUi(pCharacter1, DirectX::XMFLOAT2{ uiNearXPos,uiNearYPos });
 	AddChild(pUi);
-	
+
 	//Create player 2
 	std::vector<int> const char2Controls{ VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT };
 	auto* pCharacter2 = new BombermanCharPrefab(meshPath, L"./Resources/Textures/PeasantGirl_Diffuse.png",
 		playerRadius, playerHeight, playerStepOffset, playerMoveSpeed, char2Controls, GamepadIndex::PlayerTwo);
 	AddChild(pCharacter2);
 	pCharacter2->GetTransform()->Translate(startX, startY, startZ);
-	pUi = new BombermanUi(pCharacter2,DirectX::XMFLOAT2{static_cast<float>(uiFarXPos),uiNearYPos});
+	pUi = new BombermanUi(pCharacter2, DirectX::XMFLOAT2{ static_cast<float>(uiFarXPos),uiNearYPos });
 	AddChild(pUi);
 
 	//Create player 3
@@ -444,7 +447,7 @@ void BombermanScene::CreatePlayers()
 		playerRadius, playerHeight, playerStepOffset, playerMoveSpeed, char3Controls, GamepadIndex::PlayerThree);
 	AddChild(pCharacter3);
 	pCharacter3->GetTransform()->Translate(startX, startY, BombermanGameSettings::block_size / 2.f);
-	pUi = new BombermanUi(pCharacter3,DirectX::XMFLOAT2{uiNearXPos, static_cast<float>(uiFarYPos)},true);
+	pUi = new BombermanUi(pCharacter3, DirectX::XMFLOAT2{ uiNearXPos, static_cast<float>(uiFarYPos) }, true);
 	AddChild(pUi);
 
 	//Create player 4
@@ -453,6 +456,13 @@ void BombermanScene::CreatePlayers()
 		playerRadius, playerHeight, playerStepOffset, playerMoveSpeed, char4Controls, GamepadIndex::PlayerFour);
 	AddChild(pCharacter4);
 	pCharacter4->GetTransform()->Translate(BombermanGameSettings::block_size / 2.f, startY, BombermanGameSettings::block_size / 2.f);
-	pUi = new BombermanUi(pCharacter4,DirectX::XMFLOAT2{static_cast<float>(uiFarXPos),static_cast<float>(uiFarYPos)},true);
+	pUi = new BombermanUi(pCharacter4, DirectX::XMFLOAT2{ static_cast<float>(uiFarXPos),static_cast<float>(uiFarYPos) }, true);
 	AddChild(pUi);
+}
+
+void BombermanScene::CreateCampSite()
+{
+	auto* const pBonfire = new BonfirePrefab({ -25.f,0.f,40.f });
+	pBonfire->GetTransform()->Scale(2.f, 2.f, 2.f);
+	AddChild(pBonfire);
 }

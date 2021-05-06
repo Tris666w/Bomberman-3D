@@ -6,6 +6,7 @@ class BombermanScene final :public GameScene
 public:
 	BombermanScene();
 	~BombermanScene() override;
+
 protected:
 	void Initialize() override;
 	void Update() override;
@@ -26,7 +27,7 @@ private:
 
 	/// @brief Creates the floor plane
 	void CreateFloor();
-	
+
 	/// @brief Create the walls of the floor
 	/// @param size the size of the grid with width: size and height: size
 	/// @param wallHeight heighht of the walls in units (will be multiplied with blockSize)
@@ -48,6 +49,10 @@ private:
 	/// @param rot the rotation of the camera
 	void CreateAndActivateCamera(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 rot);
 
+	/// @brief Initialize the players and UI
 	void CreatePlayers();
+
+	/// @brief Creates the camp site
+	void CreateCampSite();
 };
 

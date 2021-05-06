@@ -23,10 +23,10 @@ void CameraComponent::Shake(float elapsedSec)
 		pos.x += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
 		pos.y += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
 		pos.z += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-									
-	}								
-	else							
-	{								
+
+	}
+	else
+	{
 		pos.x -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
 		pos.y -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
 		pos.z -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
@@ -122,41 +122,41 @@ GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroup
 	UNREFERENCED_PARAMETER(gameContext);
 
 
-	float const halfWidth = static_cast<float>(OverlordGame::GetGameSettings().Window.Width) /2.f;
-	float const halfHeight = static_cast<float>(OverlordGame::GetGameSettings().Window.Height) /2.f;
-	
+	float const halfWidth = static_cast<float>(OverlordGame::GetGameSettings().Window.Width) / 2.f;
+	float const halfHeight = static_cast<float>(OverlordGame::GetGameSettings().Window.Height) / 2.f;
+
 	float const xPosNdc = (InputManager::GetMousePosition().x - halfWidth) / halfWidth;
 	float const yPosNdc = (halfHeight - InputManager::GetMousePosition().y) / halfHeight;
-	
-	DirectX::XMFLOAT3 nearPoint = DirectX::XMFLOAT3(xPosNdc,yPosNdc,0.f);
-	DirectX::XMFLOAT3 farPoint = DirectX::XMFLOAT3(xPosNdc,yPosNdc,1.0f);
-	
+
+	DirectX::XMFLOAT3 nearPoint = DirectX::XMFLOAT3(xPosNdc, yPosNdc, 0.f);
+	DirectX::XMFLOAT3 farPoint = DirectX::XMFLOAT3(xPosNdc, yPosNdc, 1.0f);
+
 	auto nearPointVector = XMLoadFloat3(&nearPoint);
 	auto farPointVector = XMLoadFloat3(&farPoint);
 
 	auto const viewProjInv = XMLoadFloat4x4(&m_ViewProjectionInverse);
-	
-	nearPointVector = XMVector3TransformCoord(nearPointVector,viewProjInv);
-	farPointVector = XMVector3TransformCoord(farPointVector,viewProjInv);
-	
+
+	nearPointVector = XMVector3TransformCoord(nearPointVector, viewProjInv);
+	farPointVector = XMVector3TransformCoord(farPointVector, viewProjInv);
+
 
 	XMStoreFloat3(&nearPoint, nearPointVector);
 	XMStoreFloat3(&farPoint, farPointVector);
-	
+
 	physx::PxVec3 const origin = ToPxVec3(nearPoint);
-	physx::PxVec3 const dir = ToPxVec3(DirectX::XMFLOAT3(farPoint.x - nearPoint.x,farPoint.y-nearPoint.y,farPoint.z-nearPoint.z));
-	
+	physx::PxVec3 const dir = ToPxVec3(DirectX::XMFLOAT3(farPoint.x - nearPoint.x, farPoint.y - nearPoint.y, farPoint.z - nearPoint.z));
+
 	physx::PxQueryFilterData filterData;
 	filterData.data.word0 = ~static_cast<UINT32>(ignoreGroups);
-	
+
 	physx::PxRaycastBuffer hit;
-	if (m_pGameObject->GetScene()->GetPhysxProxy()->Raycast(origin,dir.getNormalized(),PX_MAX_F32,hit, physx::PxHitFlag::eDEFAULT,filterData))
+	if (m_pGameObject->GetScene()->GetPhysxProxy()->Raycast(origin, dir.getNormalized(), PX_MAX_F32, hit, physx::PxHitFlag::eDEFAULT, filterData))
 	{
-		return static_cast<GameObject*>(hit.block.actor->userData);	
+		return static_cast<GameObject*>(hit.getAnyHit(0).actor->userData);
 	}
-	
+
 	return nullptr;
-	
+
 }
 
 void CameraComponent::ShakeCamera(float duration, float intensity)

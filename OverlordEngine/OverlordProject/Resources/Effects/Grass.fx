@@ -1,5 +1,6 @@
-/* DirectX Procedural Grass Shader (HLSL)
-	wwww.nickvanheer.com	*/
+//Mostly based on  this paper by Nick Vanheer
+//http://www.nickvanheer.com/project/NickVanheer_GrassGeometryShader.pdf
+
 cbuffer cbPerObject
 {
 	float4x4 m_MatrixWorldViewProj : WORLDVIEWPROJECTION;
@@ -13,9 +14,14 @@ RasterizerState DisableCulling
 	CullMode = None;
 	FillMode = Solid;
 };
-		
-int tesselationSteps = 0;
 
+SamplerState m_TextureSampler
+{
+	Filter = ANISOTROPIC;
+	AddressU = WRAP;
+	AddressV = WRAP;
+	AddressW = WRAP;
+};
 SamplerState samgHeightMap
 {
 	Filter = MIN_MAG_MIP_LINEAR;
@@ -23,14 +29,11 @@ SamplerState samgHeightMap
 	AddressV = Clamp; // of Mirror of Clamp of Border
 };
 
-bool IsGrass = true;
-bool IsWind = true;
 bool IsDense = true;
-bool AddOriginalGeometry = true;
 float gWindVelocity = 0.7;
 float3 gWindDirection = float3(1.f, 0.f, 0.f);
 float gElapsedSec : TIME;
-
+	
 Texture2D gGrassTexture;
 Texture2D gHeightMap;
 Texture2D gDirectionTexture;
@@ -57,13 +60,6 @@ bool gUseHeightMap = true;
 bool gUseWeightMap = true;
 bool gUseDirectionTexture = true;
 
-SamplerState m_TextureSampler
-{
-	Filter = ANISOTROPIC;
-	AddressU = WRAP;
-	AddressV = WRAP;
-	AddressW = WRAP;
-};
 
 
 //**********
@@ -390,17 +386,7 @@ TRIANGLECOLLECTION Subdivide(TRIANGLE tri, inout TriangleStream<GS_DATA> triStre
 
 [maxvertexcount(60)]
 void MainGS(triangle VS_OUTPUT input[3], inout TriangleStream<GS_DATA> triStream)
-{
-	//add original geometry
-	if (AddOriginalGeometry)
-	{
-		CreateVertex(triStream, input[0].Position.xyz, input[0].Normal, input[0].TexCoord);
-		CreateVertex(triStream, input[1].Position.xyz, input[1].Normal, input[1].TexCoord);
-		CreateVertex(triStream, input[2].Position.xyz, input[2].Normal, input[2].TexCoord);
-	
-		triStream.RestartStrip();
-	}
-		
+{		
 	//sample height, direction and weight noise maps
 	float samplePoint = 1.f;
 	float samplePoint2 = 1.f;
@@ -471,7 +457,7 @@ float4 MainPS(GS_DATA input) : SV_TARGET
 	return float4(76, 115, 49, 1);
 }
 
-// Default Technique
+
 technique10 DefaultTechnique
 {
 	pass p0

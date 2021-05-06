@@ -10,6 +10,5 @@ protected:
 	void Update(const GameContext&) override;
 
 private:
-	
 };
 
