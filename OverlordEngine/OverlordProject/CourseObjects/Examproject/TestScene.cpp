@@ -16,7 +16,7 @@ void TestScene::Initialize()
 {
 	AddChild(new BonfirePrefab({ -10,0,0 }));
 	auto* pp = new PostColorGrading();
-	pp->SetContribution(0.4f);
+	pp->SetContribution(1.f);
 	pp->SetLUT(L"Resources/Textures/test_lut.png");
 	AddPostProcessingEffect(pp);
 }

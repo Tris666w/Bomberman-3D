@@ -100,7 +100,6 @@ void SpriteRenderer::UpdateBuffer(const GameContext& gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
 
-	//TODO:
 	// if the vertex buffer does not exists, or the number of sprites is bigger then the buffer size
 	if (!m_pVertexBuffer || m_Sprites.size() > m_BufferSize)
 	{
@@ -152,7 +151,6 @@ void SpriteRenderer::UpdateBuffer(const GameContext& gameContext)
 	});
 	//------------------------
 
-	//TODO: Fill Buffer
 	// Finally fill the  buffer. You will need to create a D3D11_MAPPED_SUBRESOURCE
 	D3D11_MAPPED_SUBRESOURCE mappedSubResource;
 	// Next you will need to use the device context to map the vertex buffer to the mapped resource

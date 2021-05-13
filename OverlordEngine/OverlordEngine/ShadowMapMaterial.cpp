@@ -15,7 +15,6 @@ void ShadowMapMaterial::Initialize(const GameContext& gameContext)
 {
 	if (!m_IsInitialized)
 	{
-		//TODO: initialize the effect, techniques, shader variables, input layouts (hint use EffectHelper::BuildInputLayout), etc.
 		//Init effect
 		m_pShadowEffect = ContentManager::Load<ID3DX11Effect>(L"./Resources/Effects/ShadowMapGenerator.fx");
 

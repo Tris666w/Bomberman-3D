@@ -29,7 +29,7 @@ SamplerState samgHeightMap
 	AddressV = Clamp; // of Mirror of Clamp of Border
 };
 
-bool IsDense = true;
+bool IsDense = false;
 float gWindVelocity = 0.7;
 float3 gWindDirection = float3(1.f, 0.f, 0.f);
 float gElapsedSec : TIME;
@@ -41,7 +41,7 @@ Texture2D gWeightMap;
 Texture2D gAddColorMap;
 
 int maxHeight = 3.5;
-float maxWidth = 0.5;
+float maxWidth = 0.1;
 float unitHeightSegmentBottom = 0.4;
 float unitHeightSegmentMid = 0.4;
 float unitHeightSegmentTop = 0.2;
@@ -386,7 +386,7 @@ TRIANGLECOLLECTION Subdivide(TRIANGLE tri, inout TriangleStream<GS_DATA> triStre
 
 [maxvertexcount(60)]
 void MainGS(triangle VS_OUTPUT input[3], inout TriangleStream<GS_DATA> triStream)
-{		
+{
 	//sample height, direction and weight noise maps
 	float samplePoint = 1.f;
 	float samplePoint2 = 1.f;

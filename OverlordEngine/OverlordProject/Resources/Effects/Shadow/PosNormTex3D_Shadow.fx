@@ -1,5 +1,5 @@
 float4x4 gWorld : WORLD;
-float4x4 gWorldViewProj : WORLDVIEWPROJECTION; 
+float4x4 gWorldViewProj : WORLDVIEWPROJECTION;
 float4x4 gWorldViewProj_Light;
 float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
 float gShadowMapBias = 0.01f;
@@ -21,15 +21,15 @@ SamplerComparisonState cmpSampler
 SamplerState samLinear
 {
 	Filter = MIN_MAG_MIP_LINEAR;
-	AddressU = Wrap;// or Mirror or Clamp or Border
-	AddressV = Wrap;// or Mirror or Clamp or Border
+	AddressU = Wrap; // or Mirror or Clamp or Border
+	AddressV = Wrap; // or Mirror or Clamp or Border
 };
 
 SamplerState samPoint
 {
 	Filter = MIN_MAG_MIP_POINT;
-	AddressU = Wrap;// or Mirror or Clamp or Border
-	AddressV = Wrap;// or Mirror or Clamp or Border
+	AddressU = Wrap; // or Mirror or Clamp or Border
+	AddressV = Wrap; // or Mirror or Clamp or Border
 };
 
 RasterizerState Solid
@@ -69,7 +69,7 @@ RasterizerState NoCulling
 //--------------------------------------------------------------------------------------
 VS_OUTPUT VS(VS_INPUT input)
 {
-	VS_OUTPUT output = (VS_OUTPUT)0;
+	VS_OUTPUT output = (VS_OUTPUT) 0;
 	output.pos = mul(float4(input.pos, 1.f), gWorldViewProj);
 	output.normal = normalize(mul(input.normal, (float3x3) gWorld));
 	output.texCoord = input.texCoord;
@@ -110,9 +110,9 @@ float EvaluateShadowMap(float4 lpos)
 	float x, y;
  
 	//perform PCF filtering on a 4 x 4 texel neighborhood
-	for (y = -1.5; y < 1.5;y += 1.0)
+	for (y = -1.5; y < 1.5; y += 1.0)
 	{
-		for (x = -1.5; x < 1.5;x += 1.0)
+		for (x = -1.5; x < 1.5; x += 1.0)
 		{
 			sum += gShadowMap.SampleCmpLevelZero(cmpSampler, lpos.xy + texOffset(x, y), lpos.z);
 		}
@@ -130,8 +130,8 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 {
 	float shadowValue = EvaluateShadowMap(input.lPos);
 
-	float4 diffuseColor = gDiffuseMap.Sample( samLinear,input.texCoord );
-	float3 color_rgb= diffuseColor.rgb;
+	float4 diffuseColor = gDiffuseMap.Sample(samLinear, input.texCoord);
+	float3 color_rgb = diffuseColor.rgb;
 	float color_a = diffuseColor.a;
 	
 	//HalfLambert Diffuse :)
@@ -140,7 +140,7 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 	diffuseStrength = saturate(diffuseStrength);
 	color_rgb = color_rgb * diffuseStrength;
 
-	return float4( color_rgb * shadowValue , color_a );
+	return float4(color_rgb * shadowValue, color_a);
 }
 
 //--------------------------------------------------------------------------------------
@@ -153,9 +153,9 @@ technique11 Default
 		SetRasterizerState(NoCulling);
 		SetDepthStencilState(EnableDepth, 0);
 
-		SetVertexShader( CompileShader( vs_4_0, VS() ) );
-		SetGeometryShader( NULL );
-		SetPixelShader( CompileShader( ps_4_0, PS() ) );
+		SetVertexShader(CompileShader(vs_4_0, VS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_4_0, PS()));
 	}
 }
 

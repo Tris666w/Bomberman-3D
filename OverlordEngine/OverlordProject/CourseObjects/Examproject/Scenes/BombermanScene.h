@@ -19,7 +19,7 @@ private:
 	void CreateLevel();
 
 	/// @brief Create grass
-	void CreateGrass();
+	void CreateVegetation();
 
 	/// @brief Creates the floor grid
 	/// @param size The size of the grid with width: size and height: size
@@ -31,15 +31,15 @@ private:
 	/// @brief Create the walls of the floor
 	/// @param size the size of the grid with width: size and height: size
 	/// @param wallHeight heighht of the walls in units (will be multiplied with blockSize)
-	void CreateWalls(int const size, int const wallHeight);
+	void CreateWalls(int const size);
 
 	/// @brief Create the static walls in the grid
 	/// @param size size of the grid
 	void CreateNotDestructibleWalls(int const size);
 
-	/// @brief Create the explode-able walls
+	/// @brief Create the stumps on the grid
 	/// @param size size of the grid
-	void CreateDestructibleWalls(int const size);
+	void CreateStumps(int const size);
 
 	///@brief Creates the sky box
 	void CreateSkybox();

@@ -12,7 +12,7 @@ SamplerState samPoint
 float gContribution;
 Texture2D gLUT;
 Texture2D gRenderedText;
-#define LUTColors 32.0f
+#define LUTColors 16.0f
 
 // Create Depth Stencil State (ENABLE DEPTH WRITING)
 DepthStencilState DisableDepthWriting
@@ -62,25 +62,21 @@ float4 PS(PS_INPUT input): SV_Target
 	uint width, height;
 	gLUT.GetDimensions(width, height);
 	
-	//Calculate the texel sizes
-	float dx = 1.f / width;
-	float dy = 1.f / height;
-	
 	float maxColor = LUTColors - 1.0;
 	
+	//Calculate the half of a texel and a threshold for precision
+	float halfColX = 0.5 / width;
+	float halfColY = 0.5 / height;
+	//float threshold = maxColor / LUTColors;
+ 
 	//Get the color of the pixel in this renderloop (make sure it is in [0;1]!)
 	float3 col = saturate(gRenderedText.Sample(samPoint, input.TexCoord).rgb);
 	
-	//Calculate the half of a texel and a threshold for precision
-	float halfColX = 0.5 / dx;
-	float halfColY = 0.5 / dy;
-	float threshold = maxColor / LUTColors;
- 
 	//Calculate red [half texel from the left;half a texel from the right]
-	float xOffset = halfColX + col.r * threshold / LUTColors;
+	float xOffset = halfColX + col.r / LUTColors * (maxColor / LUTColors);
 	
 	//Calculate green [half texel from the bottom;half a texel from the top]
-	float yOffset = halfColY + col.g * threshold;
+	float yOffset = halfColY + col.g * (maxColor / LUTColors);
 	
 	//Calculate blue [0,maxColor]
 	float cell = floor(col.b * maxColor);

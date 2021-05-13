@@ -70,7 +70,6 @@ void PostProcessingMaterial::Initialize(const GameContext& gameContext)
 
 bool PostProcessingMaterial::LoadEffect(const GameContext& , const std::wstring& effectFile)
 {
-	//TODO: complete
 	//Load Effect through ContentManager
 	m_pEffect = ContentManager::Load<ID3DX11Effect>(effectFile);
 	
@@ -98,7 +97,6 @@ bool PostProcessingMaterial::LoadEffect(const GameContext& , const std::wstring&
 
 void PostProcessingMaterial::Draw(const GameContext& gameContext, RenderTarget* previousRendertarget)
 {
-	//TODO: complete
 	//1. Clear the object's RenderTarget (m_pRenderTarget) [Check RenderTarget Class]
 	float clearColor[4] = {0.2f,0.6f,0.8f, 1.0f};
 	m_pRenderTarget->Clear(gameContext,clearColor);
@@ -135,8 +133,6 @@ void PostProcessingMaterial::CreateVertexBuffer(const GameContext& gameContext)
 {
 	m_NumVertices = 4;
 	
-	UNREFERENCED_PARAMETER(gameContext);
-	//TODO: complete
 	//Create vertex array containing three elements in system memory
 	using namespace DirectX;
 	std::vector<VertexPosTex> vertices = {};
@@ -171,7 +167,6 @@ void PostProcessingMaterial::CreateVertexBuffer(const GameContext& gameContext)
 void PostProcessingMaterial::CreateIndexBuffer(const GameContext& gameContext)
 {
 	m_NumIndices = 6;
-	//TODO: complete
 	// Create index buffer
 	D3D11_BUFFER_DESC desc = {};
 	desc.CPUAccessFlags = D3D11_USAGE_IMMUTABLE;

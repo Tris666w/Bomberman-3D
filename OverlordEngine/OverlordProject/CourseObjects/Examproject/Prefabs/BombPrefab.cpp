@@ -16,7 +16,7 @@
 #include "PhysxProxy.h"
 #include "BombermanCharPrefab.h"
 #include "SoundManager.h"
-#include "..//Components/DestroyableWallComponent.h"
+#include "StumpPrefab.h"
 
 BombPrefab::BombPrefab() :GameObject()
 {
@@ -104,11 +104,9 @@ void BombPrefab::Update(const::GameContext& gameContext)
 	m_ExplodeTimer += gameContext.pGameTime->GetElapsed();
 	if (m_ExplodeTimer >= m_ExplodeTime)
 	{
-		gameContext.pCamera->ShakeCamera(0.5f,0.15f);
+		gameContext.pCamera->ShakeCamera(0.5f, 0.15f);
 		Explode();
 	}
-
-
 }
 
 
@@ -116,9 +114,10 @@ void BombPrefab::Explode()
 {
 	if (m_IsExploding)
 		return;
-	
-	SoundManager::GetInstance()->GetSystem()->playSound(m_pSound,nullptr,false,&m_pChannel);
-	
+
+	SoundManager::GetInstance()->GetSystem()->playSound(m_pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(BombermanGameSettings::sound_effect_volume);
+
 	m_IsExploding = true;
 	m_IsActive = false;
 	m_ExplodeTimer = 0.f;
@@ -173,13 +172,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 			}
 			if (pOther->GetTag() == BombermanGameSettings::destructible_tag)
 			{
-				auto* pComp = pOther->GetComponent<DestroyableWallComponent>();
-				if (pComp == nullptr)
-				{
-					Logger::LogError(L"BombPrefab::CreateExplosion, tag is " + BombermanGameSettings::destructible_tag + L", but no DestroyableWallComponent was found");
-					break;
-				}
-				pComp->DestroyObject();
+				static_cast<StumpPrefab*>(pOther)->Break();
 			}
 			break;
 		}

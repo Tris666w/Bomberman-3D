@@ -5,7 +5,6 @@
 #include "GameScene.h"
 #include "OverlordSimulationFilterShader.h"
 
-// TODO: get rid of this nasty hard coded url
 static const char* DEFAULT_PVD_HOST = "127.0.0.1";
 static const physx::PxU32 DEFAULT_PVD_PORT = 5425;
 
@@ -90,27 +89,6 @@ void PhysxManager::Init(void* /*pDevice*/)
 		return;
 	}
 
-	//TODO: Fix CudaContextManager for PhysX 3.3.4
-	////Cude context manager
-	//PxCudaContextManagerDesc cudaContextManDesc = PxCudaContextManagerDesc();
-	//cudaContextManDesc.interopMode = PxCudaInteropMode::D3D11_INTEROP;
-	//cudaContextManDesc.graphicsDevice = pDevice;
-
-	//m_pCudaContextManager = PxCreateCudaContextManager(*m_pFoundation, cudaContextManDesc, m_pProfileZoneManager);
-	//if (m_pCudaContextManager)
-	//{
-	//	if (!m_pCudaContextManager->contextIsValid())
-	//	{
-	//		m_pCudaContextManager->release();
-	//		m_pCudaContextManager = nullptr;
-	//	}
-	//	else
-	//	{
-	//		auto deviceName =std::string(m_pCudaContextManager->getDeviceName());
-	//		Logger::LogFormat(LogLevel::Info, L"PhysxManager> Using Cuda Context Manager [%s]", std::wstring(deviceName.begin(), deviceName.end()).c_str());
-	//	}
-	//}
-
 	//Create Main Physics Object
 	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, physx::PxTolerancesScale(), recordMemoryAllocations,
 	                             m_pProfileZoneManager);
@@ -119,7 +97,6 @@ void PhysxManager::Init(void* /*pDevice*/)
 		Logger::LogError(L"Physx: Physics Object creation failed!");
 	}
 
-	//TODO: ADD ProfileZone
 
 	//Create Default CpuDispatcher (only 1 thread)
 	m_pDefaultCpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
@@ -166,7 +143,6 @@ bool PhysxManager::ToggleVisualDebuggerConnection() const
 	physx::PxVisualDebuggerConnectionFlags connectionFlags(physx::PxVisualDebuggerExt::getAllConnectionFlags());
 	//if (!mUseFullPvdConnection)
 	//	theConnectionFlags = PxVisualDebuggerConnectionFlag::Profile; 
-	//TODO: ADD PROFILE FIRST
 
 	//The normal way to connect to pvd.  PVD needs to be running at the time this function is called.
 	//We don't worry about the return value because we are already registered as a listener for connections

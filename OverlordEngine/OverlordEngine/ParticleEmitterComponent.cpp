@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ParticleEmitterComponent.h"
- #include <utility>
+#include <utility>
 #include "EffectHelper.h"
 #include "ContentManager.h"
 #include "TextureDataLoader.h"
@@ -8,7 +8,7 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int particleCount):
+ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int particleCount) :
 	m_pVertexBuffer(nullptr),
 	m_pEffect(nullptr),
 	m_pParticleTexture(nullptr),
@@ -28,20 +28,20 @@ ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int 
 
 ParticleEmitterComponent::~ParticleEmitterComponent()
 {
-	for (auto& particle: m_Particles)
+	for (auto& particle : m_Particles)
 		delete particle;
 
-	for (auto& pBurst: m_Bursts)
+	for (auto& pBurst : m_Bursts)
 		delete pBurst;
-	
+
 	SafeRelease(m_pInputLayout);
 	SafeRelease(m_pVertexBuffer);
-	
+
 }
 
 void ParticleEmitterComponent::AddBurst(Burst* pBurst)
 {
-	if (std::find(m_Bursts.begin(),m_Bursts.end(),pBurst) != m_Bursts.end())
+	if (std::find(m_Bursts.begin(), m_Bursts.end(), pBurst) != m_Bursts.end())
 	{
 		Logger::LogWarning(L"ParticleEmitterComponent::AddBurst, this burst is already in use");
 	}
@@ -51,12 +51,12 @@ void ParticleEmitterComponent::AddBurst(Burst* pBurst)
 void ParticleEmitterComponent::RemoveBurst(Burst* pBurst)
 {
 	SafeDelete(pBurst);
-	std::_Erase_remove(m_Bursts,pBurst);
+	std::_Erase_remove(m_Bursts, pBurst);
 }
 
 void ParticleEmitterComponent::ResetBursts()
 {
-	for (auto& pBurst: m_Bursts)
+	for (auto& pBurst : m_Bursts)
 		pBurst->Reset();
 }
 
@@ -89,10 +89,10 @@ void ParticleEmitterComponent::LoadEffect(const GameContext& gameContext)
 	{
 		std::wcout << L"m_pTextureVariable not valid\n";
 	}
-	
-	if(!EffectHelper::BuildInputLayout(gameContext.pDevice,m_pDefaultTechnique,&m_pInputLayout,m_pInputLayoutSize))
+
+	if (!EffectHelper::BuildInputLayout(gameContext.pDevice, m_pDefaultTechnique, &m_pInputLayout, m_pInputLayoutSize))
 		std::wcout << L"EffectHelper::BuildInputLayout --> did not succeed\n";
-		
+
 }
 
 void ParticleEmitterComponent::CreateVertexBuffer(const GameContext& gameContext)
@@ -109,61 +109,61 @@ void ParticleEmitterComponent::CreateVertexBuffer(const GameContext& gameContext
 
 	HRESULT const result = gameContext.pDevice->CreateBuffer(&buffDesc, nullptr, &m_pVertexBuffer);
 	if (result != S_OK)
-		Logger::LogHResult(result,L"ParticleEmitterComponent::CreateVertexBuffer",true);
-	
+		Logger::LogHResult(result, L"ParticleEmitterComponent::CreateVertexBuffer", true);
+
 }
 
 void ParticleEmitterComponent::UpdateBursts(const GameContext& gameContext)
 {
-	for(auto& pBurst:m_Bursts)
+	for (auto& pBurst : m_Bursts)
 	{
 		if (pBurst->PassedCycles >= pBurst->Cycles && pBurst->Cycles != -1)
 			continue;
 
-			//Check if enough we can start the burst
-			pBurst->TotalTimePast += gameContext.pGameTime->GetElapsed();
-			pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
-		
-			if (pBurst->TotalTimePast < pBurst->TriggerTime)
-				continue;
+		//Check if enough we can start the burst
+		pBurst->TotalTimePast += gameContext.pGameTime->GetElapsed();
+		pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
 
-			//Check if enough we can start the next interval
-			if (pBurst->PassedIntervalTime < pBurst->IntervalTime)
-				continue;
-			
-			++pBurst->PassedCycles;
-			pBurst->PassedIntervalTime = 0.f;
+		if (pBurst->TotalTimePast < pBurst->TriggerTime)
+			continue;
 
-			auto it = m_Particles.begin();
-			int amountOfParticlesSpawned = 0;
-			
-			//Loop over all particles until we reach the end of the vector or we have spawned enough particles
-			while (it != m_Particles.end() && amountOfParticlesSpawned < pBurst->Count)
+		//Check if enough we can start the next interval
+		if (pBurst->PassedIntervalTime < pBurst->IntervalTime)
+			continue;
+
+		++pBurst->PassedCycles;
+		pBurst->PassedIntervalTime = 0.f;
+
+		auto it = m_Particles.begin();
+		int amountOfParticlesSpawned = 0;
+
+		//Loop over all particles until we reach the end of the vector or we have spawned enough particles
+		while (it != m_Particles.end() && amountOfParticlesSpawned < pBurst->Count)
+		{
+			//If the particle is inactive, spawn a new one and increase the counter
+			if (!(*it)->IsActive())
 			{
-				//If the particle is inactive, spawn a new one and increase the counter
-				if (!(*it)->IsActive())
-				{
-					(*it)->Init(GetTransform()->GetPosition());
-					++amountOfParticlesSpawned;
-				}
-				++it;
+				(*it)->Init(GetTransform()->GetPosition());
+				++amountOfParticlesSpawned;
 			}
+			++it;
+		}
 	}
 }
 
 void ParticleEmitterComponent::Update(const GameContext& gameContext)
 {
 	m_LastParticleInit += gameContext.pGameTime->GetElapsed();
-	
+
 	m_ActiveParticles = 0;
 
 	UpdateBursts(gameContext);
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	auto* pBuffer = (ParticleVertex*) mappedResource.pData;
+	auto* pBuffer = (ParticleVertex*)mappedResource.pData;
 
-	for(auto& particle : m_Particles)
+	for (auto& particle : m_Particles)
 	{
 		particle->Update(gameContext);
 		if (particle->IsActive())
@@ -175,7 +175,7 @@ void ParticleEmitterComponent::Update(const GameContext& gameContext)
 		{
 			continue;
 		}
-		else if(m_LastParticleInit >= (1.f/m_Settings.EmitRate) && m_IsActive)
+		else if (m_LastParticleInit >= (1.f / m_Settings.EmitRate) && m_IsActive)
 		{
 			particle->Init(GetTransform()->GetPosition());
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();
@@ -184,10 +184,10 @@ void ParticleEmitterComponent::Update(const GameContext& gameContext)
 		}
 	}
 
-	gameContext.pDeviceContext->Unmap(m_pVertexBuffer,0);
+	gameContext.pDeviceContext->Unmap(m_pVertexBuffer, 0);
 }
 
-void ParticleEmitterComponent::Draw(const GameContext& )
+void ParticleEmitterComponent::Draw(const GameContext&)
 {}
 
 void ParticleEmitterComponent::PostDraw(const GameContext& gameContext)
@@ -202,9 +202,9 @@ void ParticleEmitterComponent::PostDraw(const GameContext& gameContext)
 
 	UINT stride = sizeof(ParticleVertex);
 	UINT offset = 0;
-	
+
 	gameContext.pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	
+
 	D3DX11_TECHNIQUE_DESC techDesc;
 	m_pDefaultTechnique->GetDesc(&techDesc);
 	for (unsigned int i = 0; i < techDesc.Passes; ++i)
@@ -212,5 +212,5 @@ void ParticleEmitterComponent::PostDraw(const GameContext& gameContext)
 		m_pDefaultTechnique->GetPassByIndex(i)->Apply(0, gameContext.pDeviceContext);
 		gameContext.pDeviceContext->Draw(m_ActiveParticles, 0);
 	}
-	
+
 }

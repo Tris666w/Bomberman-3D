@@ -8,7 +8,7 @@ enum class EmitterShape
 
 struct Burst
 {
-	Burst(int count = 10, int cycles = 10, float intervalTime = 0.1f, float triggerTime = 5.f):
+	Burst(int count = 10, int cycles = 10, float intervalTime = 0.1f, float triggerTime = 5.f) :
 		Count(count),
 		Cycles(cycles),
 		IntervalTime(intervalTime),
@@ -17,7 +17,7 @@ struct Burst
 		PassedIntervalTime(0.f),
 		TotalTimePast(0.f)
 	{
-		
+
 	}
 
 	//Reset PassedCycles, TotalTime and PassedIntervalTime
@@ -45,7 +45,7 @@ struct Burst
 
 struct ParticleEmitterSettings
 {
-	ParticleEmitterSettings():
+	ParticleEmitterSettings() :
 		EmitRate(10),
 		MinSize(0.1f),
 		MaxSize(2.0f),
@@ -59,7 +59,7 @@ struct ParticleEmitterSettings
 		StartColor(static_cast<DirectX::XMFLOAT4>(DirectX::Colors::White)),
 		EndingColor(static_cast<DirectX::XMFLOAT4>(DirectX::Colors::Black)),
 		m_Shape(EmitterShape::Cone),
-		MoveDirection({0,1,0})
+		MoveDirection({ 0,1,0 })
 	{
 	}
 	//The amount of particles spawned every second
@@ -95,7 +95,7 @@ struct ParticleEmitterSettings
 struct ParticleVertex
 {
 	ParticleVertex(const DirectX::XMFLOAT3 pos = DirectX::XMFLOAT3(0, 0, 0),
-		const DirectX::XMFLOAT4 col = static_cast<DirectX::XMFLOAT4>(DirectX::Colors::White), 
+		const DirectX::XMFLOAT4 col = static_cast<DirectX::XMFLOAT4>(DirectX::Colors::White),
 		const float size = 5.0f, const float rotation = 0) :
 		Position(pos),
 		Color(col),
@@ -123,7 +123,7 @@ class ParticleEmitterComponent : public BaseComponent
 	//The default technique
 	ID3DX11EffectTechnique* m_pDefaultTechnique{};
 	//Shader matrix variables
-	ID3DX11EffectMatrixVariable *m_pWvpVariable{}, *m_pViewInverseVariable{};
+	ID3DX11EffectMatrixVariable* m_pWvpVariable{}, * m_pViewInverseVariable{};
 	//Shader texture variable
 	ID3DX11EffectShaderResourceVariable* m_pTextureVariable{};
 	//ShaderResourceView, containing the particle texture
@@ -156,6 +156,7 @@ class ParticleEmitterComponent : public BaseComponent
 	//Method to update the bursts
 	void UpdateBursts(const GameContext& gameContext);
 
+
 public:
 	ParticleEmitterComponent(const ParticleEmitterComponent& other) = delete;
 	ParticleEmitterComponent(ParticleEmitterComponent&& other) noexcept = delete;
@@ -180,7 +181,7 @@ public:
 	void SetEndingColor(DirectX::XMFLOAT4 color) { m_Settings.EndingColor = color; }
 	void SetShape(EmitterShape shape) { m_Settings.m_Shape = shape; }
 	void SetConeMoveDirection(DirectX::XMFLOAT3 moveDir) { m_Settings.MoveDirection = moveDir; }
-	void SetIsActive(bool isActive) {m_IsActive = isActive;};
+	void SetIsActive(bool isActive) { m_IsActive = isActive; };
 
 	void AddBurst(Burst* pBurst);
 	void RemoveBurst(Burst* pBurst);

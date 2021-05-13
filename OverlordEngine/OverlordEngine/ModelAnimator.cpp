@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "ModelAnimator.h"
 
-ModelAnimator::ModelAnimator(MeshFilter* pMeshFilter):
-m_pMeshFilter(pMeshFilter),
-m_Transforms(std::vector<DirectX::XMFLOAT4X4>()),
-m_IsPlaying(false), 
-m_Reversed(false),
-m_ClipSet(false),
-m_TickCount(0),
-m_AnimationSpeed(1.0f)
+ModelAnimator::ModelAnimator(MeshFilter* pMeshFilter) :
+	m_pMeshFilter(pMeshFilter),
+	m_Transforms(std::vector<DirectX::XMFLOAT4X4>()),
+	m_IsPlaying(false),
+	m_Reversed(false),
+	m_ClipSet(false),
+	m_TickCount(0),
+	m_AnimationSpeed(1.0f)
 {
 	SetAnimation(0);
 }
@@ -37,6 +37,7 @@ void ModelAnimator::SetAnimation(std::wstring clipName)
 		if (clipName == animClip.Name)
 		{
 			SetAnimation(animClip);
+			foundAnim = true;
 		}
 	}
 	if (!foundAnim)
@@ -65,12 +66,12 @@ void ModelAnimator::Reset(bool pause)
 	if (m_ClipSet)
 	{
 		auto boneTransformVect = m_CurrentClip.Keys[0].BoneTransforms;
-		m_Transforms.assign(boneTransformVect.begin(),boneTransformVect.end());
+		m_Transforms.assign(boneTransformVect.begin(), boneTransformVect.end());
 	}
 	else
 	{
 		DirectX::XMFLOAT4X4 identity{};
-		m_Transforms.assign(m_pMeshFilter->m_BoneCount,identity);
+		m_Transforms.assign(m_pMeshFilter->m_BoneCount, identity);
 	}
 }
 
@@ -82,7 +83,7 @@ void ModelAnimator::Update(const GameContext& gameContext)
 		if (passedTicks > m_CurrentClip.Duration)
 		{
 			passedTicks = m_CurrentClip.Duration;
-		}	
+		}
 
 		if (m_Reversed)
 		{
@@ -126,35 +127,35 @@ void ModelAnimator::Update(const GameContext& gameContext)
 		//Clear the m_Transforms vector
 		m_Transforms.clear();
 
-		for (int index = 0 ;index <m_pMeshFilter->m_BoneCount; ++index)
+		for (int index = 0; index < m_pMeshFilter->m_BoneCount; ++index)
 		{
 			auto const transformA = DirectX::XMLoadFloat4x4(&keyA.BoneTransforms[index]);
 			auto const transformB = DirectX::XMLoadFloat4x4(&keyB.BoneTransforms[index]);
-			
-			DirectX::XMVECTOR positionA {};
-			DirectX::XMVECTOR positionB {};
-			DirectX::XMVECTOR scaleA {};
-			DirectX::XMVECTOR scaleB {};
-			DirectX::XMVECTOR rotationA {};
-			DirectX::XMVECTOR rotationB {};
 
-			DirectX::XMMatrixDecompose(&scaleA,&rotationA,&positionA,transformA);
-			DirectX::XMMatrixDecompose(&scaleB,&rotationB,&positionB,transformB);
-			
-			auto const interpolatedPos = DirectX::XMVectorLerp(positionA,positionB,blendWeight);
-			auto const interpolatedRot = DirectX::XMQuaternionSlerp(rotationA,rotationB,blendWeight);
-			auto const interpolatedScale = DirectX::XMVectorLerp(scaleA,scaleB,blendWeight);
-			
+			DirectX::XMVECTOR positionA{};
+			DirectX::XMVECTOR positionB{};
+			DirectX::XMVECTOR scaleA{};
+			DirectX::XMVECTOR scaleB{};
+			DirectX::XMVECTOR rotationA{};
+			DirectX::XMVECTOR rotationB{};
+
+			DirectX::XMMatrixDecompose(&scaleA, &rotationA, &positionA, transformA);
+			DirectX::XMMatrixDecompose(&scaleB, &rotationB, &positionB, transformB);
+
+			auto const interpolatedPos = DirectX::XMVectorLerp(positionA, positionB, blendWeight);
+			auto const interpolatedRot = DirectX::XMQuaternionSlerp(rotationA, rotationB, blendWeight);
+			auto const interpolatedScale = DirectX::XMVectorLerp(scaleA, scaleB, blendWeight);
+
 			auto const translationMatrix = DirectX::XMMatrixTranslationFromVector(interpolatedPos);
 			auto const rotationMatrix = DirectX::XMMatrixRotationQuaternion(interpolatedRot);
 			auto const scaleMatrix = DirectX::XMMatrixScalingFromVector(interpolatedScale);
 
 			auto const transformXMMatrix = rotationMatrix * translationMatrix * scaleMatrix;
-			
+
 			DirectX::XMFLOAT4X4 transformMatrix{};
-			DirectX::XMStoreFloat4x4(&transformMatrix,transformXMMatrix);
+			DirectX::XMStoreFloat4x4(&transformMatrix, transformXMMatrix);
 			m_Transforms.push_back(transformMatrix);
-			
+
 		}
 	}
 }

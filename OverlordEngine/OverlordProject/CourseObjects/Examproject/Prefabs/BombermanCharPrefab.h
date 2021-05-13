@@ -20,7 +20,7 @@ public:
 	/// @param moveSpeed the movement speed
 	/// @param controlKeyVect Vector of the input keys
 	/// @param playerIndex the index of the player
-	BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, float radius = 2, float height = 5, float stepOffset = 0.5f, float moveSpeed = 100, const std::vector<int>& controlKeyVect = std::vector<int>({ 'A', 'D', 'W', 'S', 32 }), GamepadIndex playerIndex = GamepadIndex::PlayerOne);
+	BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect = std::vector<int>({ 'A', 'D', 'W', 'S', 32 }), GamepadIndex playerIndex = GamepadIndex::PlayerOne, bool useGamePad = false);
 	virtual ~BombermanCharPrefab() = default;
 
 	BombermanCharPrefab(const BombermanCharPrefab& other) = delete;
@@ -35,8 +35,8 @@ public:
 
 	void KillPlayer();
 
-	bool GetCanSpawnBomb()const {return m_CanSpawnBomb;}
-	GamepadIndex GetPlayerIndex()const {return m_PlayerIndex;}
+	bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
+	GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
 protected:
 	bool m_IsDead;
 	ControllerComponent* m_pController;
@@ -45,6 +45,8 @@ protected:
 	std::vector<int> m_InputKeys{};
 	std::vector<int> m_ActionIDs{};
 	GamepadIndex const m_PlayerIndex;
+	bool m_UseGamePad;
+
 	//Running
 	float m_MaxRunVelocity,
 		m_TerminalVelocity,
@@ -61,6 +63,8 @@ protected:
 	float const m_BombCooldown = 3.f;
 	float m_BombTimer = 0.f;
 	bool m_CanSpawnBomb = true;
+
+	//Character Death parameters
 
 	//File paths
 	std::wstring m_MeshFilePath;

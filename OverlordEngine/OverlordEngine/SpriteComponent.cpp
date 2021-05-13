@@ -37,7 +37,6 @@ void SpriteComponent::Draw(const GameContext&)
 	if (!m_pTexture)
 		return;
 
-	//TODO: Here you need to draw the SpriteComponent using the Draw of the sprite renderer
 	// The sprite renderer is a singleton
 	// you will need to position, the rotation and the scale
 	// You can use the QuaternionToEuler function to help you with the z rotation

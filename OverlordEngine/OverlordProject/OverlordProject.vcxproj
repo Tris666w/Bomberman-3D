@@ -108,7 +108,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\BombermanScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\Components\DestroyableWallComponent.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
@@ -158,6 +157,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 3\TutorialScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\UberScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -174,7 +174,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\BombermanScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
-    <ClInclude Include="CourseObjects\Examproject\Components\DestroyableWallComponent.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
@@ -212,6 +211,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
     <ClInclude Include="CourseObjects\Week 4\UberScene.h" />
     <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
+    <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

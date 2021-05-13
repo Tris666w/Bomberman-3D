@@ -132,6 +132,15 @@ inline void Clamp(T& value, T hi, T lo)
 	if (value < lo)
 		value = lo;
 }
+
+/// @brief Checks if the floats are (approximately) equal (uses epsilon)
+/// @param a float 1
+/// @param b float 2
+/// @return boolean
+inline bool AreEqual(float a, float b)
+{
+	return fabs(a-b) < FLT_EPSILON;
+}
 #pragma endregion Templates & Macros
 
 #include <GeneralStructs.h>
