@@ -47,6 +47,7 @@
 #include "CourseObjects/Week 10/PostProcessingScene.h"
 #endif
 #ifdef EXAM
+#include "CourseObjects/Examproject/Scenes/MainMenu.h"
 #include "CourseObjects/Examproject/Scenes/BombermanScene.h"
 #endif
 #ifdef TEST
@@ -116,8 +117,9 @@ void MainGame::Initialize()
 	SceneManager::GetInstance()->SetActiveGameScene(L"PostProcessingScene");
 #endif
 #ifdef EXAM
+	SceneManager::GetInstance()->AddGameScene(new MainMenu());
 	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"BombermanScene");
+	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
 #endif
 #ifdef TEST
 	SceneManager::GetInstance()->AddGameScene(new TestScene());

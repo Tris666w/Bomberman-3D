@@ -48,6 +48,8 @@
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -97,5 +99,7 @@
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
   </ItemGroup>
 </Project>

@@ -14,14 +14,11 @@ public:
 	/// @brief Constructor of the bomberman character
 	/// @param meshFilePath path to the .ovm mesh file
 	/// @param materialFilePath path to the diffuse map
-	/// @param radius radius of the characterController
-	/// @param height  height of the characterController
-	/// @param stepOffset the maximum height the character can climb
-	/// @param moveSpeed the movement speed
 	/// @param controlKeyVect Vector of the input keys
 	/// @param playerIndex the index of the player
+	/// @param useGamePad bool to check if we use a game pad
 	BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect = std::vector<int>({ 'A', 'D', 'W', 'S', 32 }), GamepadIndex playerIndex = GamepadIndex::PlayerOne, bool useGamePad = false);
-	virtual ~BombermanCharPrefab() = default;
+	~BombermanCharPrefab() override = default;
 
 	BombermanCharPrefab(const BombermanCharPrefab& other) = delete;
 	BombermanCharPrefab(BombermanCharPrefab&& other) noexcept = delete;
@@ -35,8 +32,8 @@ public:
 
 	void KillPlayer();
 
-	bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
-	GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
+	[[nodiscard]] bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
+	[[nodiscard]] GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
 protected:
 	bool m_IsDead;
 	ControllerComponent* m_pController;

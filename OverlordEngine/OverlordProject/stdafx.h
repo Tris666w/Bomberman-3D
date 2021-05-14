@@ -139,9 +139,15 @@ inline void Clamp(T& value, T hi, T lo)
 /// @return boolean
 inline bool AreEqual(float a, float b)
 {
-	return fabs(a-b) < FLT_EPSILON;
+	return fabs(a - b) < FLT_EPSILON;
 }
+
 #pragma endregion Templates & Macros
+
+#pragma region Collision
+bool IsPointInRect(const POINT& point, const DirectX::Rect& rect);
+
+#pragma endregion Collision
 
 #include <GeneralStructs.h>
 #include "MathHelper.h"

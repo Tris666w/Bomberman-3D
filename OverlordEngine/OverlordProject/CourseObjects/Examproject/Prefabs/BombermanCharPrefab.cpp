@@ -14,6 +14,7 @@
 #include "OverlordGame.h"
 #include "../../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
+#include "../../../stdafx.h"
 
 BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect, GamepadIndex playerIndex, bool useGamePad)
 	:m_IsDead(false),
@@ -75,9 +76,9 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 
 
 	//Input
+#pragma region Keyboard
 	if (!m_UseGamePad)
 	{
-#pragma region 
 		m_ActionIDs.push_back(gameContext.pInput->GetAvailableActionID());
 		auto inputAction = InputAction(m_ActionIDs[0], InputTriggerState::Down, m_InputKeys[0], 0, 0, m_PlayerIndex);
 		gameContext.pInput->AddInputAction(inputAction);
@@ -99,9 +100,9 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 		gameContext.pInput->AddInputAction(inputAction);
 #pragma endregion Keyboard
 	}
+#pragma region GamePad
 	else
 	{
-#pragma region 
 		m_ActionIDs.push_back(gameContext.pInput->GetAvailableActionID());
 		auto inputAction = InputAction(m_ActionIDs[0], InputTriggerState::Down, -1, 0, static_cast<WORD>(m_InputKeys[0]), m_PlayerIndex);
 		gameContext.pInput->AddInputAction(inputAction);
@@ -236,10 +237,8 @@ void BombermanCharPrefab::Update(const GameContext& gameContext)
 
 void BombermanCharPrefab::KillPlayer()
 {
-	//TODO setDeath animation + transform the player out of the game
 	m_IsDead = true;
 	m_pModel->GetAnimator()->SetAnimation(L"Death");
-
 }
 
 DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const

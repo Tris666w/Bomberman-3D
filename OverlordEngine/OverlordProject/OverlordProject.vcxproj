@@ -60,6 +60,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)OverlordEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,6 +86,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../OverlordEngine/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -109,6 +111,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Scenes\BombermanScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -158,6 +161,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Week 4\UberScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -175,6 +179,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Scenes\BombermanScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
@@ -212,6 +217,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Week 4\UberScene.h" />
     <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
+    <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
