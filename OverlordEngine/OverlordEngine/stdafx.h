@@ -147,9 +147,9 @@ inline int GetArrayIndex(int const x, int const y, int const z, int const width,
 {
 	return z * width * height + y * width + x;
 }
+
 //String conversion source : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
 //Comment by user "zumalifeguard"
-
 inline std::string WstringToString(const std::wstring& s)
 {
 	using convert_typeX = std::codecvt_utf8<wchar_t>;

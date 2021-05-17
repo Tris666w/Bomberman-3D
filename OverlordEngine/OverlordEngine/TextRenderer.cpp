@@ -170,7 +170,7 @@ void TextRenderer::UpdateBuffer(const GameContext& gameContext)
 			CreateTextVertices(pFont, cache[i], static_cast<TextVertex*>(mappedResource.pData), bufferPosition);
 		}
 
-		pFont->SetBufferSize(bufferPosition - pFont->GetBufferStart() + 1);
+		pFont->SetBufferSize(bufferPosition - pFont->GetBufferStart());
 		pFont->ClearCache();
 	}
 	gameContext.pDeviceContext->Unmap(m_pVertexBuffer, 0);

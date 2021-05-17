@@ -60,6 +60,16 @@ const std::vector<std::vector<int>>& BombermanGameSettings::GetControlsVector() 
 	return m_ControlsVector;
 }
 
+void BombermanGameSettings::SetSoundVolume(float volume)
+{
+	m_SoundVolume = volume;
+}
+
+void BombermanGameSettings::SetMusicVolume(float volume)
+{
+	m_MusicVolume = volume;
+}
+
 BombermanGameSettings::BombermanGameSettings()
 {
 	m_ControlsVector.push_back({VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT});

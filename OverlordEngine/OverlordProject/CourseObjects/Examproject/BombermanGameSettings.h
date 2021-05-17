@@ -24,7 +24,8 @@ public:
 	[[nodiscard]]const std::vector<std::vector<int>>& GetControlsVector()const;
 	
 	//Setters
-	
+	void SetSoundVolume(float volume);
+	void SetMusicVolume(float volume);
 	
 
 private:

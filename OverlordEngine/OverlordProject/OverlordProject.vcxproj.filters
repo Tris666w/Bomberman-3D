@@ -50,6 +50,7 @@
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\OptionsMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -101,5 +102,6 @@
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\OptionsMenu.h" />
   </ItemGroup>
 </Project>

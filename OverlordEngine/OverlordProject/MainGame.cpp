@@ -48,6 +48,8 @@
 #endif
 #ifdef EXAM
 #include "CourseObjects/Examproject/Scenes/MainMenu.h"
+#include "CourseObjects/Examproject/Scenes/OptionsMenu.h"
+
 #endif
 MainGame::MainGame(void)
 {}
@@ -114,6 +116,8 @@ void MainGame::Initialize()
 #endif
 #ifdef EXAM
 	SceneManager::GetInstance()->AddGameScene(new MainMenu());
+	SceneManager::GetInstance()->AddGameScene(new OptionsMenu());
+	
 	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
 #endif
 }

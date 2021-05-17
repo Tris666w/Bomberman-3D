@@ -142,6 +142,27 @@ inline bool AreEqual(float a, float b)
 	return fabs(a - b) < FLT_EPSILON;
 }
 
+//String conversion source : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
+//Comment by user "zumalifeguard"
+#pragma warning (push)
+#pragma warning (disable: 4996)
+inline std::string WstringToString(const std::wstring& s)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.to_bytes(s);
+}
+
+
+inline std::wstring StringToWString(const std::string& s)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.from_bytes(s);
+}
+#pragma  warning (pop)
 #pragma endregion Templates & Macros
 
 #pragma region Collision
