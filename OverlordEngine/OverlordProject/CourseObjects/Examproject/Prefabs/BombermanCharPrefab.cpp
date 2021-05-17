@@ -47,7 +47,7 @@ BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const
 
 void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 {
-	m_Radius = BombermanGameSettings::block_size / 2.5f;
+	m_Radius = BombermanGameSettings::GetInstance()->GetBlockSize() / 2.5f;
 	m_Height = 5.0f;
 	m_StepOffset = 0.01f;
 	m_MaxRunVelocity = 25.f;
@@ -55,7 +55,7 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto* pControllerComponent = new ControllerComponent(physx->createMaterial(0.f, 0.f, 0.f), m_Radius, m_Height, m_StepOffset, L"Bomberman");
-	SetTag(BombermanGameSettings::player_tag);
+	SetTag(BombermanGameSettings::GetInstance()->GetPlayerTag());
 	m_pController = pControllerComponent;
 	AddComponent(pControllerComponent);
 
@@ -245,7 +245,7 @@ DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
 {
 	DirectX::XMFLOAT3 spawnPos = { 0,GetTransform()->GetWorldPosition().y - m_Height / 3.f,0 };
 	DirectX::XMFLOAT3 const worldPos = { GetTransform()->GetWorldPosition() };
-	auto const blockSize = BombermanGameSettings::block_size;
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 
 	spawnPos.x = static_cast<float>((static_cast<int>(worldPos.x) / blockSize) * blockSize) + static_cast<float>(blockSize) / 2.f;
 	spawnPos.z = static_cast<float>((static_cast<int>(worldPos.z) / blockSize) * blockSize) + static_cast<float>(blockSize) / 2.f;

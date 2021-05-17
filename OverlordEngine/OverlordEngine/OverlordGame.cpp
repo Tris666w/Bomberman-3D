@@ -87,7 +87,7 @@ HRESULT OverlordGame::Run(HINSTANCE hInstance)
 
 	hr = InitializeGame();
 	if(Logger::LogHResult(hr, L"OverlordGame::InitializeGame")) return hr;
-
+	
 	MSG msg;
 	ZeroMemory(&msg, sizeof(MSG));
 	while(msg.message != WM_QUIT)

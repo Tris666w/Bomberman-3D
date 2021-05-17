@@ -30,20 +30,20 @@ void StumpPrefab::Break()
 	pSound->setMode(FMOD_LOOP_OFF);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &pChannel);
-	pChannel->setVolume(BombermanGameSettings::sound_effect_volume);
+	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
 	GetScene()->RemoveChild(this, true);
 }
 
 void StumpPrefab::Initialize(const GameContext&)
 {
 	auto const bouncyMaterial = PhysxManager::GetInstance()->GetPhysics()->createMaterial(0, 0, 1.f);
-	auto const halfSize = BombermanGameSettings::block_size / 2.f;
+	auto const halfSize = BombermanGameSettings::GetInstance()->GetBlockSize() / 2.f;
 
 	auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/TreeStump.ovm");
 	pModelComponent->SetMaterial(m_MatId);
 	AddComponent(pModelComponent);
 
-	SetTag(BombermanGameSettings::destructible_tag);
+	SetTag(BombermanGameSettings::GetInstance()->GetDestructibleTag());
 
 	auto const rb = new RigidBodyComponent();
 	rb->SetKinematic(true);

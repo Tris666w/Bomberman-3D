@@ -1,14 +1,70 @@
 #include "stdafx.h"
 #include "BombermanGameSettings.h"
 
-float BombermanGameSettings::breakable_wall_spawn_percentage = 0.5f;
-float BombermanGameSettings::sound_effect_volume = 0.f;
-float BombermanGameSettings::music_volume = 0.f;
+BombermanGameSettings::~BombermanGameSettings()
+{	
+}
 
-int BombermanGameSettings::grid_size = 11;
-int BombermanGameSettings::wall_height = 2;
-int BombermanGameSettings::block_size = 6;
+int BombermanGameSettings::GetAmountOfPlayers() const
+{
+	return m_AmountOfPLayers;
+}
 
-std::wstring BombermanGameSettings::player_tag = L"PlayerChar";
-std::wstring BombermanGameSettings::bomb_tag = L"Bomb";
-std::wstring BombermanGameSettings::destructible_tag = L"Destructible";
+int BombermanGameSettings::GetBlockSize() const
+{
+	return m_BlockSize;
+}
+
+int BombermanGameSettings::GetGridSize() const
+{
+	return m_GridSize;
+}
+
+int BombermanGameSettings::GetWallHeight() const
+{
+	return m_WallHeight;
+}
+
+float BombermanGameSettings::GetBreakableSpawnPercent() const
+{
+	return m_BreakableSpawnPercentage;
+}
+
+float BombermanGameSettings::GetSoundVolume() const
+{
+	return m_SoundVolume;
+}
+
+float BombermanGameSettings::GetMusicVolume() const
+{
+	return m_MusicVolume;
+}
+
+std::wstring BombermanGameSettings::GetPlayerTag() const
+{
+	return m_PlayerTag;
+}
+
+std::wstring BombermanGameSettings::GetDestructibleTag() const
+{
+	return m_DestructibleTag;
+}
+
+std::wstring BombermanGameSettings::GetBombTag() const
+{
+	return m_BombTag;
+}
+
+const std::vector<std::vector<int>>& BombermanGameSettings::GetControlsVector() const
+{
+	return m_ControlsVector;
+}
+
+BombermanGameSettings::BombermanGameSettings()
+{
+	m_ControlsVector.push_back({VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT});
+	m_ControlsVector.push_back({'A','D','W','S','X'});
+	m_ControlsVector.push_back({VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT});
+	m_ControlsVector.push_back({VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT});
+}
+

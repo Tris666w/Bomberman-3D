@@ -32,7 +32,7 @@ void BombPrefab::Activate(const DirectX::XMFLOAT3& spawnPos)
 
 void BombPrefab::Initialize(const::GameContext& gameContext)
 {
-	SetTag(BombermanGameSettings::bomb_tag);
+	SetTag(BombermanGameSettings::GetInstance()->GetBombTag());
 
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto pDiffuseMaterial = new DiffuseMaterial();
@@ -116,7 +116,7 @@ void BombPrefab::Explode()
 		return;
 
 	SoundManager::GetInstance()->GetSystem()->playSound(m_pSound, nullptr, false, &m_pChannel);
-	m_pChannel->setVolume(BombermanGameSettings::sound_effect_volume);
+	m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
 
 	m_IsExploding = true;
 	m_IsActive = false;
@@ -141,18 +141,19 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 	auto const physxProxy = SceneManager::GetInstance()->GetActiveScene()->GetPhysxProxy();
 
 
+	auto blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 	auto const dir = ToPxVec3(direction);
-	auto distance = static_cast<physx::PxReal>(BombermanGameSettings::block_size) - 0.5f;
+	auto distance = static_cast<physx::PxReal>(blockSize) - 0.5f;
 	auto const pos = ToPxVec3(m_ExplodePos) + distance / 2.f * dir;
 
 
 	for (physx::PxReal i = 1; i < static_cast<physx::PxReal>(reach) + 1; ++i)  // NOLINT(cert-flp30-c)
 	{
 		physx::PxHitBuffer<physx::PxRaycastHit> hit{};
-		distance = i * BombermanGameSettings::block_size;
+		distance = i * blockSize;
 		if (!physxProxy->Raycast(pos, dir, distance, hit, physx::PxHitFlag::eDEFAULT))
 		{
-			CreateExplosion(ToPxVec3(m_ExplodePos) + i * BombermanGameSettings::block_size * dir);
+			CreateExplosion(ToPxVec3(m_ExplodePos) + i * blockSize * dir);
 		}
 		else
 		{
@@ -162,15 +163,15 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 				Logger::LogError(L"BombPrefab::CreateExplosion, hit RigidBody has no user data!");
 				break;
 			}
-			if (pOther->GetTag() == BombermanGameSettings::bomb_tag)
+			if (pOther->GetTag() == BombermanGameSettings::GetInstance()->GetBombTag())
 			{
 				static_cast<BombPrefab*>(pOther)->Explode();
 			}
-			if (pOther->GetTag() == BombermanGameSettings::player_tag)
+			if (pOther->GetTag() == BombermanGameSettings::GetInstance()->GetPlayerTag())
 			{
 				static_cast<BombermanCharPrefab*>(pOther)->KillPlayer();
 			}
-			if (pOther->GetTag() == BombermanGameSettings::destructible_tag)
+			if (pOther->GetTag() == BombermanGameSettings::GetInstance()->GetDestructibleTag())
 			{
 				static_cast<StumpPrefab*>(pOther)->Break();
 			}

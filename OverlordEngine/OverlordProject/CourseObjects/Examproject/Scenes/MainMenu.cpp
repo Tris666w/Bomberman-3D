@@ -1,39 +1,50 @@
 #include "stdafx.h"
 #include "MainMenu.h"
+
+#include "BombermanScene.h"
+#include "SceneManager.h"
 #include "..\UiButton.h"
 
-template <auto* F>
-struct Wrapper {};
+MainMenu::MainMenu() :GameScene(L"Main menu"),
+	m_StartGameButton(nullptr),
+	m_QuitGameButton(nullptr)
 
-template <class Ret, class... Args, auto (*F)(Args...) -> Ret>
-struct Wrapper<F>
-{
-    auto operator()(Args... args)
-    {
-        return F(args...);
-    }
-};
-
-MainMenu::MainMenu() :GameScene(L"Main menu")
 {
 }
 
 void MainMenu::Print()
 {
-	Logger::LogInfo(L"REEEEEE");
+	Logger::LogInfo(L"Fuck dit man");
+}
+
+void MainMenu::StartGame()
+{
+	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
+	SceneManager::GetInstance()->SetActiveGameScene(L"BombermanScene");
+}
+
+void MainMenu::QuitGame()
+{
+	PostQuitMessage(0);
 }
 
 void MainMenu::Initialize()
 {
 	std::wstring const fontPath = L"Resources/SpriteFonts/BombermanBig.fnt";
-	pButton =new UiButton<MainMenu,&MainMenu::Print>(fontPath,{0.f,0.f},L"Start Game",this,64);
-	AddChild(pButton);
+
+	m_StartGameButton = new UiButton<MainMenu,&MainMenu::StartGame>(fontPath,{0.f,0.f},L"Start Game",this,64);
+	AddChild(m_StartGameButton);
+
+	m_QuitGameButton = new UiButton<MainMenu,&MainMenu::QuitGame>(fontPath,{600.f,0.f},L"Quit Game",this,64);
+	AddChild(m_QuitGameButton);
 }
 
 
 void MainMenu::Update()
 {
-	pButton->CheckForActivation(GetGameContext());
+	m_StartGameButton->CheckForActivation(GetGameContext());
+	m_QuitGameButton->CheckForActivation(GetGameContext());
+	
 }
 
 void MainMenu::Draw()

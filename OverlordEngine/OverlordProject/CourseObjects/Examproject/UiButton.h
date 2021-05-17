@@ -5,7 +5,8 @@
 #include "SpriteFont.h"
 #include "TextRenderer.h"
 
-template <typename F, void(F::*Func)()>
+
+template <typename F,void(F::*Func)()>
 class UiButton final : public GameObject
 {
 public:
@@ -36,7 +37,6 @@ public:
 		m_DrawRect.y = static_cast<size_t>(drawPos.y);
 	}
 
-	//template <class... Args>
 	void CheckForActivation(const GameContext& gameContext)
 	{
 		if (IsPointInRect(gameContext.pInput->GetMousePosition(), m_DrawRect))

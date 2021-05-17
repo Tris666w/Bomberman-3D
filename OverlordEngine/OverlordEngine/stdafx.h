@@ -133,6 +133,20 @@ inline void Clamp(T& value, T hi, T lo)
 		value = lo;
 }
 
+template<typename T>
+inline T Interpolate(T value1, T value2, T t)
+{
+	return (1.0f - t) * value1 + t * value2;
+}
+
+inline int GetArrayIndex(int const x, int const y, int const width)
+{
+	return y * width + x;
+}
+inline int GetArrayIndex(int const x, int const y, int const z, int const width, int const height)
+{
+	return z * width * height + y * width + x;
+}
 //String conversion source : https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
 //Comment by user "zumalifeguard"
 

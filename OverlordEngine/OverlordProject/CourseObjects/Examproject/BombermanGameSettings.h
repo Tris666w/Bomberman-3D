@@ -1,20 +1,53 @@
 #pragma once
-struct BombermanGameSettings final
+#include <Singleton.h>
+
+class BombermanGameSettings final: public Singleton<BombermanGameSettings>
 {
-	static int block_size;
-	static int grid_size;
-	static int wall_height;
+public:
+	~BombermanGameSettings();
+	
+	//Getters
+	
+	[[nodiscard]]int GetAmountOfPlayers()const;
+	[[nodiscard]]int GetBlockSize()const;
+	[[nodiscard]]int GetGridSize()const;
+	[[nodiscard]]int GetWallHeight()const;
+	
+	[[nodiscard]]float GetBreakableSpawnPercent()const;
+	[[nodiscard]]float GetSoundVolume()const;
+	[[nodiscard]]float GetMusicVolume()const;
+  
+	[[nodiscard]]std::wstring GetPlayerTag()const;
+	[[nodiscard]]std::wstring GetDestructibleTag()const;
+	[[nodiscard]]std::wstring GetBombTag()const;
+
+	[[nodiscard]]const std::vector<std::vector<int>>& GetControlsVector()const;
+	
+	//Setters
+	
+	
+
+private:
+	friend class Singleton<BombermanGameSettings>;
+
+	BombermanGameSettings();
+
+	int m_AmountOfPLayers = 4;
+	int m_BlockSize = 6;
+	int m_GridSize = 11;
+	int m_WallHeight = 2;
 	//Should be float between [0;1]
-	static float breakable_wall_spawn_percentage;
+	float m_BreakableSpawnPercentage = 0.5f;
 
 	//Volume of the sound effects
-	static float sound_effect_volume;
+	float m_SoundVolume = 0.f;
 	//Volume of the music
-	static float music_volume;
+	float m_MusicVolume = 0.f;
 
-	static std::wstring player_tag;
-	static std::wstring bomb_tag;
-	static std::wstring destructible_tag;
+	std::wstring m_PlayerTag = L"PlayerChar";
+	std::wstring m_BombTag =  L"Bomb";
+	std::wstring m_DestructibleTag = L"Destructible";
 
+	std::vector<std::vector<int>> m_ControlsVector{};
 };
 

@@ -5,35 +5,8 @@
 #include "PhysxProxy.h"
 #include "GameObject.h"
 #include "GameScene.h"
-#include "SceneManager.h"
+#include "NoiseGenerator.h"
 
-void CameraComponent::Shake(float elapsedSec)
-{
-	m_ShakeTimer += elapsedSec;
-	if (m_ShakeTimer >= m_ShakeTime)
-	{
-		GetTransform()->Translate(m_ShakeStartPos);
-		m_IsShaking = false;
-		return;
-	}
-	int const plusOrMinus{ rand() };
-	auto pos = GetTransform()->GetPosition();
-	if (plusOrMinus % 2 == 0)
-	{
-		pos.x += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-		pos.y += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-		pos.z += m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-
-	}
-	else
-	{
-		pos.x -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-		pos.y -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-		pos.z -= m_ShakeIntensity * (static_cast<float>(rand() % 10) / 10.f);
-	}
-
-	GetTransform()->Translate(pos);
-}
 
 CameraComponent::CameraComponent() :
 	m_FarPlane(2500.0f),
@@ -45,17 +18,38 @@ CameraComponent::CameraComponent() :
 	m_ShakeStartPos(),
 	m_ShakeTimer(0),
 	m_ShakeIntensity(0),
+	m_IsShaking(false),
 	m_ShakeTime(0),
-	m_IsShaking(false)
+	m_ShakeSpeed(0.2f),
+	m_ShakeSeed(rand() % m_MapSize),
+	m_Lunacrity(2.f),
+	m_Frequency(3.f),
+	m_Persistence(0.5f),
+	m_MapSize(256),
+	m_OctaveCount(8),
+	m_ScalingBias(2.f)
 {
 	XMStoreFloat4x4(&m_Projection, DirectX::XMMatrixIdentity());
 	XMStoreFloat4x4(&m_View, DirectX::XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ViewInverse, DirectX::XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ViewProjection, DirectX::XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ViewProjectionInverse, DirectX::XMMatrixIdentity());
+
+	m_SeedVector.reserve(m_MapSize);
+	m_SeedVector.resize(m_MapSize);
+	for (int& seed : m_SeedVector)
+		seed = rand() % m_MapSize;
+
+	m_GradientVector.resize(2);
+	m_GradientVector[0] = -1.f;
+	m_GradientVector[1] = 1.f;
+
 }
 
-void CameraComponent::Initialize(const GameContext&) {}
+void CameraComponent::Initialize(const GameContext&)
+{
+
+}
 
 void CameraComponent::Update(const GameContext& gameContext)
 {
@@ -63,17 +57,17 @@ void CameraComponent::Update(const GameContext& gameContext)
 	using namespace DirectX;
 
 	const auto windowSettings = OverlordGame::GetGameSettings().Window;
-	DirectX::XMMATRIX projection;
+	XMMATRIX projection;
 
 	if (m_PerspectiveProjection)
 	{
-		projection = DirectX::XMMatrixPerspectiveFovLH(m_FOV, windowSettings.AspectRatio, m_NearPlane, m_FarPlane);
+		projection = XMMatrixPerspectiveFovLH(m_FOV, windowSettings.AspectRatio, m_NearPlane, m_FarPlane);
 	}
 	else
 	{
 		const float viewWidth = (m_Size > 0) ? m_Size * windowSettings.AspectRatio : windowSettings.Width;
 		const float viewHeight = (m_Size > 0) ? m_Size : windowSettings.Height;
-		projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, m_NearPlane, m_FarPlane);
+		projection = XMMatrixOrthographicLH(viewWidth, viewHeight, m_NearPlane, m_FarPlane);
 	}
 
 	const DirectX::XMVECTOR worldPosition = XMLoadFloat3(&GetTransform()->GetWorldPosition());
@@ -92,7 +86,7 @@ void CameraComponent::Update(const GameContext& gameContext)
 
 	if (m_IsShaking)
 	{
-		Shake(gameContext.pGameTime->GetElapsed());
+		Shake(gameContext.pGameTime->GetElapsed(), gameContext.pGameTime->GetTotal());
 	}
 }
 
@@ -159,11 +153,33 @@ GameObject* CameraComponent::Pick(const GameContext& gameContext, CollisionGroup
 
 }
 
-void CameraComponent::ShakeCamera(float duration, float intensity)
+auto CameraComponent::ShakeCamera(const float duration, float intensity) -> void
 {
 	m_IsShaking = true;
 	m_ShakeIntensity = intensity;
 	m_ShakeTime = duration;
 	m_ShakeTimer = 0;
 	m_ShakeStartPos = GetTransform()->GetWorldPosition();
+
+}
+
+void CameraComponent::Shake(float const elapsedSec, float)
+{
+	m_ShakeTimer += elapsedSec;
+	if (m_ShakeTimer >= m_ShakeTime)
+	{
+		GetTransform()->Translate(m_ShakeStartPos);
+		m_IsShaking = false;
+		return;
+	}
+	auto& pos = GetTransform()->GetPosition();
+
+	DirectX::XMFLOAT3 const newPos =
+	{
+		pos.x + NoiseGenerator::PerlinNoise1D(m_ShakeSeed,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector),
+		pos.y + NoiseGenerator::PerlinNoise1D(m_ShakeSeed + 1,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector),
+		pos.z + NoiseGenerator::PerlinNoise1D(m_ShakeSeed + 2,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector)
+
+	};
+	GetTransform()->Translate(newPos);
 }

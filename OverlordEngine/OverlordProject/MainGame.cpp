@@ -48,10 +48,6 @@
 #endif
 #ifdef EXAM
 #include "CourseObjects/Examproject/Scenes/MainMenu.h"
-#include "CourseObjects/Examproject/Scenes/BombermanScene.h"
-#endif
-#ifdef TEST
-#include "CourseObjects/Examproject/TestScene.h"
 #endif
 MainGame::MainGame(void)
 {}
@@ -118,12 +114,7 @@ void MainGame::Initialize()
 #endif
 #ifdef EXAM
 	SceneManager::GetInstance()->AddGameScene(new MainMenu());
-	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
 	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
-#endif
-#ifdef TEST
-	SceneManager::GetInstance()->AddGameScene(new TestScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"TestScene");
 #endif
 }
 

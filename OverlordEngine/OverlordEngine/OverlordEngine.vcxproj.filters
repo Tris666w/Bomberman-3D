@@ -159,6 +159,7 @@
       <Filter>Particles</Filter>
     </ClCompile>
     <ClCompile Include="PostProcessingMaterial.cpp" />
+    <ClCompile Include="NoiseGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -349,6 +350,7 @@
       <Filter>Particles</Filter>
     </ClInclude>
     <ClInclude Include="PostProcessingMaterial.h" />
+    <ClInclude Include="NoiseGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">

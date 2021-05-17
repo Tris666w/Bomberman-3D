@@ -33,17 +33,20 @@ BombermanScene::BombermanScene() : GameScene(L"BombermanScene")
 BombermanScene::~BombermanScene()
 {
 	BombManager::GetInstance()->DestroyInstance();
+	BombermanGameSettings::GetInstance()->DestroyInstance();
 }
 
 void BombermanScene::Initialize()
 {
 	GetPhysxProxy()->EnablePhysxDebugRendering(false);
 	const auto gameContext = GetGameContext();
-
+	auto const gridSize = BombermanGameSettings::GetInstance()->GetGridSize();
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
+	
 	//Spawn the camera
-	DirectX::XMFLOAT3 const cameraPos = { BombermanGameSettings::grid_size * BombermanGameSettings::block_size / 1.98f
-		,BombermanGameSettings::grid_size / 3.f * (BombermanGameSettings::wall_height + 2) * BombermanGameSettings::block_size,
-		-BombermanGameSettings::block_size * BombermanGameSettings::grid_size / 3.f };
+	DirectX::XMFLOAT3 const cameraPos = { gridSize * blockSize / 1.98f
+		,gridSize / 3.f * (BombermanGameSettings::GetInstance()->GetWallHeight() + 2) * blockSize,
+		-blockSize * gridSize / 3.f };
 	DirectX::XMFLOAT3 const cameraRot = { 60,0,0 };
 	CreateAndActivateCamera(cameraPos, cameraRot);
 
@@ -69,7 +72,7 @@ void BombermanScene::Initialize()
 	pSound->setMode(FMOD_LOOP_NORMAL);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &pChannel);
-	pChannel->setVolume(BombermanGameSettings::music_volume);
+	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
 
 }
 
@@ -83,10 +86,11 @@ void BombermanScene::Draw()
 
 void BombermanScene::CreateLevel()
 {
-	CreateGridFloor(BombermanGameSettings::grid_size);
-	CreateWalls(BombermanGameSettings::grid_size);
-	CreateNotDestructibleWalls(BombermanGameSettings::grid_size);
-	CreateStumps(BombermanGameSettings::grid_size);
+	auto const gridSize = BombermanGameSettings::GetInstance()->GetGridSize();
+	CreateGridFloor(gridSize);
+	CreateWalls(gridSize);
+	CreateNotDestructibleWalls(gridSize);
+	CreateStumps(gridSize);
 	CreateSkybox();
 	CreateFloor();
 	CreateCampSite();
@@ -95,7 +99,8 @@ void BombermanScene::CreateLevel()
 
 void BombermanScene::CreateVegetation()
 {
-	auto const xStart = static_cast<float>(BombermanGameSettings::block_size * (BombermanGameSettings::grid_size + 2.5));
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
+	auto const xStart = static_cast<float>(blockSize * (BombermanGameSettings::GetInstance()->GetGridSize() + 2.5));
 
 	auto pObj = new GameObject();
 	auto pModel = new ModelComponent(L"Resources/Meshes/Plane.ovm");
@@ -109,7 +114,7 @@ void BombermanScene::CreateVegetation()
 	pMat->SetAddedColorTexture(L"Resources/Textures/Grass/AddColor.png");
 	pMat->SetDirectionTexture(L"Resources/Textures/Grass/Direction.png");
 	pMat->SetLightDirection(GetGameContext().pShadowMapper->GetLightDirection());
-	pObj->GetTransform()->Translate(xStart - BombermanGameSettings::block_size, 0, 0);
+	pObj->GetTransform()->Translate(xStart - blockSize, 0, 0);
 	pObj->GetTransform()->Scale(1.5f, 1.f, 2.f);
 
 	AddChild(pObj);
@@ -144,7 +149,7 @@ void BombermanScene::CreateGridFloor(int const size)
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
-	auto const blockSize = BombermanGameSettings::block_size;
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
@@ -220,7 +225,7 @@ void BombermanScene::CreateWalls(int const size)
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
-	auto const blockSize = static_cast<float>(BombermanGameSettings::block_size);
+	auto const blockSize = static_cast<float>(BombermanGameSettings::GetInstance()->GetBlockSize());
 
 	float startX = -blockSize / 2.f;
 	float startZ = -blockSize / 2.f;
@@ -343,7 +348,7 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
-	auto const blockSize = BombermanGameSettings::block_size;
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
@@ -391,7 +396,7 @@ void BombermanScene::CreateStumps(int const size)
 		return;
 	}
 
-	auto const blockSize = BombermanGameSettings::block_size;
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
@@ -423,12 +428,13 @@ void BombermanScene::CreateStumps(int const size)
 			}
 
 			//Use spawnPercent
-			if (!(static_cast<float>(rand() % 100) < BombermanGameSettings::breakable_wall_spawn_percentage * 100))
+			if (!(static_cast<float>(rand() % 100) < BombermanGameSettings::GetInstance()->GetBreakableSpawnPercent() * 100))
 				continue;
 
 			auto* pWall = new StumpPrefab(matId);
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * BombermanGameSettings::block_size / 2.f, static_cast<float>(startZ + offsetZ));
+			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize/ 2.f, static_cast<float>(startZ + offsetZ));
 			AddChild(pWall);
+			
 		}
 	}
 }
@@ -470,34 +476,34 @@ void BombermanScene::CreatePlayers()
 
 	std::wstring const meshPath = L"./Resources/Meshes/Bomberman.ovm";
 
-	float const uiNearXPos = pWindow.Width / 30.f;
-	float const uiNearYPos = pWindow.Height / 20.f;
-	float const uiFarXPos = static_cast<float>(pWindow.Width) - pWindow.Width / 8.f;
+	if (BombermanGameSettings::GetInstance()->GetAmountOfPlayers() < 2)
+	{
+		Logger::LogError(L"BombermanScene::CreatePlayers(), the game has to have at least 2 players!",true);
+	}
 
-	float const startX = BombermanGameSettings::grid_size * BombermanGameSettings::block_size - BombermanGameSettings::block_size / 2.f;
-	float const startY = BombermanGameSettings::block_size * 1.5f;
-	float const startZ = BombermanGameSettings::grid_size * BombermanGameSettings::block_size - BombermanGameSettings::block_size / 2.f;
+	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
+	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize- blockSize/ 2.f;
+	float const startY = blockSize * 1.5f;
 
+	for (int playerIndex = 0; playerIndex < BombermanGameSettings::GetInstance()->GetAmountOfPlayers(); playerIndex++)
+	{
+		auto& controls = BombermanGameSettings::GetInstance()->GetControlsVector()[playerIndex];
 
+		auto* const pCharacter = new BombermanCharPrefab(meshPath,
+		                                                 L"./Resources/Textures/Bomberman/Player" + std::to_wstring(
+			                                                 playerIndex + 1) + L".png",
+		                                                 controls, static_cast<GamepadIndex>(playerIndex), false);
+		AddChild(pCharacter);
 
-	//Create player 1
-	std::vector<int> const char1Controls = { static_cast<int>(GamePadKeys::DPAD_LEFT), static_cast<int>(GamePadKeys::DPAD_RIGHT),
-		static_cast<int>(GamePadKeys::DPAD_UP),static_cast<int>(GamePadKeys::DPAD_DOWN),static_cast<int>(GamePadKeys::A) };
-	auto* pCharacter1 = new BombermanCharPrefab(meshPath, L"./Resources/Textures/Bomberman.png",
-		char1Controls, GamepadIndex::PlayerOne, true);
-	AddChild(pCharacter1);
-	pCharacter1->GetTransform()->Translate(BombermanGameSettings::block_size / 2.f, startY, startZ);
-	auto* pUi = new BombermanUi(pCharacter1, DirectX::XMFLOAT2{ uiNearXPos,uiNearYPos });
-	AddChild(pUi);
-
-	//Create player 2
-	std::vector<int> const char2Controls{ VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RSHIFT };
-	auto* pCharacter2 = new BombermanCharPrefab(meshPath, L"./Resources/Textures/Bomberman.png",
-		char2Controls, GamepadIndex::PlayerTwo);
-	AddChild(pCharacter2);
-	pCharacter2->GetTransform()->Translate(startX, startY, startZ);
-	pUi = new BombermanUi(pCharacter2, DirectX::XMFLOAT2{ static_cast<float>(uiFarXPos),uiNearYPos });
-	AddChild(pUi);
+		if (playerIndex / 2)
+			pCharacter->GetTransform()->Translate(startX, startY,
+			                                      playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+			                                      blockSize + blockSize / 2.f);
+		else
+			pCharacter->GetTransform()->Translate(blockSize / 2.f, startY,
+			                                      playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+			                                      blockSize + blockSize / 2.f);
+	}
 }
 
 void BombermanScene::CreateCampSite()
