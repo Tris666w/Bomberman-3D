@@ -15,16 +15,6 @@ MainMenu::MainMenu() :GameScene(L"Main menu"),
 {
 }
 
-void MainMenu::StartGame()
-{
-	SceneManager::GetInstance()->AddGameScene(new BombermanScene());
-	SceneManager::GetInstance()->SetActiveGameScene(L"BombermanScene");
-}
-
-void MainMenu::QuitGame()
-{
-	PostQuitMessage(0);
-}
 
 void MainMenu::Initialize()
 {
@@ -43,7 +33,7 @@ void MainMenu::Initialize()
 
 	//Camera
 	auto pObj = new GameObject();
-	auto const gameContext = GetGameContext();
+	auto& gameContext = GetGameContext();
 	auto const input = InputAction(2, InputTriggerState::Pressed, 'R');
 	gameContext.pInput->AddInputAction(input);
 
@@ -81,8 +71,17 @@ void MainMenu::Draw()
 {
 }
 
-void MainMenu::GoToOptions()
+void MainMenu::GoToOptions(void*)
 {
 	SceneManager::GetInstance()->SetActiveGameScene(L"Options menu");
 }
 
+void MainMenu::StartGame(void*)
+{
+	SceneManager::GetInstance()->SetActiveGameScene(L"Pre game menu");
+}
+
+void MainMenu::QuitGame(void*)
+{
+	PostQuitMessage(0);
+}

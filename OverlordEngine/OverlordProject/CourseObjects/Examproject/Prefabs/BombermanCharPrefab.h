@@ -34,6 +34,7 @@ public:
 
 	[[nodiscard]] bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
 	[[nodiscard]] GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
+	[[nodiscard]]bool GetIsDead()const{return m_IsDead;}
 protected:
 	bool m_IsDead;
 	ControllerComponent* m_pController;

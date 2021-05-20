@@ -10,9 +10,9 @@ protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
-	void GoToOptions();
-	void StartGame();
-	void QuitGame();
+	void GoToOptions(void*);
+	void StartGame(void*);
+	void QuitGame(void*);
 private:
 	UiButton<MainMenu,&MainMenu::StartGame>* m_StartGameButton;
 	UiButton<MainMenu,&MainMenu::GoToOptions>* m_OptionsButton;

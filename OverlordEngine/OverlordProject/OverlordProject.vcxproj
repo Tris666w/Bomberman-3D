@@ -104,7 +104,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanUI.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BombPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.cpp" />
@@ -112,6 +111,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\InGameMenu.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -143,6 +143,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostBloom.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\OptionsMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\PreGameMenu.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -163,6 +164,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -173,7 +175,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanUI.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
-    <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
     <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BombPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.h" />
@@ -181,6 +182,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\InGameMenu.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
@@ -213,6 +215,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostBloom.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\OptionsMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\PreGameMenu.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
@@ -220,6 +223,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
+    <ClInclude Include="CourseObjects\Examproject\Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

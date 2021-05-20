@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "TextureData.h"
 
 class TextureData;
 
@@ -18,6 +19,8 @@ public:
 	                DirectX::XMFLOAT4 color = static_cast<DirectX::XMFLOAT4>(DirectX::Colors::White));
 	virtual ~SpriteComponent() = default;
 
+
+	DirectX::XMFLOAT2 GetTextureDimensions() const;
 	DirectX::XMFLOAT2 GetPivot() const { return m_Pivot; }
 	DirectX::XMFLOAT4 GetColor() const { return m_Color; }
 

@@ -49,7 +49,8 @@
 #ifdef EXAM
 #include "CourseObjects/Examproject/Scenes/MainMenu.h"
 #include "CourseObjects/Examproject/Scenes/OptionsMenu.h"
-
+#include "CourseObjects/Examproject/Scenes/PreGameMenu.h"
+#include "CourseObjects/Examproject/Scenes/InGameMenu.h"
 #endif
 MainGame::MainGame(void)
 {}
@@ -117,6 +118,8 @@ void MainGame::Initialize()
 #ifdef EXAM
 	SceneManager::GetInstance()->AddGameScene(new MainMenu());
 	SceneManager::GetInstance()->AddGameScene(new OptionsMenu());
+	SceneManager::GetInstance()->AddGameScene(new PreGameMenu());
+	SceneManager::GetInstance()->AddGameScene(new InGameMenu());
 	
 	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
 #endif

@@ -37,7 +37,6 @@
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BombPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombManager.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\BombermanHelpers.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\Explosion.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
@@ -51,6 +50,9 @@
     <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\OptionsMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Text.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\PreGameMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\InGameMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -89,7 +91,6 @@
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BombermanCharPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BombPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombManager.h" />
-    <ClInclude Include="CourseObjects\Examproject\BombermanHelpers.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\SkyBoxMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\Explosion.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
@@ -103,5 +104,8 @@
     <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\OptionsMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\Text.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\PreGameMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\InGameMenu.h" />
   </ItemGroup>
 </Project>

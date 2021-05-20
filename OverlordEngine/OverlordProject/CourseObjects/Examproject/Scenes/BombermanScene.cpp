@@ -9,6 +9,7 @@
 #include "ColliderComponent.h"
 #include "OverlordGame.h"
 #include "RigidBodyComponent.h"
+#include "SceneManager.h"
 #include "SoundManager.h"
 #include "TransformComponent.h"
 
@@ -38,15 +39,15 @@ BombermanScene::~BombermanScene()
 
 void BombermanScene::Initialize()
 {
-	GetPhysxProxy()->EnablePhysxDebugRendering(false);
-	const auto gameContext = GetGameContext();
+	GetPhysxProxy()->EnablePhysxDebugRendering(true);
+	auto& gameContext = GetGameContext();
 	auto const gridSize = BombermanGameSettings::GetInstance()->GetGridSize();
 	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
-	
+
 	//Spawn the camera
 	DirectX::XMFLOAT3 const cameraPos = { gridSize * blockSize / 1.98f
 		,gridSize / 3.f * (BombermanGameSettings::GetInstance()->GetWallHeight() + 2) * blockSize,
-		-blockSize * gridSize / 3.f };
+		-blockSize * gridSize / 2.75f };
 	DirectX::XMFLOAT3 const cameraRot = { 60,0,0 };
 	CreateAndActivateCamera(cameraPos, cameraRot);
 
@@ -65,19 +66,24 @@ void BombermanScene::Initialize()
 
 	//Sound
 	FMOD::Sound* pSound;
-	FMOD::Channel* pChannel;
 	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
 	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/The 8-Bit Forest.mp3", FMOD_DEFAULT, nullptr, &pSound);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	pSound->setMode(FMOD_LOOP_NORMAL);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &pChannel);
-	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pAmbientSoundChannel);
+	m_pAmbientSoundChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
 
+
+	m_MenuActionID = gameContext.pInput->GetAvailableActionID();
+	auto const input = InputAction(m_MenuActionID, InputTriggerState::Pressed, VK_ESCAPE);
+	gameContext.pInput->AddInputAction(input);
 }
 
 void BombermanScene::Update()
 {
+	if (auto& gameContext = GetGameContext(); gameContext.pInput->IsActionTriggered(m_MenuActionID))
+		LoadInGameMenu();
 }
 
 void BombermanScene::Draw()
@@ -217,7 +223,6 @@ void BombermanScene::CreateFloor()
 	pModel->SetMaterial(matId);
 	AddChild(pObj);
 	pObj->GetTransform()->Translate(31, 0, 50);
-
 }
 
 void BombermanScene::CreateWalls(int const size)
@@ -235,7 +240,7 @@ void BombermanScene::CreateWalls(int const size)
 	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Log.png");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
 
-	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(halfSize, halfSize, halfSize));
+	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(blockSize, halfSize, halfSize));
 	for (int z = 0; z < 2; ++z)
 	{
 		for (int x = 1; x < size + 1; ++x)
@@ -357,7 +362,7 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
 	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
-	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(halfSize, halfSize, halfSize));
+	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(static_cast<physx::PxReal>(blockSize), halfSize, halfSize));
 
 	for (int x = 1; x < size - 1; x += 2)
 	{
@@ -371,7 +376,7 @@ void BombermanScene::CreateNotDestructibleWalls(int const size)
 			auto* pWall = new GameObject();
 			pWall->AddComponent(pModelComponent);
 
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize / 2.f,
+			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), blockSize * 1.f,
 				static_cast<float>(startZ + offsetZ));
 
 			auto rb = new RigidBodyComponent(true);
@@ -432,16 +437,16 @@ void BombermanScene::CreateStumps(int const size)
 				continue;
 
 			auto* pWall = new StumpPrefab(matId);
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize/ 2.f, static_cast<float>(startZ + offsetZ));
+			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize / 2.f, static_cast<float>(startZ + offsetZ));
 			AddChild(pWall);
-			
+
 		}
 	}
 }
 
 void BombermanScene::CreateSkybox()
 {
-	const auto gameContext = GetGameContext();
+	auto& gameContext = GetGameContext();
 
 	//Create game object and model
 	auto const skyboxGameObject = new GameObject();
@@ -472,37 +477,55 @@ void BombermanScene::CreateAndActivateCamera(DirectX::XMFLOAT3 pos, DirectX::XMF
 
 void BombermanScene::CreatePlayers()
 {
-	auto const pWindow = OverlordGame::GetGameSettings().Window;
+	auto& pWindow = OverlordGame::GetGameSettings().Window;
 
 	std::wstring const meshPath = L"./Resources/Meshes/Bomberman.ovm";
 
 	if (BombermanGameSettings::GetInstance()->GetAmountOfPlayers() < 2)
 	{
-		Logger::LogError(L"BombermanScene::CreatePlayers(), the game has to have at least 2 players!",true);
+		Logger::LogError(L"BombermanScene::CreatePlayers(), the game has to have at least 2 players!", true);
 	}
 
 	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
-	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize- blockSize/ 2.f;
+	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize - blockSize / 2.f;
 	float const startY = blockSize * 1.5f;
+
+	auto& schemeMap = BombermanGameSettings::GetInstance()->GetSchemeMap();
+	auto drawPos = DirectX::XMFLOAT2(pWindow.Width / 7.5f, pWindow.Height * 1.f);
 
 	for (int playerIndex = 0; playerIndex < BombermanGameSettings::GetInstance()->GetAmountOfPlayers(); playerIndex++)
 	{
-		auto& controls = BombermanGameSettings::GetInstance()->GetControlsVector()[playerIndex];
+		auto const inputScheme = BombermanGameSettings::GetInstance()->GetPlayerInputScheme(playerIndex);
+		auto& controls = schemeMap.at(inputScheme).first;
 
-		auto* const pCharacter = new BombermanCharPrefab(meshPath,
-		                                                 L"./Resources/Textures/Bomberman/Player" + std::to_wstring(
-			                                                 playerIndex + 1) + L".png",
-		                                                 controls, static_cast<GamepadIndex>(playerIndex), false);
+		BombermanCharPrefab* pCharacter{};
+
+		if (static_cast<int>(inputScheme) >= static_cast<int>(InputScheme::Controller))
+			pCharacter = new BombermanCharPrefab(meshPath,
+				L"./Resources/Textures/Bomberman/Player" + std::to_wstring(
+					playerIndex + 1) + L".png",
+				controls, static_cast<GamepadIndex>(playerIndex), true);
+		else
+			pCharacter = new BombermanCharPrefab(meshPath,
+				L"./Resources/Textures/Bomberman/Player" + std::to_wstring(
+					playerIndex + 1) + L".png",
+				controls, static_cast<GamepadIndex>(playerIndex), false);
 		AddChild(pCharacter);
 
 		if (playerIndex / 2)
 			pCharacter->GetTransform()->Translate(startX, startY,
-			                                      playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
-			                                      blockSize + blockSize / 2.f);
+				playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+				blockSize + blockSize / 2.f);
 		else
 			pCharacter->GetTransform()->Translate(blockSize / 2.f, startY,
-			                                      playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
-			                                      blockSize + blockSize / 2.f);
+				playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+				blockSize + blockSize / 2.f);
+
+		auto const UI = new BombermanUi(L"Resources/Textures/Bomberman/UIPlayer" + std::to_wstring(playerIndex + 1) + L".png", pCharacter, drawPos);
+		UI->GetTransform()->Scale(0.25f, 0.25f, 0.25f);
+		AddChild(UI);
+
+		drawPos.x += pWindow.Width / 5.f;
 	}
 }
 
@@ -527,5 +550,26 @@ void BombermanScene::CreateCampSite()
 		AddChild(pObj);
 		pObj->GetTransform()->Scale(0.3f, 0.3f, 0.3f);
 		pObj->GetTransform()->Translate(-25.f, 0.f, 40.f + static_cast<float>(pow(-1, i)) * 15.f);
+	}
+}
+
+void BombermanScene::LoadInGameMenu() const
+{
+	SceneManager::GetInstance()->SetActiveGameScene(L"In-game menu");
+}
+
+void BombermanScene::SceneActivated()
+{
+	if (m_pAmbientSoundChannel)
+	{
+		m_pAmbientSoundChannel->setPaused(false);
+	}
+}
+
+void BombermanScene::SceneDeactivated()
+{
+	if (m_pAmbientSoundChannel)
+	{
+		m_pAmbientSoundChannel->setPaused(true);
 	}
 }

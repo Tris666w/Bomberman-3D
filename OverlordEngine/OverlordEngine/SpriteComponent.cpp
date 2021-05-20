@@ -17,6 +17,11 @@ SpriteComponent::SpriteComponent(std::wstring spriteAsset, DirectX::XMFLOAT2 piv
 {
 }
 
+DirectX::XMFLOAT2 SpriteComponent::GetTextureDimensions() const
+{
+	return m_pTexture->GetDimension();
+}
+
 void SpriteComponent::Initialize(const GameContext& )
 {
 	m_pTexture = ContentManager::Load<TextureData>(m_SpriteAsset);

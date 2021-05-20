@@ -188,7 +188,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 spawnPos)
 	AddChild(pObj);
 }
 
-void BombPrefab::CreateExplosion(physx::PxVec3 spawnPos)
+void BombPrefab::CreateExplosion(const physx::PxVec3& spawnPos)
 {
 	CreateExplosion(ToXMFLOAT3(spawnPos));
 }

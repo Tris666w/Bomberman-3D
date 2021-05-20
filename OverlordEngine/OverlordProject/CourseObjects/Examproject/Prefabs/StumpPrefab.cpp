@@ -50,7 +50,9 @@ void StumpPrefab::Initialize(const GameContext&)
 	rb->SetCollisionGroup(CollisionGroupFlag::Group0);
 	AddComponent(rb);
 
-	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(halfSize, halfSize, halfSize));
+	std::shared_ptr<physx::PxGeometry>geometry
+		(new physx::PxBoxGeometry(static_cast<float>(BombermanGameSettings::GetInstance()->GetBlockSize()), halfSize, halfSize));
+	
 	auto* cc = new ColliderComponent(geometry, *bouncyMaterial, physx::PxTransform(physx::PxQuat(DirectX::XM_PIDIV2, physx::PxVec3(0, 0, 1))));
 
 	AddComponent(cc);

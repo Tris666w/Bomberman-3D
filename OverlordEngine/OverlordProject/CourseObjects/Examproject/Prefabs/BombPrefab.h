@@ -58,6 +58,6 @@ private:
 
 	/// @brief spawns 1 explosion at the given pos
 	/// @param spawnPos Spawn position of the explosion
-	void CreateExplosion(physx::PxVec3 spawnPos);
+	void CreateExplosion(const physx::PxVec3& spawnPos);
 };
 

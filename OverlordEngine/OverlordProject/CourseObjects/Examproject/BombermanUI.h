@@ -1,13 +1,13 @@
 #pragma once
 #include <GameObject.h>
 class SpriteComponent;
-class SpriteFont;
 class BombermanCharPrefab;
 class BombermanUi final:public GameObject
 {
 public:
-	BombermanUi(BombermanCharPrefab* pPlayer, DirectX::XMFLOAT2, bool drawUnder = false);
+	BombermanUi(const std::wstring& assetPath, BombermanCharPrefab* pPlayer, DirectX::XMFLOAT2 drawPos);
 	~BombermanUi() override;
+
 protected:
 	void Initialize(const GameContext&) override;
 	void PostInitialize(const GameContext&) override;
@@ -16,10 +16,10 @@ protected:
 	void Update(const GameContext&) override;
 
 private:
-	SpriteFont* m_pFont;
+	std::wstring m_TexturePath;
 	SpriteComponent* m_pSprite;
 	BombermanCharPrefab* m_pPlayer;
 	DirectX::XMFLOAT2 m_DrawPos;
-	bool m_DrawUnder;
+	bool m_PlayerHasDied;
 };
 

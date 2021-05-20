@@ -19,6 +19,7 @@ public:
 	void NextScene();
 	void PreviousScene();
 	GameScene* GetActiveScene() const { return m_ActiveScene; }
+	GameScene* GetScene(const std::wstring& sceneName)const;
 	OverlordGame* GetGame() const { return m_pGame; }
 
 private:

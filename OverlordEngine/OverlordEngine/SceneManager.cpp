@@ -5,7 +5,7 @@
 #include "GameSpecs.h"
 #include <algorithm>
 
-SceneManager::SceneManager():
+SceneManager::SceneManager() :
 	m_pScenes(std::vector<GameScene*>()),
 	m_IsInitialized(false),
 	m_ActiveScene(nullptr),
@@ -46,7 +46,9 @@ void SceneManager::RemoveGameScene(GameScene* pScene)
 
 	if (it != m_pScenes.end())
 	{
-		m_pScenes.erase(it);
+		//m_pScenes.erase(it);
+		SafeDelete(*it);
+		std::_Erase_remove(m_pScenes, *it);
 	}
 }
 
@@ -77,12 +79,27 @@ void SceneManager::PreviousScene()
 	}
 }
 
+GameScene* SceneManager::GetScene(const std::wstring& sceneName) const
+{
+	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](GameScene* scene)
+		{
+			return wcscmp(scene->m_SceneName.c_str(), sceneName.c_str()) == 0;
+		});
+
+	if (it != m_pScenes.end())
+	{
+		return *it;
+	}
+
+	return nullptr;
+}
+
 void SceneManager::SetActiveGameScene(const std::wstring& sceneName)
 {
 	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](GameScene* scene)
-	{
-		return wcscmp(scene->m_SceneName.c_str(), sceneName.c_str()) == 0;
-	});
+		{
+			return wcscmp(scene->m_SceneName.c_str(), sceneName.c_str()) == 0;
+		});
 
 	if (it != m_pScenes.end())
 	{

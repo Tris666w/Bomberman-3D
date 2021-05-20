@@ -29,6 +29,7 @@ InputManager::~InputManager(void)
 		m_pCurrKeyboardState = nullptr;
 		m_pOldKeyboardState = nullptr;
 	}
+	m_IsInitialized = false;
 }
 
 void InputManager::Initialize()
@@ -70,8 +71,8 @@ int InputManager::GetAvailableActionID()const
 	int newID = 0;
 	while (!hasFoundNewID)
 	{
-		if (std::find_if(m_InputActions.begin(),m_InputActions.end(),
-			[&newID](const std::pair<int,InputAction>& pair){
+		if (std::find_if(m_InputActions.begin(), m_InputActions.end(),
+			[&newID](const std::pair<int, InputAction>& pair) {
 				if (pair.first == newID)
 					return true;
 				else
@@ -270,8 +271,8 @@ bool InputManager::IsMouseButtonDown_unsafe(int button, bool previousFrame)
 {
 	if (previousFrame)
 		return (m_pOldKeyboardState[button] & 0xF0) != 0;
-	
-return (m_pCurrKeyboardState[button] & 0xF0) != 0;
+
+	return (m_pCurrKeyboardState[button] & 0xF0) != 0;
 }
 
 //NO RANGE CHECKS

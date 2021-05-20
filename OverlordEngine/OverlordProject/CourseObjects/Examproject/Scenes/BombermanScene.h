@@ -14,6 +14,8 @@ protected:
 
 private:
 	CameraComponent* m_pCamera = nullptr;
+	int m_MenuActionID = -1;
+	FMOD::Channel* m_pAmbientSoundChannel = nullptr;
 
 	/// @brief Creates the level
 	void CreateLevel();
@@ -54,5 +56,11 @@ private:
 
 	/// @brief Creates the camp site
 	void CreateCampSite();
+
+	/// @brief Loads the in-game men8
+	void LoadInGameMenu()const;
+protected:
+	void SceneActivated() override;
+	void SceneDeactivated() override;
 };
 

@@ -2,6 +2,7 @@
 #include <GameScene.h>
 #include "../UiButton.h"
 
+class Text;
 class OptionsMenu final:   public GameScene
 {
 public:
@@ -12,19 +13,19 @@ protected:
 	void Update() override;
 	void Draw() override;
 
-	void LoadMainMenu();
-	void IncreaseSoundVolume();
-	void DecreaseSoundVolume();
-	void IncreaseMusicVolume();
-	void DecreaseMusicVolume();
+	void LoadMainMenu(void* pData);
+	void ChangeSoundVolume(void* pData);
+	void ChangeMusicVolume(void* pData);
 
 private:
-	SpriteFont* m_pFont;
-	
 	UiButton<OptionsMenu,&OptionsMenu::LoadMainMenu>* m_MainMenuButton{};
-	UiButton<OptionsMenu,&OptionsMenu::IncreaseSoundVolume>* m_SoundVolumePlusButton{};
-	UiButton<OptionsMenu,&OptionsMenu::DecreaseSoundVolume>* m_SoundVolumeMinusButton{};
-	UiButton<OptionsMenu,&OptionsMenu::IncreaseMusicVolume>* m_MusicVolumePlusButton{};
-	UiButton<OptionsMenu,&OptionsMenu::DecreaseMusicVolume>* m_MusicVolumeMinusButton{};
+	UiButton<OptionsMenu,&OptionsMenu::ChangeSoundVolume>* m_SoundVolumePlusButton{};
+	UiButton<OptionsMenu,&OptionsMenu::ChangeSoundVolume>* m_SoundVolumeMinusButton{};
+	UiButton<OptionsMenu,&OptionsMenu::ChangeMusicVolume>* m_MusicVolumePlusButton{};
+	UiButton<OptionsMenu,&OptionsMenu::ChangeMusicVolume>* m_MusicVolumeMinusButton{};
+
+	Text* m_pSoundText = nullptr;
+	Text* m_pMusicText = nullptr;
+	
 };
 
