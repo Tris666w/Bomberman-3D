@@ -36,7 +36,7 @@ private:
 
 	float const m_ExplodeTime = 3.f;
 	float m_ExplodeTimer = 0.f;
-	int const m_ExplosionReach = 3;
+	int const m_ExplosionReach = 2;
 	DirectX::XMFLOAT3 m_ExplodePos = {};
 	bool m_IsExploding = false;
 

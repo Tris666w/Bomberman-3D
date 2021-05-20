@@ -57,6 +57,8 @@ void MainMenu::Initialize()
 	pObj->GetTransform()->Scale(1.5f, 1.f, 1.f);
 
 	pObj->GetTransform()->Rotate(-90, 0, 0);
+
+	InitializeMusic();
 }
 
 
@@ -74,10 +76,18 @@ void MainMenu::Draw()
 void MainMenu::SceneActivated()
 {
 	GetGameContext().pInput->Initialize();
+
+	if (m_pChannel)
+	{
+		m_pChannel->setPaused(false);
+		m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	}
 }
 
 void MainMenu::SceneDeactivated()
 {
+	if (m_pChannel)
+		m_pChannel->setPaused(true);
 }
 
 void MainMenu::GoToOptions(void*)
@@ -93,4 +103,18 @@ void MainMenu::StartGame(void*)
 void MainMenu::QuitGame(void*)
 {
 	PostQuitMessage(0);
+}
+
+void MainMenu::InitializeMusic()
+{
+	FMOD::Sound* pSound;
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/Menu.wav", FMOD_DEFAULT, nullptr, &pSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	pSound->setMode(FMOD_LOOP_NORMAL);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	
+	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	m_pChannel->setPaused(true);
 }

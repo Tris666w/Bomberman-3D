@@ -12,12 +12,17 @@ protected:
 	void Draw() override;
 	void SceneActivated() override;
 	void SceneDeactivated() override;
+private:
 	void GoToOptions(void*);
 	void StartGame(void*);
 	void QuitGame(void*);
-private:
+	void InitializeMusic();
+	
+	FMOD::Channel* m_pChannel;
+	
 	UiButton<MainMenu,&MainMenu::StartGame>* m_StartGameButton;
 	UiButton<MainMenu,&MainMenu::GoToOptions>* m_OptionsButton;
 	UiButton<MainMenu,&MainMenu::QuitGame>* m_QuitGameButton;
+	
 };
 

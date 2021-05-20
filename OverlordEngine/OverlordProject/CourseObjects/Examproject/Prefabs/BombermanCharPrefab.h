@@ -62,8 +62,6 @@ protected:
 	float m_BombTimer = 0.f;
 	bool m_CanSpawnBomb = true;
 
-	//Character Death parameters
-
 	//File paths
 	std::wstring m_MeshFilePath;
 	std::wstring m_MaterialFilePath;

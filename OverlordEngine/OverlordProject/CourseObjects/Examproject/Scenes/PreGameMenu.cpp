@@ -115,8 +115,7 @@ void PreGameMenu::Initialize()
 	m_CycleInputControls = new UiButton<PreGameMenu, &PreGameMenu::SetInputScheme>(fontPathMedium, soundForwardPath, { drawPos }, L"Cycle", this, charSizeMedium);
 	AddChild(m_CycleInputControls);
 
-	auto const input = InputAction(1000, InputTriggerState::Pressed, -1, VK_RBUTTON);
-	gameContext.pInput->AddInputAction(input);
+	InitializeMusic();
 }
 
 void PreGameMenu::Update()
@@ -149,6 +148,22 @@ void PreGameMenu::Update()
 
 void PreGameMenu::Draw()
 {
+}
+
+void PreGameMenu::SceneActivated()
+{
+	if (m_pChannel)
+	{
+		m_pChannel->setPaused(false);
+		m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	}
+
+}
+
+void PreGameMenu::SceneDeactivated()
+{
+	if (m_pChannel)
+		m_pChannel->setPaused(true);
 }
 
 void PreGameMenu::LoadMainMenu(void*)
@@ -201,4 +216,18 @@ void PreGameMenu::SetInputScheme(void* pData)
 	m_pSchemeSprite->SetTexture(texturePath);
 
 	BombermanGameSettings::GetInstance()->SetPlayerInput(m_CurrentPlayerIndex - 1, static_cast<InputScheme>(m_InputIndex));
+}
+
+void PreGameMenu::InitializeMusic()
+{
+	FMOD::Sound* pSound;
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/PreGame.wav", FMOD_DEFAULT, nullptr, &pSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	pSound->setMode(FMOD_LOOP_NORMAL);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	
+	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	m_pChannel->setPaused(true);
 }

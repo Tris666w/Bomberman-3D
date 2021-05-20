@@ -41,6 +41,7 @@ void EndScreen::Initialize()
 
 	CreateCamera();
 	CreateBackground();
+	InitializeMusic();
 }
 
 void EndScreen::Update()
@@ -55,10 +56,19 @@ void EndScreen::Draw()
 void EndScreen::SceneActivated()
 {
 	GetGameContext().pInput->Initialize();
+	if (m_pChannel)
+	{
+		m_pChannel->setPaused(false);
+		m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	}
 }
 
 void EndScreen::SceneDeactivated()
 {
+	if (m_pChannel)
+	{
+		m_pChannel->setPaused(true);
+	}
 	SceneManager::GetInstance()->RemoveGameScene(this);
 }
 
@@ -101,4 +111,18 @@ void EndScreen::CreateBackground()
 	AddChild(pObj);
 	pObj->GetTransform()->Scale(1.5f, 1.f, 1.f);
 	pObj->GetTransform()->Rotate(-90, 0, 0);
+}
+
+void EndScreen::InitializeMusic()
+{
+	FMOD::Sound* pSound;
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/EndMusic.mp3", FMOD_DEFAULT, nullptr, &pSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	pSound->setMode(FMOD_LOOP_NORMAL);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	
+	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+	m_pChannel->setPaused(true);
 }

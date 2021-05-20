@@ -70,8 +70,6 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	m_pModel = new ModelComponent(m_MeshFilePath, true);
 	m_pModel->SetMaterial(matID);
 	AddComponent(m_pModel);
-	//m_pModel->GetTransform()->Translate(0, -m_Height / 3.f - m_Radius, 0);
-
 
 	//Input
 #pragma region Keyboard

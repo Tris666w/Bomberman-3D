@@ -16,7 +16,10 @@ protected:
 private:
 	size_t m_WinnerIndex;
 	UiButton<EndScreen, &EndScreen::ContinueToMenu>* m_pContinueButton = nullptr;
+	FMOD::Channel* m_pChannel = nullptr;
+	
 	void CreateCamera();
 	void CreateBackground();
+	void InitializeMusic();
 };
 

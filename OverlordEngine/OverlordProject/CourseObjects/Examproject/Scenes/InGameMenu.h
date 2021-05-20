@@ -38,6 +38,5 @@ private:
 	Text* m_pMusicText = nullptr;
 
 	void InitSoundButtons();
-	
 };
 

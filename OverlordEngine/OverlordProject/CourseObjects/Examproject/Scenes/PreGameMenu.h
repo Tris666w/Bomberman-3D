@@ -13,6 +13,8 @@ protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
+	void SceneActivated() override;
+	void SceneDeactivated() override;
 
 private:
 	void LoadMainMenu(void*);
@@ -20,6 +22,7 @@ private:
 	void SetAmountOfPLayers(void* pData);
 	void CycleControllerChoosePlayer(void* pData);
 	void SetInputScheme(void*);
+	void InitializeMusic();
 
 	UiButton<PreGameMenu, &PreGameMenu::BeginGame>* m_StartGameButton;
 	UiButton<PreGameMenu, &PreGameMenu::LoadMainMenu>* m_MainMenuButton{};
@@ -41,5 +44,6 @@ private:
 	int m_CurrentPlayerIndex = 1;
 	int m_InputIndex = 0;
 
+	FMOD::Channel* m_pChannel = nullptr;
 };
 

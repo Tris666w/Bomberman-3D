@@ -12,7 +12,9 @@ protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
-
+	void SceneActivated() override;
+	void SceneDeactivated() override;
+	
 	void LoadMainMenu(void* pData);
 	void ChangeSoundVolume(void* pData);
 	void ChangeMusicVolume(void* pData);
@@ -26,6 +28,8 @@ private:
 
 	Text* m_pSoundText = nullptr;
 	Text* m_pMusicText = nullptr;
+	FMOD::Channel* m_pChannel;
 	
+	void InitializeMusic();
 };
 
