@@ -185,7 +185,7 @@ void PreGameMenu::CycleControllerChoosePlayer(void* pData)
 	m_CurrentPlayerIndex = newIndex;
 	m_pPlayerControlIndexText->SetText(std::to_wstring(newIndex));
 
-	auto inputScheme = BombermanGameSettings::GetInstance()->GetPlayerInputScheme(m_CurrentPlayerIndex);
+	auto inputScheme = BombermanGameSettings::GetInstance()->GetPlayerInputScheme(m_CurrentPlayerIndex-1);
 	SetInputScheme(&inputScheme);
 }
 

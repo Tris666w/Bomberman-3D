@@ -112,6 +112,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\InGameMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\Scenes\EndScreen.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -183,6 +184,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\InGameMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\Scenes\EndScreen.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />

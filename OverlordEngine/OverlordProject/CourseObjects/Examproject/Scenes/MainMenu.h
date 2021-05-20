@@ -10,6 +10,8 @@ protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
+	void SceneActivated() override;
+	void SceneDeactivated() override;
 	void GoToOptions(void*);
 	void StartGame(void*);
 	void QuitGame(void*);

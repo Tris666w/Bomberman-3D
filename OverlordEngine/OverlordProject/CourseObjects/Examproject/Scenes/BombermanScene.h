@@ -1,5 +1,6 @@
 #pragma once
 #include <GameScene.h>
+class BombermanCharPrefab;
 
 class BombermanScene final :public GameScene
 {
@@ -7,15 +8,19 @@ public:
 	BombermanScene();
 	~BombermanScene() override;
 
+	/// @brief Check if there is only 1 player remaining, if so finish the game
+	void CheckForGameEnd();
 protected:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
-
+	void SceneActivated() override;
+	void SceneDeactivated() override;
 private:
 	CameraComponent* m_pCamera = nullptr;
 	int m_MenuActionID = -1;
 	FMOD::Channel* m_pAmbientSoundChannel = nullptr;
+	std::vector<BombermanCharPrefab*>m_CharPrefabs;
 
 	/// @brief Creates the level
 	void CreateLevel();
@@ -59,8 +64,9 @@ private:
 
 	/// @brief Loads the in-game men8
 	void LoadInGameMenu()const;
-protected:
-	void SceneActivated() override;
-	void SceneDeactivated() override;
+
+	/// @brief Finish the game
+	/// @param playerIndex index of the winner
+	void FinishGame(size_t playerIndex);
 };
 

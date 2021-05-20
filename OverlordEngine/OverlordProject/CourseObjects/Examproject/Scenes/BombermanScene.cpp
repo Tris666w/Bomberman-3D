@@ -12,7 +12,7 @@
 #include "SceneManager.h"
 #include "SoundManager.h"
 #include "TransformComponent.h"
-
+#include "EndScreen.h"
 #include "../BombManager.h"
 #include "../BombermanUI.h"
 #include "../BombermanGameSettings.h"
@@ -510,7 +510,9 @@ void BombermanScene::CreatePlayers()
 				L"./Resources/Textures/Bomberman/Player" + std::to_wstring(
 					playerIndex + 1) + L".png",
 				controls, static_cast<GamepadIndex>(playerIndex), false);
+
 		AddChild(pCharacter);
+		m_CharPrefabs.push_back(pCharacter);
 
 		if (playerIndex / 2)
 			pCharacter->GetTransform()->Translate(startX, startY,
@@ -558,8 +560,38 @@ void BombermanScene::LoadInGameMenu() const
 	SceneManager::GetInstance()->SetActiveGameScene(L"In-game menu");
 }
 
+void BombermanScene::CheckForGameEnd()
+{
+	int amountOfLivingPlayers = 0;
+	int livingPlayerIndex = -1;
+	for (int index = 0; index < static_cast<int>(m_CharPrefabs.size()); ++index)
+	{
+		if (!m_CharPrefabs[index]->GetIsDead())
+		{
+			livingPlayerIndex = index;
+			++amountOfLivingPlayers;
+		}
+	}
+	if (amountOfLivingPlayers != 1)
+	{
+		return;
+	}
+
+	if (livingPlayerIndex <= -1)
+		Logger::LogError(L"BombermanScene::CheckForGameEnd(), living player index <0!");
+
+	FinishGame(livingPlayerIndex);
+}
+
+void BombermanScene::FinishGame(size_t playerIndex)
+{
+	SceneManager::GetInstance()->AddGameScene(new EndScreen(playerIndex + 1));
+	SceneManager::GetInstance()->SetActiveGameScene(L"End screen");
+}
+
 void BombermanScene::SceneActivated()
 {
+	GetGameContext().pInput->Initialize();
 	if (m_pAmbientSoundChannel)
 	{
 		m_pAmbientSoundChannel->setPaused(false);

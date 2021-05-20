@@ -2,6 +2,7 @@
 #include "BombermanCharPrefab.h"
 
 #include "../BombermanGameSettings.h"
+#include "../Scenes/BombermanScene.h"
 #include "PhysxManager.h"
 #include "Components.h"
 #include "../BombManager.h"
@@ -9,12 +10,9 @@
 #include "ContentManager.h"
 #include "GameScene.h"
 #include "ModelAnimator.h"
-#include "SpriteFont.h"
-#include "TextRenderer.h"
-#include "OverlordGame.h"
+#include "SceneManager.h"
 #include "../../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
-#include "../../../stdafx.h"
 
 BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect, GamepadIndex playerIndex, bool useGamePad)
 	:m_IsDead(false),
@@ -239,6 +237,9 @@ void BombermanCharPrefab::KillPlayer()
 {
 	m_IsDead = true;
 	m_pModel->GetAnimator()->SetAnimation(L"Death");
+
+	auto const scene = SceneManager::GetInstance()->GetActiveScene();
+	reinterpret_cast<BombermanScene*>(scene)->CheckForGameEnd();
 }
 
 DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const

@@ -71,6 +71,15 @@ void MainMenu::Draw()
 {
 }
 
+void MainMenu::SceneActivated()
+{
+	GetGameContext().pInput->Initialize();
+}
+
+void MainMenu::SceneDeactivated()
+{
+}
+
 void MainMenu::GoToOptions(void*)
 {
 	SceneManager::GetInstance()->SetActiveGameScene(L"Options menu");

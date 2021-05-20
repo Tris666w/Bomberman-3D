@@ -8,6 +8,7 @@
 #include "ModelComponent.h"
 #include "TransformComponent.h"
 #include "../../../Materials/DiffuseMaterial.h"
+
 InGameMenu::InGameMenu() :GameScene(L"In-game menu"),
 m_MainMenuButton(nullptr),
 m_RestartButton(nullptr),
