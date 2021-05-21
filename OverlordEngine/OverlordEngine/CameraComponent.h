@@ -10,6 +10,17 @@ class CameraComponent : public BaseComponent
 	float m_FarPlane, m_NearPlane, m_FOV, m_Size;
 	bool m_IsActive, m_PerspectiveProjection;
 
+	
+	//Perlin noise map
+	int m_MapSize;
+	float m_Frequency{};
+	float m_Lunacrity{};
+	float m_Persistence{};
+	int m_OctaveCount;
+	float m_ScalingBias;
+	std::vector<int>m_SeedVector{};
+	std::vector<float>m_GradientVector{};
+	
 	//Camera shake
 	DirectX::XMFLOAT3 m_ShakeStartPos;
 	float m_ShakeTimer;
@@ -19,17 +30,7 @@ class CameraComponent : public BaseComponent
 	float m_ShakeSpeed;
 	uint32_t m_ShakeSeed;
 
-	void Shake(float elapsedSec, float totalTime);
-
-	//Perlin noise map
-	int m_MapSize;
-	float m_Frequency{};
-	float m_Lunacrity{};
-	float m_Persistence{};
-	int m_OctaveCount;
-	float m_ScalingBias;
-	std::vector<int>m_SeedVector{};
-	std::vector<float>m_GradientVector{};;
+	void Shake(float elapsedSec);
 
 public:
 	CameraComponent(const CameraComponent& other) = delete;

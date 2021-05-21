@@ -30,13 +30,15 @@ public:
 	void Update(const GameContext& gameContext) override;
 	void Draw(const GameContext&) override;
 
-	void KillPlayer();
-
+	void SetHealth(int newHealth);
+	void DamagePlayer(int amount);
+	
 	[[nodiscard]] bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
 	[[nodiscard]] GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
 	[[nodiscard]]bool GetIsDead()const{return m_IsDead;}
 protected:
 	bool m_IsDead;
+	int m_Health;
 	ControllerComponent* m_pController;
 	ModelComponent* m_pModel = nullptr;
 	float m_Radius, m_Height, m_StepOffset;
@@ -66,11 +68,12 @@ protected:
 	std::wstring m_MeshFilePath;
 	std::wstring m_MaterialFilePath;
 
+	//Sound
+	FMOD::Sound* m_pHitSound = nullptr;
+	FMOD::Sound* m_pDeathSound = nullptr;
+	
 	//Methods
 	DirectX::XMFLOAT3 CalculateBombSpawnPos()const;
-
-	//UI
-	SpriteFont* m_pFont = nullptr;
-	SpriteComponent* m_pSprite = nullptr;
+	void KillPlayer();
 };
 

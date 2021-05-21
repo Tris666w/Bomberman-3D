@@ -33,7 +33,7 @@ protected:
 
 private:
 	bool m_IsActive = false;
-
+	int m_Damage = 1;
 	float const m_ExplodeTime = 3.f;
 	float m_ExplodeTimer = 0.f;
 	int const m_ExplosionReach = 2;

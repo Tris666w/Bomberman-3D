@@ -56,7 +56,7 @@ void CameraComponent::Update(const GameContext& gameContext)
 	// see https://stackoverflow.com/questions/21688529/binary-directxxmvector-does-not-define-this-operator-or-a-conversion
 	using namespace DirectX;
 
-	const auto windowSettings = OverlordGame::GetGameSettings().Window;
+	auto& windowSettings = OverlordGame::GetGameSettings().Window;
 	XMMATRIX projection;
 
 	if (m_PerspectiveProjection)
@@ -86,7 +86,7 @@ void CameraComponent::Update(const GameContext& gameContext)
 
 	if (m_IsShaking)
 	{
-		Shake(gameContext.pGameTime->GetElapsed(), gameContext.pGameTime->GetTotal());
+		Shake(gameContext.pGameTime->GetElapsed());
 	}
 }
 
@@ -160,10 +160,9 @@ auto CameraComponent::ShakeCamera(const float duration, float intensity) -> void
 	m_ShakeTime = duration;
 	m_ShakeTimer = 0;
 	m_ShakeStartPos = GetTransform()->GetWorldPosition();
-
 }
 
-void CameraComponent::Shake(float const elapsedSec, float)
+void CameraComponent::Shake(float const elapsedSec)
 {
 	m_ShakeTimer += elapsedSec;
 	if (m_ShakeTimer >= m_ShakeTime)
@@ -172,13 +171,17 @@ void CameraComponent::Shake(float const elapsedSec, float)
 		m_IsShaking = false;
 		return;
 	}
-	auto& pos = GetTransform()->GetPosition();
+	auto& pos = m_ShakeStartPos;
 
+	float x =  NoiseGenerator::PerlinNoise1D(m_ShakeSeed,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector);
+	float y =  NoiseGenerator::PerlinNoise1D(m_ShakeSeed+1,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector);
+	float z =  NoiseGenerator::PerlinNoise1D(m_ShakeSeed+2,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector);
+	Logger::LogInfo(L"Sampled noise: x = "+std::to_wstring(x)+L", y = "+std::to_wstring(y)+L", z = "+std::to_wstring(z));
 	DirectX::XMFLOAT3 const newPos =
 	{
-		pos.x + NoiseGenerator::PerlinNoise1D(m_ShakeSeed,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector),
-		pos.y + NoiseGenerator::PerlinNoise1D(m_ShakeSeed + 1,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector),
-		pos.z + NoiseGenerator::PerlinNoise1D(m_ShakeSeed + 2,m_Frequency * elapsedSec,m_OctaveCount,m_Lunacrity,m_Persistence,m_SeedVector,m_GradientVector)
+		pos.x + m_ShakeIntensity * x,
+		pos.y + m_ShakeIntensity * y,
+		pos.z + m_ShakeIntensity * z
 
 	};
 	GetTransform()->Translate(newPos);

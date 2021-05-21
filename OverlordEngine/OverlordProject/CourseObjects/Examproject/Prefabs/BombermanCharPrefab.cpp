@@ -11,11 +11,13 @@
 #include "GameScene.h"
 #include "ModelAnimator.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 #include "../../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
 
 BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect, GamepadIndex playerIndex, bool useGamePad)
 	:m_IsDead(false),
+	m_Health(1),
 	m_pController(nullptr),
 	m_Radius(),
 	m_Height(),
@@ -120,6 +122,19 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 		gameContext.pInput->AddInputAction(inputAction);
 #pragma endregion GamePad
 	}
+
+	//Initialize Sounds
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto fmodResult = pFmodSystem->createStream("Resources/Sounds/Hit.wav", FMOD_DEFAULT, 0, &m_pHitSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	m_pHitSound->setMode(FMOD_LOOP_OFF);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	
+	fmodResult = pFmodSystem->createStream("Resources/Sounds/Death.wav", FMOD_DEFAULT, 0, &m_pDeathSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	m_pDeathSound->setMode(FMOD_LOOP_OFF);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	
 }
 
 void BombermanCharPrefab::PostInitialize(const GameContext&)
@@ -234,7 +249,10 @@ void BombermanCharPrefab::Update(const GameContext& gameContext)
 void BombermanCharPrefab::KillPlayer()
 {
 	m_IsDead = true;
-	m_pModel->GetAnimator()->SetAnimation(L"Death");
+	FMOD::Channel* pChannel;
+	SoundManager::GetInstance()->GetSystem()->playSound(m_pDeathSound,nullptr,false,&pChannel);
+	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
+	m_pModel->GetAnimator()->Pause();
 
 	auto const scene = SceneManager::GetInstance()->GetActiveScene();
 	reinterpret_cast<BombermanScene*>(scene)->CheckForGameEnd();
@@ -254,4 +272,24 @@ DirectX::XMFLOAT3 BombermanCharPrefab::CalculateBombSpawnPos() const
 
 void BombermanCharPrefab::Draw(const GameContext&)
 {
+}
+
+void BombermanCharPrefab::SetHealth(int newHealth)
+{
+	m_Health = newHealth;
+}
+
+void BombermanCharPrefab::DamagePlayer(int amount)
+{
+	m_Health -= amount;
+	if (m_Health>0)
+	{
+		FMOD::Channel* pChannel;
+		SoundManager::GetInstance()->GetSystem()->playSound(m_pHitSound,nullptr,false,&pChannel);
+		pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
+	}
+	else
+	{
+		KillPlayer();
+	}
 }

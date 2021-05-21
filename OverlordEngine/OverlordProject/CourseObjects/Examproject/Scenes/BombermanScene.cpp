@@ -489,7 +489,7 @@ void BombermanScene::CreatePlayers()
 	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize - blockSize / 2.f;
 	float const startY = blockSize * 1.5f;
-
+	int const startHealth = 2;
 	auto& schemeMap = BombermanGameSettings::GetInstance()->GetSchemeMap();
 	auto drawPos = DirectX::XMFLOAT2(pWindow.Width / 7.5f, pWindow.Height * 1.f);
 
@@ -512,6 +512,7 @@ void BombermanScene::CreatePlayers()
 				controls, static_cast<GamepadIndex>(playerIndex), false);
 
 		AddChild(pCharacter);
+		pCharacter->SetHealth(startHealth);
 		m_CharPrefabs.push_back(pCharacter);
 
 		if (playerIndex / 2)

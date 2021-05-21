@@ -104,7 +104,7 @@ void BombPrefab::Update(const::GameContext& gameContext)
 	m_ExplodeTimer += gameContext.pGameTime->GetElapsed();
 	if (m_ExplodeTimer >= m_ExplodeTime)
 	{
-		gameContext.pCamera->ShakeCamera(0.5f, 0.15f);
+		gameContext.pCamera->ShakeCamera(0.5f, 1.f);
 		Explode();
 	}
 }
@@ -169,7 +169,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 			}
 			if (pOther->GetTag() == BombermanGameSettings::GetInstance()->GetPlayerTag())
 			{
-				static_cast<BombermanCharPrefab*>(pOther)->KillPlayer();
+				static_cast<BombermanCharPrefab*>(pOther)->DamagePlayer(m_Damage);
 			}
 			if (pOther->GetTag() == BombermanGameSettings::GetInstance()->GetDestructibleTag())
 			{
