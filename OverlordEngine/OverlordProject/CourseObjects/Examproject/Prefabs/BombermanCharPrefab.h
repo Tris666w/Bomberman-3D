@@ -30,15 +30,23 @@ public:
 	void Update(const GameContext& gameContext) override;
 	void Draw(const GameContext&) override;
 
-	void SetHealth(int newHealth);
 	void DamagePlayer(int amount);
+	void SetAmountOfBombs(int amount);
+	void SetBombRange(int newRange);
+	void AddLife();
 	
-	[[nodiscard]] bool GetCanSpawnBomb()const { return m_CanSpawnBomb; }
+	[[nodiscard]] int GetMaxAmountOfBombs()const{return m_MaxAmountOfBombs;}
 	[[nodiscard]] GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
-	[[nodiscard]]bool GetIsDead()const{return m_IsDead;}
+	[[nodiscard]] bool GetIsDead()const { return m_IsDead; }
+	[[nodiscard]] int GetBaseBombRange() const{return m_BaseBombRange;}
 protected:
-	bool m_IsDead;
+	//Health member variables
+	int const m_StartHealth = 1;
+	int const m_MaxHealth = 3;
 	int m_Health;
+	bool m_IsDead;
+
+	
 	ControllerComponent* m_pController;
 	ModelComponent* m_pModel = nullptr;
 	float m_Radius, m_Height, m_StepOffset;
@@ -60,9 +68,12 @@ protected:
 	DirectX::XMFLOAT3 m_Velocity;
 
 	//Bomb parameters
+	int const m_BaseBombRange = 1;
+	int m_AmountOfAvailableBombs = 2;
+	int const m_MaxAmountOfBombs = 2;
+	std::vector<float>m_BombTimers;
 	float const m_BombCooldown = 3.f;
-	float m_BombTimer = 0.f;
-	bool m_CanSpawnBomb = true;
+	int m_BombRange;
 
 	//File paths
 	std::wstring m_MeshFilePath;
@@ -71,9 +82,9 @@ protected:
 	//Sound
 	FMOD::Sound* m_pHitSound = nullptr;
 	FMOD::Sound* m_pDeathSound = nullptr;
-	
+
 	//Methods
-	DirectX::XMFLOAT3 CalculateBombSpawnPos()const;
+	[[nodiscard]] DirectX::XMFLOAT3 CalculateBombSpawnPos()const;
 	void KillPlayer();
 };
 

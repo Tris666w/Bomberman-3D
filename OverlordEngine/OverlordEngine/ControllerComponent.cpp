@@ -59,9 +59,9 @@ void ControllerComponent::Initialize(const GameContext&)
 
 	std::string const name = std::string(m_Name.begin(), m_Name.end());
 	m_Controller->getActor()->setName(name.c_str());
-	m_Controller->getActor()->userData = GetGameObject();
+	m_Controller->getActor()->userData = this;
 
-	m_Controller->setUserData(this);;
+	m_Controller->setUserData(this);
 	SetCollisionGroup(static_cast<CollisionGroupFlag>(m_CollisionGroups.word0));
 	SetCollisionIgnoreGroups(static_cast<CollisionGroupFlag>(m_CollisionGroups.word1));
 }

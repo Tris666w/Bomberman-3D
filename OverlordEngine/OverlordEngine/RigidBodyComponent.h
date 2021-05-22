@@ -23,6 +23,7 @@ class RigidBodyComponent : public BaseComponent
 
 	bool m_isStatic;
 	bool m_isKinematic;
+	bool m_GravityDisabled;
 
 	physx::PxD6Joint* m_pConstraintJoint;
 	physx::PxFilterData m_CollisionGroups;
@@ -34,7 +35,7 @@ public:
 	RigidBodyComponent(RigidBodyComponent&& other) noexcept = delete;
 	RigidBodyComponent& operator=(const RigidBodyComponent& other) = delete;
 	RigidBodyComponent& operator=(RigidBodyComponent&& other) noexcept = delete;
-	RigidBodyComponent(bool isStatic = false);
+	RigidBodyComponent(bool isStatic = false, bool gravityDisabled = false);
 	virtual ~RigidBodyComponent();
 
 	virtual bool IsStatic()  const { return m_isStatic; }

@@ -15,9 +15,11 @@
 #include "../../../Materials/Shadow/SkinnedDiffuseMaterial_Shadow.h"
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
 
-BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath, const std::vector<int>& controlKeyVect, GamepadIndex playerIndex, bool useGamePad)
+BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath,
+                                         const std::vector<int>& controlKeyVect, GamepadIndex playerIndex,
+                                         bool useGamePad)
 	:m_IsDead(false),
-	m_Health(1),
+	m_Health(m_StartHealth),
 	m_pController(nullptr),
 	m_Radius(),
 	m_Height(),
@@ -37,10 +39,12 @@ BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const
 	m_RunVelocity(0),
 	m_JumpVelocity(0),
 	m_Velocity(0, 0, 0),
-
+	m_BombRange(m_BaseBombRange),
 	//File paths
 	m_MeshFilePath(meshFilePath),
-	m_MaterialFilePath(materialFilePath)
+	m_MaterialFilePath(materialFilePath),
+	m_BombTimers()
+
 
 {
 }
@@ -59,12 +63,18 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	m_pController = pControllerComponent;
 	AddComponent(pControllerComponent);
 
-	//Add 1 bomb per player
-	auto* pBomb = new BombPrefab();
-	GetScene()->AddChild(pBomb);
-	BombManager::GetInstance()->AddBomb(pBomb);
+	//Add the max amount of bombs +1 
+	for (int i = 0; i < m_AmountOfAvailableBombs + 1; ++i)
+	{
+		auto* pBomb = new BombPrefab();
+		GetScene()->AddChild(pBomb);
+		BombManager::GetInstance()->AddBomb(pBomb);
+	}
 
-
+	for (int i = 0; i < m_AmountOfAvailableBombs; ++i)
+	{
+		m_BombTimers.push_back(0);
+	}
 	auto skinnedDiffuseMaterial = new SkinnedDiffuseMaterial_Shadow();
 	skinnedDiffuseMaterial->SetDiffuseTexture(m_MaterialFilePath);
 	auto const matID = gameContext.pMaterialManager->AddMaterial(skinnedDiffuseMaterial);
@@ -129,12 +139,12 @@ void BombermanCharPrefab::Initialize(const GameContext& gameContext)
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	m_pHitSound->setMode(FMOD_LOOP_OFF);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	
+
 	fmodResult = pFmodSystem->createStream("Resources/Sounds/Death.wav", FMOD_DEFAULT, 0, &m_pDeathSound);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	m_pDeathSound->setMode(FMOD_LOOP_OFF);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	
+
 }
 
 void BombermanCharPrefab::PostInitialize(const GameContext&)
@@ -145,33 +155,39 @@ void BombermanCharPrefab::PostInitialize(const GameContext&)
 
 void BombermanCharPrefab::Update(const GameContext& gameContext)
 {
-
 	if (m_IsDead)
-	{
-		GetTransform()->Translate(10000, 10000, 10000);
 		return;
-	}
 
-	if (m_CanSpawnBomb)
+	for (auto& timer : m_BombTimers)
 	{
-		if (gameContext.pInput->IsActionTriggered(m_ActionIDs[4]))
+		if (m_AmountOfAvailableBombs < m_MaxAmountOfBombs)
 		{
-			auto* pBomb = BombManager::GetInstance()->GetBomb();
-			if (!pBomb)
-				Logger::LogWarning(L"No bombs available?");
-			else
+			timer += gameContext.pGameTime->GetElapsed();
+			if (timer >= m_BombCooldown)
 			{
-				pBomb->Activate(CalculateBombSpawnPos());
-				m_CanSpawnBomb = false;
-				m_BombTimer = 0.f;
+				m_AmountOfAvailableBombs++;
+				timer = 0.f;
 			}
 		}
 	}
-	else
+
+	if (gameContext.pInput->IsActionTriggered(m_ActionIDs[4]))
 	{
-		m_BombTimer += gameContext.pGameTime->GetElapsed();
-		if (m_BombTimer >= m_BombCooldown)
-			m_CanSpawnBomb = true;
+		if (m_AmountOfAvailableBombs > 0)
+		{
+			auto* pBomb = BombManager::GetInstance()->GetBomb();
+			if (!pBomb)
+			{
+				pBomb = new BombPrefab();
+				GetScene()->AddChild(pBomb);
+				BombManager::GetInstance()->AddBomb(pBomb);
+			}
+			else
+			{
+				pBomb->Activate(CalculateBombSpawnPos(),m_BombRange);
+				--m_AmountOfAvailableBombs;
+			}
+		}
 	}
 	using namespace DirectX;
 	auto move = XMFLOAT2(0, 0);
@@ -250,7 +266,7 @@ void BombermanCharPrefab::KillPlayer()
 {
 	m_IsDead = true;
 	FMOD::Channel* pChannel;
-	SoundManager::GetInstance()->GetSystem()->playSound(m_pDeathSound,nullptr,false,&pChannel);
+	SoundManager::GetInstance()->GetSystem()->playSound(m_pDeathSound, nullptr, false, &pChannel);
 	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
 	m_pModel->GetAnimator()->Pause();
 
@@ -274,22 +290,33 @@ void BombermanCharPrefab::Draw(const GameContext&)
 {
 }
 
-void BombermanCharPrefab::SetHealth(int newHealth)
-{
-	m_Health = newHealth;
-}
-
 void BombermanCharPrefab::DamagePlayer(int amount)
 {
 	m_Health -= amount;
-	if (m_Health>0)
+	if (m_Health > 0)
 	{
 		FMOD::Channel* pChannel;
-		SoundManager::GetInstance()->GetSystem()->playSound(m_pHitSound,nullptr,false,&pChannel);
+		SoundManager::GetInstance()->GetSystem()->playSound(m_pHitSound, nullptr, false, &pChannel);
 		pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
 	}
 	else
 	{
 		KillPlayer();
 	}
+}
+
+void BombermanCharPrefab::SetAmountOfBombs(int amount)
+{
+	m_AmountOfAvailableBombs = amount;
+}
+
+void BombermanCharPrefab::SetBombRange(int newRange)
+{
+	m_BombRange = newRange;
+}
+
+void BombermanCharPrefab::AddLife()
+{
+	++m_Health;
+	Clamp(m_Health,m_MaxHealth,0);
 }

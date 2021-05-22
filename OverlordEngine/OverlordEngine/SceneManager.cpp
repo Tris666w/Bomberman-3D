@@ -46,7 +46,6 @@ void SceneManager::RemoveGameScene(GameScene* pScene)
 
 	if (it != m_pScenes.end())
 	{
-		//m_pScenes.erase(it);
 		SafeDelete(*it);
 		std::_Erase_remove(m_pScenes, *it);
 	}

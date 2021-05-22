@@ -52,6 +52,10 @@
 #include "CourseObjects/Examproject/Scenes/PreGameMenu.h"
 #include "CourseObjects/Examproject/Scenes/InGameMenu.h"
 #endif
+#ifdef TEST
+#include "CourseObjects/Examproject/TestScene.h"
+#endif
+
 MainGame::MainGame(void)
 {}
 
@@ -120,9 +124,14 @@ void MainGame::Initialize()
 	SceneManager::GetInstance()->AddGameScene(new OptionsMenu());
 	SceneManager::GetInstance()->AddGameScene(new PreGameMenu());
 	SceneManager::GetInstance()->AddGameScene(new InGameMenu());
-	
+
 	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
 #endif
+#ifdef TEST
+	SceneManager::GetInstance()->AddGameScene(new TestScene);
+
+#endif
+
 }
 
 LRESULT MainGame::WindowProcedureHook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

@@ -7,13 +7,14 @@
 #include "GameObject.h"
 #include "GameScene.h"
 
-RigidBodyComponent::RigidBodyComponent(bool isStatic) :
+RigidBodyComponent::RigidBodyComponent(bool isStatic, bool gravityEnabled) :
 	m_pActor(nullptr),
 	m_isStatic(isStatic),
 	m_isKinematic(false),
 	m_pConstraintJoint(nullptr),
 	m_CollisionGroups(physx::PxFilterData(static_cast<UINT32>(CollisionGroupFlag::Group0), 0, 0, 0)),
-	m_InitialConstraints(0)
+	m_InitialConstraints(0),
+	m_GravityDisabled(gravityEnabled)
 {
 }
 
@@ -68,6 +69,7 @@ void RigidBodyComponent::SetCollisionGroup(CollisionGroupFlag group)
 		shape->GetShape()->setSimulationFilterData(m_CollisionGroups);
 		shape->GetShape()->setQueryFilterData(m_CollisionGroups);
 	}
+
 }
 
 void RigidBodyComponent::SetKinematic(bool isKinematic)
@@ -103,6 +105,8 @@ void RigidBodyComponent::CreateActor()
 
 		reinterpret_cast<physx::PxRigidDynamic*>(m_pActor)->setRigidDynamicFlag(
 			physx::PxRigidDynamicFlag::eKINEMATIC, m_isKinematic);
+
+		m_pActor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, m_GravityDisabled);
 
 		if (m_InitialConstraints != 0)
 		{
@@ -242,7 +246,7 @@ void RigidBodyComponent::SetConstraint(RigidBodyConstraintFlag flag, bool enable
 {
 	if (m_isStatic)
 	{
-		Logger::LogWarning(L"RigidBodyComponent::SetConstraint() > Can't contrain a static actor!");
+		Logger::LogWarning(L"RigidBodyComponent::SetConstraint() > Can't constrain a static actor!");
 		return;
 	}
 

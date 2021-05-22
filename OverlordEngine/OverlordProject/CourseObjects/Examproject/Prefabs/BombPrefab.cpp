@@ -18,16 +18,18 @@
 #include "SoundManager.h"
 #include "StumpPrefab.h"
 
-BombPrefab::BombPrefab() :GameObject()
+BombPrefab::BombPrefab() :GameObject(),
+m_ExplosionReach()
 {
 }
 
-void BombPrefab::Activate(const DirectX::XMFLOAT3& spawnPos)
+void BombPrefab::Activate(const DirectX::XMFLOAT3& spawnPos, int reach)
 {
+	m_ExplosionReach = reach;
 	m_IsActive = true;
 	m_IsExploding = false;
 	m_pRigidBody->GetTransform()->Translate(spawnPos);
-	m_pSmokeEmitter->SetIsActive(true);
+	m_pSmokeEmitter->SetEmissionActive(true);
 }
 
 void BombPrefab::Initialize(const::GameContext& gameContext)
@@ -38,7 +40,6 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 	auto pDiffuseMaterial = new DiffuseMaterial();
 	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Bomb.jpg");
 	auto const matID = gameContext.pMaterialManager->AddMaterial(pDiffuseMaterial);
-
 
 	m_pModelComponent = new ModelComponent(L"./Resources/Meshes/Bomb.ovm");
 	m_pModelComponent->SetMaterial(matID);
@@ -88,8 +89,6 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 
 void BombPrefab::PostInitialize(const GameContext&)
 {
-	m_pRigidBody->GetPxRigidBody()->userData = this;
-
 }
 
 void BombPrefab::Draw(const::GameContext&)
@@ -122,6 +121,7 @@ void BombPrefab::Explode()
 	m_IsActive = false;
 	m_ExplodeTimer = 0.f;
 	m_ExplodePos = m_pRigidBody->GetTransform()->GetWorldPosition();
+	m_pRigidBody->GetTransform()->Translate(-10000, -10000, -10000);
 
 	CreateExplosion(m_ExplodePos);
 	CreateExplosion(DirectX::XMFLOAT3(0, 0, 1), m_ExplosionReach);
@@ -129,8 +129,7 @@ void BombPrefab::Explode()
 	CreateExplosion(DirectX::XMFLOAT3(1, 0, 0), m_ExplosionReach);
 	CreateExplosion(DirectX::XMFLOAT3(-1, 0, 0), m_ExplosionReach);
 
-	m_pRigidBody->GetTransform()->Translate(-10000, -10000, -10000);
-	m_pSmokeEmitter->SetIsActive(false);
+	m_pSmokeEmitter->SetEmissionActive(false);
 }
 
 
@@ -157,7 +156,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 		}
 		else
 		{
-			auto const pOther = static_cast<GameObject*>(hit.getAnyHit(0).actor->userData);
+			auto const pOther = static_cast<BaseComponent*>(hit.getAnyHit(0).actor->userData)->GetGameObject();
 			if (pOther == nullptr)
 			{
 				Logger::LogError(L"BombPrefab::CreateExplosion, hit RigidBody has no user data!");

@@ -49,32 +49,17 @@ void BombermanScene::Initialize()
 		,gridSize / 3.f * (BombermanGameSettings::GetInstance()->GetWallHeight() + 2) * blockSize,
 		-blockSize * gridSize / 2.75f };
 	DirectX::XMFLOAT3 const cameraRot = { 60,0,0 };
+
+
 	CreateAndActivateCamera(cameraPos, cameraRot);
+	CreatePlayers();
+	CreateLevel();
+	InitPostProcessFilters();
+	InitSound();
 
 	gameContext.pShadowMapper->SetLight({ -100,150,-50 }, { 0.740129888f, -0.597205281f, 0.309117377f });
 
-	CreatePlayers();
-	CreateLevel();
-
-	auto const bloomPp = new PostBloom();
-	bloomPp->SetIntensity(0.35f);
-	AddPostProcessingEffect(bloomPp);
-	auto* pp = new PostColorGrading();
-	pp->SetContribution(0.5f);
-	pp->SetLUT(L"Resources/Textures/LUT.png");
-	AddPostProcessingEffect(pp);
-
-	//Sound
-	FMOD::Sound* pSound;
-	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
-	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/The 8-Bit Forest.mp3", FMOD_DEFAULT, nullptr, &pSound);
-	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	pSound->setMode(FMOD_LOOP_NORMAL);
-	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pAmbientSoundChannel);
-	m_pAmbientSoundChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
-
-
+	//Main menu button
 	m_MenuActionID = gameContext.pInput->GetAvailableActionID();
 	auto const input = InputAction(m_MenuActionID, InputTriggerState::Pressed, VK_ESCAPE);
 	gameContext.pInput->AddInputAction(input);
@@ -93,10 +78,8 @@ void BombermanScene::Draw()
 void BombermanScene::CreateLevel()
 {
 	auto const gridSize = BombermanGameSettings::GetInstance()->GetGridSize();
-	CreateGridFloor(gridSize);
 	CreateWalls(gridSize);
-	CreateNotDestructibleWalls(gridSize);
-	CreateStumps(gridSize);
+	CreateAndFillGrid(gridSize);
 	CreateSkybox();
 	CreateFloor();
 	CreateCampSite();
@@ -147,68 +130,6 @@ void BombermanScene::CreateVegetation()
 		pObj->GetTransform()->Rotate(0.f, randF(0, 360), 0.f);
 
 		pObj->GetTransform()->Translate(xStart + rand() % 10, 0.f, randF(0.f, 80.f));
-	}
-}
-
-void BombermanScene::CreateGridFloor(int const size)
-{
-	auto const physx = PhysxManager::GetInstance()->GetPhysics();
-	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
-
-	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
-
-	int const startX = blockSize / 2;
-	int const startZ = blockSize / 2;
-
-	auto pDiffuseMaterial1 = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial1->SetDiffuseTexture(L"./Resources/Textures/Soil1.jpg");
-	auto const matID1 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial1);
-
-	auto pDiffuseMaterial2 = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial2->SetDiffuseTexture(L"./Resources/Textures/Soil2.jpg");
-	auto const matID2 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial2);
-
-	for (int x = 0; x < size; ++x)
-	{
-		int const offsetX = x * blockSize;
-		for (int z = 0; z < size; ++z)
-		{
-			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
-
-			int const offsetZ = z * blockSize;
-			if (x % 2 == 0)
-			{
-				if (z % 2 == 0)
-					pModelComponent->SetMaterial(matID1);
-				else
-					pModelComponent->SetMaterial(matID2);
-			}
-			else
-			{
-				if (z % 2 == 1)
-					pModelComponent->SetMaterial(matID1);
-
-				else
-					pModelComponent->SetMaterial(matID2);
-			}
-
-			auto* pWall = new GameObject();
-			pWall->AddComponent(pModelComponent);
-
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 0, static_cast<float>(startZ + offsetZ));
-
-			auto rb = new RigidBodyComponent(true);
-			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
-			pWall->AddComponent(rb);
-
-			physx::PxConvexMesh* const pxConvexMesh = ContentManager::Load<physx::PxConvexMesh>(L"Resources/Meshes/Cube.ovpc");
-			std::shared_ptr<physx::PxGeometry> meshGeometry(new physx::PxConvexMeshGeometry(pxConvexMesh));
-
-			auto cc = new ColliderComponent(meshGeometry, *bouncyMaterial);
-			pWall->AddComponent(cc);
-			AddChild(pWall);
-
-		}
 	}
 }
 
@@ -343,71 +264,38 @@ void BombermanScene::CreateWalls(int const size)
 
 }
 
-void BombermanScene::CreateNotDestructibleWalls(int const size)
+void BombermanScene::CreateAndFillGrid(int const size)
 {
 	if (size <= 5)
 	{
 		Logger::LogWarning(L"Size can't be less than 5");
 		return;
 	}
-	auto const physx = PhysxManager::GetInstance()->GetPhysics();
-	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
 	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
+	auto const physx = PhysxManager::GetInstance()->GetPhysics();
+	auto const bouncyMaterial = physx->createMaterial(0, 0, 1.f);
 
 	int const startX = blockSize / 2;
 	int const startZ = blockSize / 2;
 	auto const halfSize = blockSize / 2.f;
 
-	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
-	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
+	auto pStumpDiffuse = new DiffuseMaterial_Shadow();
+	pStumpDiffuse->SetDiffuseTexture(L"./Resources/Textures/TreeStump.png");
+	auto const matIdStump = GetGameContext().pMaterialManager->AddMaterial(pStumpDiffuse);
+
+	auto WallDiffuse = new DiffuseMaterial_Shadow();
+	WallDiffuse->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
+	auto const matIdWall = GetGameContext().pMaterialManager->AddMaterial(WallDiffuse);
 	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(static_cast<physx::PxReal>(blockSize), halfSize, halfSize));
 
-	for (int x = 1; x < size - 1; x += 2)
-	{
-		int const offsetX = x * blockSize;
-		for (int z = 1; z < size - 1; z += 2)
-		{
-			int const offsetZ = z * blockSize;
+	auto pDiffuseMaterial1 = new DiffuseMaterial_Shadow();
+	pDiffuseMaterial1->SetDiffuseTexture(L"./Resources/Textures/Soil1.jpg");
+	auto const matID1 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial1);
 
-			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
-			pModelComponent->SetMaterial(matId);
-			auto* pWall = new GameObject();
-			pWall->AddComponent(pModelComponent);
-
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), blockSize * 1.f,
-				static_cast<float>(startZ + offsetZ));
-
-			auto rb = new RigidBodyComponent(true);
-			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
-			pWall->AddComponent(rb);
-
-			auto* cc = new ColliderComponent(geometry, *bouncyMaterial,
-				physx::PxTransform(
-					physx::PxQuat(DirectX::XM_PIDIV2, physx::PxVec3(0, 0, 1))));
-
-			pWall->AddComponent(cc);
-			AddChild(pWall);
-		}
-	}
-}
-
-void BombermanScene::CreateStumps(int const size)
-{
-	if (size <= 5)
-	{
-		Logger::LogWarning(L"Size can't be less than 5");
-		return;
-	}
-
-	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
-
-	int const startX = blockSize / 2;
-	int const startZ = blockSize / 2;
-	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/TreeStump.png");
-	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
+	auto pDiffuseMaterial2 = new DiffuseMaterial_Shadow();
+	pDiffuseMaterial2->SetDiffuseTexture(L"./Resources/Textures/Soil2.jpg");
+	auto const matID2 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial2);
 
 	for (int x = 0; x < size; ++x)
 	{
@@ -416,7 +304,51 @@ void BombermanScene::CreateStumps(int const size)
 		{
 			int const offsetZ = z * blockSize;
 
-			//Places for static walls
+			//Create floor
+			auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
+			if ((x + z) % 2 == 0)
+				pModelComponent->SetMaterial(matID1);
+			else
+				pModelComponent->SetMaterial(matID2);
+
+			auto* floor = new GameObject();
+			floor->AddComponent(pModelComponent);
+
+			floor->GetTransform()->Translate(static_cast<float>(startX + offsetX), 0, static_cast<float>(startZ + offsetZ));
+
+			auto rb = new RigidBodyComponent(true);
+			rb->SetCollisionGroup(CollisionGroupFlag::Group0);
+			floor->AddComponent(rb);
+
+			auto cc = new ColliderComponent(geometry, *bouncyMaterial);
+			floor->AddComponent(cc);
+			AddChild(floor);
+
+			//Create static walls
+			if (x % 2 == 1 && z % 2 == 1)
+			{
+				pModelComponent = new ModelComponent(L"./Resources/Meshes/Cube.ovm");
+				pModelComponent->SetMaterial(matIdWall);
+				auto* pWall = new GameObject();
+				pWall->AddComponent(pModelComponent);
+
+				pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), blockSize * 1.f,
+					static_cast<float>(startZ + offsetZ));
+
+				rb = new RigidBodyComponent(true);
+				rb->SetCollisionGroup(CollisionGroupFlag::Group0);
+				pWall->AddComponent(rb);
+
+				cc = new ColliderComponent(geometry, *bouncyMaterial,
+					physx::PxTransform(
+						physx::PxQuat(DirectX::XM_PIDIV2, physx::PxVec3(0, 0, 1))));
+
+				pWall->AddComponent(cc);
+				AddChild(pWall);
+				continue;
+			}
+
+			//Create stumps
 			if (x % 2 == 1 && z % 2 == 1)
 			{
 				continue;
@@ -431,15 +363,13 @@ void BombermanScene::CreateStumps(int const size)
 			{
 				continue;
 			}
-
 			//Use spawnPercent
 			if (!(static_cast<float>(rand() % 100) < BombermanGameSettings::GetInstance()->GetBreakableSpawnPercent() * 100))
 				continue;
 
-			auto* pWall = new StumpPrefab(matId);
-			pWall->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize / 2.f, static_cast<float>(startZ + offsetZ));
-			AddChild(pWall);
-
+			auto* pStump = new StumpPrefab(matIdStump);
+			pStump->GetTransform()->Translate(static_cast<float>(startX + offsetX), 3 * blockSize / 2.f, static_cast<float>(startZ + offsetZ));
+			AddChild(pStump);
 		}
 	}
 }
@@ -460,7 +390,6 @@ void BombermanScene::CreateSkybox()
 	pModelComponent->SetMaterial(matID);
 
 	AddChild(skyboxGameObject);
-	skyboxGameObject->GetTransform()->Translate(0, -250, 0);
 }
 
 void BombermanScene::CreateAndActivateCamera(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 rot)
@@ -489,7 +418,6 @@ void BombermanScene::CreatePlayers()
 	auto const blockSize = BombermanGameSettings::GetInstance()->GetBlockSize();
 	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize - blockSize / 2.f;
 	float const startY = blockSize * 1.5f;
-	int const startHealth = 2;
 	auto& schemeMap = BombermanGameSettings::GetInstance()->GetSchemeMap();
 	auto drawPos = DirectX::XMFLOAT2(pWindow.Width / 7.5f, pWindow.Height * 1.f);
 
@@ -512,7 +440,6 @@ void BombermanScene::CreatePlayers()
 				controls, static_cast<GamepadIndex>(playerIndex), false);
 
 		AddChild(pCharacter);
-		pCharacter->SetHealth(startHealth);
 		m_CharPrefabs.push_back(pCharacter);
 
 		if (playerIndex / 2)
@@ -561,6 +488,36 @@ void BombermanScene::LoadInGameMenu() const
 	SceneManager::GetInstance()->SetActiveGameScene(L"In-game menu");
 }
 
+void BombermanScene::FinishGame(size_t playerIndex)
+{
+	SceneManager::GetInstance()->AddGameScene(new EndScreen(playerIndex + 1));
+	SceneManager::GetInstance()->SetActiveGameScene(L"End screen");
+}
+
+void BombermanScene::InitSound()
+{
+	FMOD::Sound* pSound;
+	auto const pFmodSystem = SoundManager::GetInstance()->GetSystem();
+	auto const fmodResult = pFmodSystem->createStream("Resources/Sounds/The 8-Bit Forest.mp3", FMOD_DEFAULT, nullptr, &pSound);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	pSound->setMode(FMOD_LOOP_NORMAL);
+	SoundManager::GetInstance()->ErrorCheck(fmodResult);
+	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pAmbientSoundChannel);
+	m_pAmbientSoundChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
+}
+
+void BombermanScene::InitPostProcessFilters()
+{
+	auto const bloomPp = new PostBloom();
+	bloomPp->SetIntensity(0.35f);
+	AddPostProcessingEffect(bloomPp);
+
+	auto* pp = new PostColorGrading();
+	pp->SetContribution(0.5f);
+	pp->SetLUT(L"Resources/Textures/LUT.png");
+	AddPostProcessingEffect(pp);
+}
+
 void BombermanScene::CheckForGameEnd()
 {
 	int amountOfLivingPlayers = 0;
@@ -582,12 +539,6 @@ void BombermanScene::CheckForGameEnd()
 		Logger::LogError(L"BombermanScene::CheckForGameEnd(), living player index <0!");
 
 	FinishGame(livingPlayerIndex);
-}
-
-void BombermanScene::FinishGame(size_t playerIndex)
-{
-	SceneManager::GetInstance()->AddGameScene(new EndScreen(playerIndex + 1));
-	SceneManager::GetInstance()->SetActiveGameScene(L"End screen");
 }
 
 void BombermanScene::SceneActivated()

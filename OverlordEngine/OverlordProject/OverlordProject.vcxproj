@@ -145,6 +145,8 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\OptionsMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\PreGameMenu.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\PowerUpBase.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\PowerUps.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -218,6 +220,8 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\OptionsMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\PreGameMenu.h" />
+    <ClInclude Include="CourseObjects\Examproject\PowerUpBase.h" />
+    <ClInclude Include="CourseObjects\Examproject\PowerUps.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />

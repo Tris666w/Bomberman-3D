@@ -20,7 +20,8 @@ ParticleEmitterComponent::ParticleEmitterComponent(std::wstring  assetFile, int 
 	m_LastParticleInit(0.0f),
 	m_AssetFile(std::move(assetFile)),
 	m_Particles(),
-	m_IsActive(true)
+	m_IsEmissionActive(true),
+	m_IsBurstActive(true)
 {
 	for (int i = 0; i < m_ParticleCount; ++i)
 		m_Particles.push_back(new Particle(m_Settings));
@@ -124,7 +125,7 @@ void ParticleEmitterComponent::UpdateBursts(const GameContext& gameContext)
 		pBurst->TotalTimePast += gameContext.pGameTime->GetElapsed();
 		pBurst->PassedIntervalTime += gameContext.pGameTime->GetElapsed();
 
-		if (pBurst->TotalTimePast < pBurst->TriggerTime)
+		if (pBurst->TotalTimePast < pBurst->TriggerTime || !m_IsBurstActive)
 			continue;
 
 		//Check if enough we can start the next interval
@@ -175,7 +176,7 @@ void ParticleEmitterComponent::Update(const GameContext& gameContext)
 		{
 			continue;
 		}
-		else if (m_LastParticleInit >= (1.f / m_Settings.EmitRate) && m_IsActive)
+		else if (m_LastParticleInit >= (1.f / m_Settings.EmitRate) && m_IsEmissionActive)
 		{
 			particle->Init(GetTransform()->GetPosition());
 			pBuffer[m_ActiveParticles] = particle->GetVertexInfo();

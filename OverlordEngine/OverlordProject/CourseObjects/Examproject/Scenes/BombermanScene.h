@@ -28,25 +28,17 @@ private:
 	/// @brief Create grass
 	void CreateVegetation();
 
-	/// @brief Creates the floor grid
-	/// @param size The size of the grid with width: size and height: size
-	void CreateGridFloor(int const size);
-
 	/// @brief Creates the floor plane
 	void CreateFloor();
 
 	/// @brief Create the walls of the floor
 	/// @param size the size of the grid with width: size and height: size
-	/// @param wallHeight heighht of the walls in units (will be multiplied with blockSize)
+	/// @param wallHeight height of the walls in units (will be multiplied with blockSize)
 	void CreateWalls(int const size);
 
-	/// @brief Create the static walls in the grid
+	/// @brief creates and fills the grid with stumps and static walls
 	/// @param size size of the grid
-	void CreateNotDestructibleWalls(int const size);
-
-	/// @brief Create the stumps on the grid
-	/// @param size size of the grid
-	void CreateStumps(int const size);
+	void CreateAndFillGrid(int const size);
 
 	///@brief Creates the sky box
 	void CreateSkybox();
@@ -68,5 +60,10 @@ private:
 	/// @brief Finish the game
 	/// @param playerIndex index of the winner
 	void FinishGame(size_t playerIndex);
+
+	/// @brief initializes the ambient music
+	void InitSound();
+
+	void InitPostProcessFilters();
 };
 

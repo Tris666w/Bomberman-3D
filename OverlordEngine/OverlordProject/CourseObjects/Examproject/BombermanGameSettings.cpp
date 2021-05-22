@@ -97,7 +97,7 @@ void BombermanGameSettings::SetPlayerInput(int playerIndex, InputScheme newSchem
 BombermanGameSettings::BombermanGameSettings()
 {
 	for (int index = 0; index < max_amount_of_players; ++index)
-		m_PlayerSchemes.push_back(static_cast<InputScheme>(0));
+		m_PlayerSchemes.push_back(static_cast<InputScheme>(1));
 
 	m_SchemeMap.insert_or_assign(InputScheme::Keyboard1, std::make_pair
 	(std::vector<int>{'A', 'D', 'W', 'S', VK_SPACE}, L"Resources/Textures/InputSchemes/KeyboardScheme1.png"));

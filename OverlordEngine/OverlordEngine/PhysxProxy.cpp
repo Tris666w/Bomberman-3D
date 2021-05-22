@@ -82,31 +82,31 @@ void PhysxProxy::Update(const GameContext& gameContext) const
 	{
 		const auto transform = gameContext.pCamera->GetTransform();
 		m_pPhysxScene->getPhysics().getPvdConnectionManager()->setCamera("SceneCam", ToPxVec3(transform->GetPosition()),
-		                                                                 ToPxVec3(transform->GetUp()),
-		                                                                 ToPxVec3(transform->GetForward()));
+			ToPxVec3(transform->GetUp()),
+			ToPxVec3(transform->GetForward()));
 	}
 }
 
-void PhysxProxy::Draw(const GameContext& ) const
+void PhysxProxy::Draw(const GameContext&) const
 {
 	if (m_DrawPhysx)
 		DebugRenderer::DrawPhysX(m_pPhysxScene);
 }
 
-void PhysxProxy::onConstraintBreak(physx::PxConstraintInfo* , physx::PxU32 )
+void PhysxProxy::onConstraintBreak(physx::PxConstraintInfo*, physx::PxU32)
 {
 }
 
-void PhysxProxy::onWake(physx::PxActor** , physx::PxU32 )
+void PhysxProxy::onWake(physx::PxActor**, physx::PxU32)
 {
 }
 
-void PhysxProxy::onSleep(physx::PxActor** , physx::PxU32 )
+void PhysxProxy::onSleep(physx::PxActor**, physx::PxU32)
 {
 }
 
-void PhysxProxy::onContact(const physx::PxContactPairHeader& , const physx::PxContactPair* ,
-                           physx::PxU32 )
+void PhysxProxy::onContact(const physx::PxContactPairHeader&, const physx::PxContactPair*,
+	physx::PxU32)
 {
 }
 
@@ -119,8 +119,8 @@ void PhysxProxy::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
 			eDELETED_SHAPE_OTHER))
 			continue;
 
-		const auto triggerComponent = reinterpret_cast<BaseComponent*>(((pairs[i].triggerShape)->getActor())->userData);
-		const auto otherComponent = reinterpret_cast<BaseComponent*>(((pairs[i].otherShape)->getActor())->userData);
+		const auto triggerComponent = reinterpret_cast<BaseComponent*>(pairs[i].triggerShape->getActor()->userData);
+		const auto otherComponent = reinterpret_cast<BaseComponent*>(pairs[i].otherShape->getActor()->userData);
 
 
 		if (triggerComponent != nullptr && otherComponent != nullptr)
@@ -137,9 +137,9 @@ void PhysxProxy::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
 }
 
 bool PhysxProxy::Raycast(const physx::PxVec3& origin, const physx::PxVec3& unitDir, const physx::PxReal distance,
-                         physx::PxRaycastCallback& hitCall, physx::PxHitFlags hitFlags,
-                         const physx::PxQueryFilterData& filterData, physx::PxQueryFilterCallback* filterCall,
-                         const physx::PxQueryCache* cache) const
+	physx::PxRaycastCallback& hitCall, physx::PxHitFlags hitFlags,
+	const physx::PxQueryFilterData& filterData, physx::PxQueryFilterCallback* filterCall,
+	const physx::PxQueryCache* cache) const
 {
 	if (m_pPhysxScene != nullptr)
 	{

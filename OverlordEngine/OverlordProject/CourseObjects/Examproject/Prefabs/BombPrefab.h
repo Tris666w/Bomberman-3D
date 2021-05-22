@@ -14,8 +14,9 @@ public:
 	 * .Activates the bomb
 	 *
 	 * \param spawnPos the position where the bomb will be spawned at
+	 * \param reach the reach of the bomb in each direction
 	 */
-	void Activate(const DirectX::XMFLOAT3& spawnPos);
+	void Activate(const DirectX::XMFLOAT3& spawnPos,int reach);
 	/**
 	 * .
 	 *
@@ -36,7 +37,7 @@ private:
 	int m_Damage = 1;
 	float const m_ExplodeTime = 3.f;
 	float m_ExplodeTimer = 0.f;
-	int const m_ExplosionReach = 2;
+	int m_ExplosionReach = -1;
 	DirectX::XMFLOAT3 m_ExplodePos = {};
 	bool m_IsExploding = false;
 

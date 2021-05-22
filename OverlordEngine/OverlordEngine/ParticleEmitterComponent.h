@@ -147,8 +147,10 @@ class ParticleEmitterComponent : public BaseComponent
 	float m_LastParticleInit;
 	//string containing the path to the particle texture
 	std::wstring m_AssetFile;
-	//Bool to check if the system is active
-	bool m_IsActive;
+	//Bool to check if the emission is active
+	bool m_IsEmissionActive;
+	//Bool to check if the burst is active
+	bool m_IsBurstActive;
 	//Method to load effect-related stuff
 	void LoadEffect(const GameContext& gameContext);
 	//Method to create the vertex buffer
@@ -181,7 +183,8 @@ public:
 	void SetEndingColor(DirectX::XMFLOAT4 color) { m_Settings.EndingColor = color; }
 	void SetShape(EmitterShape shape) { m_Settings.m_Shape = shape; }
 	void SetConeMoveDirection(DirectX::XMFLOAT3 moveDir) { m_Settings.MoveDirection = moveDir; }
-	void SetIsActive(bool isActive) { m_IsActive = isActive; };
+	void SetEmissionActive(bool isActive) { m_IsEmissionActive = isActive; };
+	void SetBurstActive(bool isActive) { m_IsBurstActive = isActive; };
 
 	void AddBurst(Burst* pBurst);
 	void RemoveBurst(Burst* pBurst);

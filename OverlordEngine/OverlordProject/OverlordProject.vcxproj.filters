@@ -54,6 +54,8 @@
     <ClCompile Include="CourseObjects\Examproject\Scenes\PreGameMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\InGameMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\EndScreen.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\PowerUpBase.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\PowerUps.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -109,5 +111,7 @@
     <ClInclude Include="CourseObjects\Examproject\Scenes\PreGameMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\InGameMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\EndScreen.h" />
+    <ClInclude Include="CourseObjects\Examproject\PowerUpBase.h" />
+    <ClInclude Include="CourseObjects\Examproject\PowerUps.h" />
   </ItemGroup>
 </Project>

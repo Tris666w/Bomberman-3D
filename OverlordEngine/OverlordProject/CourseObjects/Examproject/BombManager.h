@@ -4,14 +4,14 @@ class BombPrefab;
 class BombManager :public Singleton<BombManager>
 {
 public:
-	~BombManager();
+	~BombManager() = default;
 	void AddBomb(BombPrefab* pBomb);
 	BombPrefab* GetBomb();
 private:
 	friend class Singleton<BombManager>;
 
-	BombManager() = default;
-	
+	BombManager();
+
 	std::vector<BombPrefab*> m_pBombs = {};
 };
 
