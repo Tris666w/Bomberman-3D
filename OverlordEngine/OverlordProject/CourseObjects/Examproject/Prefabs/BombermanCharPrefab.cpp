@@ -270,6 +270,8 @@ void BombermanCharPrefab::KillPlayer()
 	pChannel->setVolume(BombermanGameSettings::GetInstance()->GetSoundVolume());
 	m_pModel->GetAnimator()->Pause();
 
+	GetTransform()->Translate(10000, 10000, 10000);
+	
 	auto const scene = SceneManager::GetInstance()->GetActiveScene();
 	reinterpret_cast<BombermanScene*>(scene)->CheckForGameEnd();
 }
