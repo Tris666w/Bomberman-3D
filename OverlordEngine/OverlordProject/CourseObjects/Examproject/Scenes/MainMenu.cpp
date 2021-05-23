@@ -7,10 +7,11 @@
 #include "TransformComponent.h"
 #include "..\UiButton.h"
 #include "../../../Materials/DiffuseMaterial.h"
+#include "../Text.h"
 
 MainMenu::MainMenu() :GameScene(L"Main menu"),
-	m_StartGameButton(nullptr),
-	m_QuitGameButton(nullptr)
+m_StartGameButton(nullptr),
+m_QuitGameButton(nullptr)
 
 {
 }
@@ -18,18 +19,24 @@ MainMenu::MainMenu() :GameScene(L"Main menu"),
 
 void MainMenu::Initialize()
 {
-	std::wstring const fontPath = L"Resources/SpriteFonts/BombermanBig.fnt";
+	std::wstring const fontPath = L"Resources/SpriteFonts/BombermanMedium.fnt";
+	std::wstring const fontPathBig = L"Resources/SpriteFonts/BombermanBig.fnt";
+
 	std::wstring const soundBackwardPath = L"Resources/Sounds/BackwardSelect.wav";
 	std::wstring const soundForwardPath = L"Resources/Sounds/ForwardSelect.wav";
 
-	m_StartGameButton = new UiButton<MainMenu, &MainMenu::StartGame>(fontPath, soundForwardPath, { 375.f,200.f }, L"Start Game", this, 64);
+
+	m_StartGameButton = new UiButton<MainMenu, &MainMenu::StartGame>(fontPath, soundForwardPath, { 450,200.f }, L"Start Game", this, 64);
 	AddChild(m_StartGameButton);
 
-	m_OptionsButton = new UiButton<MainMenu, &MainMenu::GoToOptions>(fontPath, soundForwardPath, { 450.f,350.f }, L"Options", this, 64);
+	m_OptionsButton = new UiButton<MainMenu, &MainMenu::GoToOptions>(fontPath, soundForwardPath, { 475,350.f }, L"Options", this, 64);
 	AddChild(m_OptionsButton);
 
-	m_QuitGameButton = new UiButton<MainMenu, &MainMenu::QuitGame>(fontPath, soundBackwardPath, { 425.f,500.f }, L"Quit Game", this, 64);
+	m_QuitGameButton = new UiButton<MainMenu, &MainMenu::QuitGame>(fontPath, soundBackwardPath, { 450,500.f }, L"Quit Game", this, 64);
 	AddChild(m_QuitGameButton);
+
+	auto pText = new Text(L"BomberSquad", { 375.f,100.f }, BombermanGameSettings::text_color, fontPathBig);
+	AddChild(pText);
 
 	//Camera
 	auto pObj = new GameObject();
@@ -113,7 +120,7 @@ void MainMenu::InitializeMusic()
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
 	pSound->setMode(FMOD_LOOP_NORMAL);
 	SoundManager::GetInstance()->ErrorCheck(fmodResult);
-	
+
 	SoundManager::GetInstance()->GetSystem()->playSound(pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(BombermanGameSettings::GetInstance()->GetMusicVolume());
 	m_pChannel->setPaused(true);
