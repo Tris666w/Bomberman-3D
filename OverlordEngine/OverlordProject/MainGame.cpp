@@ -7,7 +7,7 @@
 #include "PhysxProxy.h"
 #include "DebugRenderer.h"
 
-#define EXAM
+#define EXAM 
 
 #ifdef W3
 #include "CourseObjects/Week 3/MinionScene.h"
@@ -51,9 +51,6 @@
 #include "CourseObjects/Examproject/Scenes/OptionsMenu.h"
 #include "CourseObjects/Examproject/Scenes/PreGameMenu.h"
 #include "CourseObjects/Examproject/Scenes/InGameMenu.h"
-#endif
-#ifdef TEST
-#include "CourseObjects/Examproject/TestScene.h"
 #endif
 
 MainGame::MainGame(void)
@@ -127,11 +124,6 @@ void MainGame::Initialize()
 
 	SceneManager::GetInstance()->SetActiveGameScene(L"Main menu");
 #endif
-#ifdef TEST
-	SceneManager::GetInstance()->AddGameScene(new TestScene);
-
-#endif
-
 }
 
 LRESULT MainGame::WindowProcedureHook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

@@ -68,6 +68,10 @@ void RadiusPowerUp::Update(const GameContext& gameContext)
 	}
 }
 
+LifePowerUp::LifePowerUp():PowerUpBase()
+{
+}
+
 void LifePowerUp::ExecuteEffect(BombermanCharPrefab* pChar)
 {
 	if (GetIsEnabled())
@@ -117,7 +121,7 @@ void BombBeltPowerup::ExecuteEffect(BombermanCharPrefab* pChar)
 	if (GetIsEnabled())
 	{
 		SetIsEnabled(false);
-		pChar->SetAmountOfBombs(pChar->GetMaxAmountOfBombs() + 1);
+		pChar->SetAmountOfBombs(pChar->GetMaxAmountOfBombs());
 		PlayEffectSound();
 	}
 }

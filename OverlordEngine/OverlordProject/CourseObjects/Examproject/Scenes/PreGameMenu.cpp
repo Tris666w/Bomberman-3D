@@ -114,7 +114,7 @@ void PreGameMenu::Initialize()
 	drawPos.y += charSizeBig * 1.5f;
 	m_CycleInputControls = new UiButton<PreGameMenu, &PreGameMenu::SetInputScheme>(fontPathMedium, soundForwardPath, { drawPos }, L"Cycle", this, charSizeMedium);
 	AddChild(m_CycleInputControls);
-
+	CycleControllerChoosePlayer(&m_CurrentPlayerIndex);
 	InitializeMusic();
 }
 

@@ -2,29 +2,29 @@
 #include "PowerUpBase.h"
 class RadiusPowerUp final : public PowerUpBase
 {
-	public:
+public:
 	RadiusPowerUp() = default;
 	void ExecuteEffect(BombermanCharPrefab* pChar) override;
 
-	protected:
+protected:
 	void Initialize(const GameContext&) override;
 
 	void Update(const GameContext&) override;
 
-	private:
-	bool m_Activated;
+private:
+	bool m_Activated = false;
 	int m_BaseBombRange = 1;
 	int m_RangeAdd = 2;
-	BombermanCharPrefab* m_pAffectedChar;
+	BombermanCharPrefab* m_pAffectedChar = nullptr;
 
-	float m_EffectTime = 5.f;
+	float m_EffectTime = 7.5f;
 	float m_Timer = 0.f;
 };
 
 class LifePowerUp final : public PowerUpBase
 {
 public:
-	LifePowerUp() = default;
+	LifePowerUp();
 	void ExecuteEffect(BombermanCharPrefab* pChar) override;
 protected:
 	void Initialize(const GameContext&) override;

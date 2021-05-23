@@ -18,7 +18,7 @@ void BonfirePrefab::Initialize(const GameContext& gameContext)
 
 	auto const scale = GetTransform()->GetScale();
 	auto const avgScale = (scale.x + scale.y + scale.z) / 3.f;
-	auto* pParticleComp = new ParticleEmitterComponent(L"Resources/Textures/FireBall.png", 100);
+	auto* pParticleComp = new ParticleEmitterComponent(L"Resources/Textures/Particles/FireBall.png", 40);
 	pParticleComp->SetEmitRate(20);
 	pParticleComp->SetVelocity(6.f);
 	pParticleComp->SetMinSize(1.0f * avgScale);
@@ -38,7 +38,7 @@ void BonfirePrefab::Initialize(const GameContext& gameContext)
 
 	//Smoke emitter
 	pBurst = new Burst(5,-1,3.1f,2.f);
-	pParticleComp = new ParticleEmitterComponent(L"Resources/Textures/smoke_04.png");
+	pParticleComp = new ParticleEmitterComponent(L"Resources/Textures/Particles/smoke_04.png",25);
 	pParticleComp->SetShape(EmitterShape::Cone);
 	pParticleComp->SetStartingColor(DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.8f));
 	pParticleComp->SetEndingColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, .5f));
@@ -62,7 +62,7 @@ void BonfirePrefab::Initialize(const GameContext& gameContext)
 	auto* const pModelComp = new ModelComponent(L"Resources/Meshes/Bonfire.ovm");
 	auto* const pMat = new DiffuseMaterial_Shadow();
 	auto const matId = gameContext.pMaterialManager->AddMaterial(pMat);
-	pMat->SetDiffuseTexture(L"Resources/Textures/Log.png");
+	pMat->SetDiffuseTexture(L"Resources/Textures/Vegetation/Log.png");
 	pMat->SetLightDirection(gameContext.pShadowMapper->GetLightDirection());
 	pModelComp->SetMaterial(matId);
 	AddComponent(pModelComp);

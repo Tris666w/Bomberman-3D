@@ -34,19 +34,24 @@ public:
 	void SetAmountOfBombs(int amount);
 	void SetBombRange(int newRange);
 	void AddLife();
-	
-	[[nodiscard]] int GetMaxAmountOfBombs()const{return m_MaxAmountOfBombs;}
+
+	[[nodiscard]] int GetHealth()const { return m_Health; }
+	[[nodiscard]] int GetMaxHealth()const { return m_MaxHealth; }
+
+
+	[[nodiscard]] int GetMaxAmountOfBombs()const { return m_MaxAmountOfBombs + 1; }
+	[[nodiscard]] int GetAmountOfBombs()const { return m_AmountOfAvailableBombs; }
 	[[nodiscard]] GamepadIndex GetPlayerIndex()const { return m_PlayerIndex; }
 	[[nodiscard]] bool GetIsDead()const { return m_IsDead; }
-	[[nodiscard]] int GetBaseBombRange() const{return m_BaseBombRange;}
+	[[nodiscard]] int GetBaseBombRange() const { return m_BaseBombRange; }
 protected:
 	//Health member variables
-	int const m_StartHealth = 1;
+	int const m_StartHealth = 2;
 	int const m_MaxHealth = 3;
 	int m_Health;
 	bool m_IsDead;
 
-	
+
 	ControllerComponent* m_pController;
 	ModelComponent* m_pModel = nullptr;
 	float m_Radius, m_Height, m_StepOffset;

@@ -43,7 +43,6 @@
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostBloom.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanUI.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\GrassMaterial.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
@@ -56,6 +55,8 @@
     <ClCompile Include="CourseObjects\Examproject\Scenes\EndScreen.cpp" />
     <ClCompile Include="CourseObjects\Examproject\PowerUpBase.cpp" />
     <ClCompile Include="CourseObjects\Examproject\PowerUps.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\PowerUpManager.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\ExplosionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -100,7 +101,6 @@
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostBloom.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanUI.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\GrassMaterial.h" />
-    <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\Materials\Post\PostColorGrading.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
@@ -113,5 +113,7 @@
     <ClInclude Include="CourseObjects\Examproject\Scenes\EndScreen.h" />
     <ClInclude Include="CourseObjects\Examproject\PowerUpBase.h" />
     <ClInclude Include="CourseObjects\Examproject\PowerUps.h" />
+    <ClInclude Include="CourseObjects\Examproject\PowerUpManager.h" />
+    <ClInclude Include="CourseObjects\Examproject\ExplosionManager.h" />
   </ItemGroup>
 </Project>

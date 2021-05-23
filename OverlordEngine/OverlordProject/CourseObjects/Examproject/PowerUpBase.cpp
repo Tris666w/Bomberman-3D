@@ -19,7 +19,7 @@ void PowerUpBase::SetParticleEmitter(ParticleEmitterComponent* pEmitter)
 	}
 	m_pEmitter = pEmitter;
 	AddComponent(m_pEmitter);
-	
+
 	m_pEmitter->SetEmissionActive(m_IsEnabled);
 	m_pEmitter->SetBurstActive(m_IsEnabled);
 }

@@ -15,18 +15,23 @@ public:
 	~BombermanGameSettings();
 
 	//Getters
-	[[nodiscard]] int GetAmountOfPlayers()const;
-	[[nodiscard]] int GetBlockSize()const;
-	[[nodiscard]] int GetGridSize()const;
-	[[nodiscard]] int GetWallHeight()const;
+	[[nodiscard]] int GetAmountOfPlayers()const { return m_AmountOfPLayers; }
+	[[nodiscard]] int GetBlockSize()const { return m_BlockSize; }
+	[[nodiscard]] int GetGridSize()const { return m_GridSize; }
+	[[nodiscard]] int GetWallHeight()const { return m_WallHeight; }
 
-	[[nodiscard]] float GetBreakableSpawnPercent()const;
-	[[nodiscard]] float GetSoundVolume()const;
-	[[nodiscard]] float GetMusicVolume()const;
+	[[nodiscard]] float GetBreakableSpawnPercent()const { return m_BreakableSpawnPercentage; }
+	[[nodiscard]] float GetSoundVolume()const { return m_SoundVolume; }
+	[[nodiscard]] float GetMusicVolume()const { return m_MusicVolume; }
 
-	[[nodiscard]] std::wstring GetPlayerTag()const;
-	[[nodiscard]] std::wstring GetDestructibleTag()const;
-	[[nodiscard]] std::wstring GetBombTag()const;
+	[[nodiscard]] float GetPowerUpSpawnPercent()const { return m_PowerUpSpawnPercentage; }
+	[[nodiscard]] float GetLifePowerUpPercentage()const { return m_LifePowerUpPercentage; }
+	[[nodiscard]] float GetRadiusPowerUpPercentage()const { return m_RadiusPowerUpPercentage; }
+	[[nodiscard]] float GetBombBeltPowerUpPercentage()const { return m_BombBeltPowerUpPercentage; }
+
+	[[nodiscard]] std::wstring GetPlayerTag()const { return m_PlayerTag; }
+	[[nodiscard]] std::wstring GetDestructibleTag()const { return m_DestructibleTag; }
+	[[nodiscard]] std::wstring GetBombTag()const { return m_BombTag; }
 
 	using SchemePair = std::pair<std::vector<int>, std::wstring>;
 	[[nodiscard]] const std::unordered_map<InputScheme, SchemePair>& GetSchemeMap()const;
@@ -49,7 +54,7 @@ private:
 
 	BombermanGameSettings();
 
-	int m_AmountOfPLayers = 4;
+	int m_AmountOfPLayers = 2;
 	int m_BlockSize = 6;
 	int m_GridSize = 11;
 	int m_WallHeight = 2;
@@ -58,9 +63,17 @@ private:
 	float m_BreakableSpawnPercentage = 0.5f;
 
 	//Volume of the sound effects
-	float m_SoundVolume = 0.9f;
+	float m_SoundVolume = 0.5f;
 	//Volume of the music
-	float m_MusicVolume = 0.2f;
+	float m_MusicVolume = 0.5f;
+
+	//Should add up to 1 and be between[0,1]!
+	float m_LifePowerUpPercentage = 0.2f;
+	float m_RadiusPowerUpPercentage = 0.4f;
+	float m_BombBeltPowerUpPercentage = 0.4f;
+
+	//Should be between [0,1]
+	float m_PowerUpSpawnPercentage = 0.6f;
 
 	std::wstring m_PlayerTag = L"PlayerChar";
 	std::wstring m_BombTag = L"Bomb";

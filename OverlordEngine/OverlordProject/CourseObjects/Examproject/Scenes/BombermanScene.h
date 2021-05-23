@@ -51,6 +51,9 @@ private:
 	/// @brief Initialize the players and UI
 	void CreatePlayers();
 
+	/// @brief Initialize powerUps according to the bomberman game settings
+	void CreatePowerUps();
+	
 	/// @brief Creates the camp site
 	void CreateCampSite();
 

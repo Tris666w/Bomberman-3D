@@ -13,11 +13,14 @@
 #include "SoundManager.h"
 #include "TransformComponent.h"
 #include "EndScreen.h"
+#include "../Prefabs/Explosion.h"
+#include "../PowerUps.h"
 #include "../BombManager.h"
 #include "../BombermanUI.h"
+#include "../PowerUpManager.h"
+#include "../ExplosionManager.h"
 #include "../BombermanGameSettings.h"
 #include "../Prefabs/StumpPrefab.h"
-
 #include "../Prefabs/BonfirePrefab.h"
 #include "../Prefabs/BombermanCharPrefab.h"
 
@@ -34,7 +37,9 @@ BombermanScene::BombermanScene() : GameScene(L"BombermanScene")
 BombermanScene::~BombermanScene()
 {
 	BombManager::GetInstance()->DestroyInstance();
+	PowerUpManager::GetInstance()->DestroyInstance();
 	BombermanGameSettings::GetInstance()->DestroyInstance();
+	ExplosionManager::GetInstance()->DestroyInstance();
 }
 
 void BombermanScene::Initialize()
@@ -56,8 +61,15 @@ void BombermanScene::Initialize()
 	CreateLevel();
 	InitPostProcessFilters();
 	InitSound();
-
+	CreatePowerUps();
 	gameContext.pShadowMapper->SetLight({ -100,150,-50 }, { 0.740129888f, -0.597205281f, 0.309117377f });
+
+	for (int i = 0; i <= 50; ++i)
+	{
+		auto* pExplosion = new Explosion();
+		ExplosionManager::GetInstance()->AddExplosion(pExplosion);
+		AddChild(pExplosion);
+	}
 
 	//Main menu button
 	m_MenuActionID = gameContext.pInput->GetAvailableActionID();
@@ -118,9 +130,9 @@ void BombermanScene::CreateVegetation()
 		auto* pMaterial = new DiffuseMaterial_Shadow();
 		matId = GetGameContext().pMaterialManager->AddMaterial(pMaterial);
 		if (rand() % 2 == 0)
-			pMaterial->SetDiffuseTexture(L"Resources/Textures/RedTree.png");
+			pMaterial->SetDiffuseTexture(L"Resources/Textures/Vegetation/RedTree.png");
 		else
-			pMaterial->SetDiffuseTexture(L"Resources/Textures/GreenTree.png");
+			pMaterial->SetDiffuseTexture(L"Resources/Textures/Vegetation/GreenTree.png");
 
 		pMaterial->SetLightDirection(GetGameContext().pShadowMapper->GetLightDirection());
 		pModel->SetMaterial(matId);
@@ -138,7 +150,7 @@ void BombermanScene::CreateFloor()
 	auto const pObj = new GameObject();
 	auto const pModel = new ModelComponent(L"Resources/Meshes/LevelFloor.ovm");
 	auto const pMat = new DiffuseMaterial_Shadow();
-	pMat->SetDiffuseTexture(L"Resources/Textures/FloorTexture.jpg");
+	pMat->SetDiffuseTexture(L"Resources/Textures/Floor_and_walls/FloorTexture.jpg");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pMat);
 	pObj->AddComponent(pModel);
 	pModel->SetMaterial(matId);
@@ -158,7 +170,7 @@ void BombermanScene::CreateWalls(int const size)
 	auto const halfSize = blockSize / 2.f;
 
 	auto pDiffuseMaterial = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Log.png");
+	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Vegetation/Log.png");
 	auto const matId = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial);
 
 	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(blockSize, halfSize, halfSize));
@@ -241,6 +253,8 @@ void BombermanScene::CreateWalls(int const size)
 			startX = blockSize / 2.f + (size)*blockSize;
 			startZ = blockSize / 2.f + (size)*blockSize;
 			break;
+		default:
+			break;
 		}
 
 		auto* pModelComponent = new ModelComponent(L"./Resources/Meshes/LogCorner.ovm");
@@ -281,20 +295,20 @@ void BombermanScene::CreateAndFillGrid(int const size)
 	auto const halfSize = blockSize / 2.f;
 
 	auto pStumpDiffuse = new DiffuseMaterial_Shadow();
-	pStumpDiffuse->SetDiffuseTexture(L"./Resources/Textures/TreeStump.png");
+	pStumpDiffuse->SetDiffuseTexture(L"./Resources/Textures/Vegetation/TreeStump.png");
 	auto const matIdStump = GetGameContext().pMaterialManager->AddMaterial(pStumpDiffuse);
 
 	auto WallDiffuse = new DiffuseMaterial_Shadow();
-	WallDiffuse->SetDiffuseTexture(L"./Resources/Textures/Wall.png");
+	WallDiffuse->SetDiffuseTexture(L"./Resources/Textures/Floor_and_walls/Wall.png");
 	auto const matIdWall = GetGameContext().pMaterialManager->AddMaterial(WallDiffuse);
 	std::shared_ptr<physx::PxGeometry>geometry(new physx::PxBoxGeometry(static_cast<physx::PxReal>(blockSize), halfSize, halfSize));
 
 	auto pDiffuseMaterial1 = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial1->SetDiffuseTexture(L"./Resources/Textures/Soil1.jpg");
+	pDiffuseMaterial1->SetDiffuseTexture(L"./Resources/Textures/Floor_and_walls/Soil1.jpg");
 	auto const matID1 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial1);
 
 	auto pDiffuseMaterial2 = new DiffuseMaterial_Shadow();
-	pDiffuseMaterial2->SetDiffuseTexture(L"./Resources/Textures/Soil2.jpg");
+	pDiffuseMaterial2->SetDiffuseTexture(L"./Resources/Textures/Floor_and_walls/Soil2.jpg");
 	auto const matID2 = GetGameContext().pMaterialManager->AddMaterial(pDiffuseMaterial2);
 
 	for (int x = 0; x < size; ++x)
@@ -419,7 +433,7 @@ void BombermanScene::CreatePlayers()
 	float const startX = BombermanGameSettings::GetInstance()->GetGridSize() * blockSize - blockSize / 2.f;
 	float const startY = blockSize * 1.5f;
 	auto& schemeMap = BombermanGameSettings::GetInstance()->GetSchemeMap();
-	auto drawPos = DirectX::XMFLOAT2(pWindow.Width / 7.5f, pWindow.Height * 1.f);
+	auto drawPos = DirectX::XMFLOAT2(0, pWindow.Height * 0.2f);
 
 	for (int playerIndex = 0; playerIndex < BombermanGameSettings::GetInstance()->GetAmountOfPlayers(); playerIndex++)
 	{
@@ -443,19 +457,58 @@ void BombermanScene::CreatePlayers()
 		m_CharPrefabs.push_back(pCharacter);
 
 		if (playerIndex / 2)
+		{
+			int modulo = playerIndex % 2;
+			drawPos.y = static_cast<float>(pWindow.Height * 0.8f);
+			drawPos.x = modulo * (pWindow.Width - pWindow.Width / 5.f);
 			pCharacter->GetTransform()->Translate(startX, startY,
-				playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+				modulo * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
 				blockSize + blockSize / 2.f);
+		}
 		else
+		{
+			int modulo = playerIndex % 2;
+			drawPos.y = 0;
+			drawPos.x = modulo * (pWindow.Width - pWindow.Width / 5.f);
 			pCharacter->GetTransform()->Translate(blockSize / 2.f, startY,
-				playerIndex % 2 * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
+				modulo * (BombermanGameSettings::GetInstance()->GetGridSize() - 1) *
 				blockSize + blockSize / 2.f);
+		}
 
-		auto const UI = new BombermanUi(L"Resources/Textures/Bomberman/UIPlayer" + std::to_wstring(playerIndex + 1) + L".png", pCharacter, drawPos);
-		UI->GetTransform()->Scale(0.25f, 0.25f, 0.25f);
+		auto const UI = new BombermanUi(L"Resources/Textures/UI/UIPlayer" + std::to_wstring(playerIndex + 1) + L".png",
+			L"Resources/Textures/UI/BombSprite.png", L"Resources/Textures/UI/heart.png", pCharacter, drawPos);
 		AddChild(UI);
+	}
+}
 
-		drawPos.x += pWindow.Width / 5.f;
+void BombermanScene::CreatePowerUps()
+{
+	//Might spawn more than  PowerUpManager::amount_of_start_power_ups, because of the rounding
+	//Differences are minimal though
+	auto const amountOfSpawning = PowerUpManager::amount_of_start_power_ups;
+	auto const radius = BombermanGameSettings::GetInstance()->GetRadiusPowerUpPercentage();
+	auto const life = BombermanGameSettings::GetInstance()->GetLifePowerUpPercentage();
+	auto const belt = BombermanGameSettings::GetInstance()->GetBombBeltPowerUpPercentage();
+
+	for (long i = 0; i < std::lroundf(amountOfSpawning * radius); ++i)
+	{
+		auto* pPowerUp = new RadiusPowerUp();
+		PowerUpManager::GetInstance()->AddPowerUp(pPowerUp);
+		AddChild(pPowerUp);
+	}
+
+	for (long i = 0; i < std::lroundf(amountOfSpawning * life); ++i)
+	{
+		auto* pPowerUp = new LifePowerUp();
+		PowerUpManager::GetInstance()->AddPowerUp(pPowerUp);
+		AddChild(pPowerUp);
+	}
+
+	for (long i = 0; i < std::lroundf(amountOfSpawning * belt); ++i)
+	{
+		auto* pPowerUp = new BombBeltPowerup();
+		PowerUpManager::GetInstance()->AddPowerUp(pPowerUp);
+		AddChild(pPowerUp);
 	}
 }
 
@@ -473,7 +526,7 @@ void BombermanScene::CreateCampSite()
 		auto* const pModelComp = new ModelComponent(L"Resources/Meshes/LogBench.ovm");
 		auto* const pMat = new DiffuseMaterial_Shadow();
 		auto const matId = GetGameContext().pMaterialManager->AddMaterial(pMat);
-		pMat->SetDiffuseTexture(L"Resources/Textures/LogBench.png");
+		pMat->SetDiffuseTexture(L"Resources/Textures/Vegetation/LogBench.png");
 		pMat->SetLightDirection(GetGameContext().pShadowMapper->GetLightDirection());
 		pModelComp->SetMaterial(matId);
 		pObj->AddComponent(pModelComp);
@@ -513,7 +566,7 @@ void BombermanScene::InitPostProcessFilters()
 	AddPostProcessingEffect(bloomPp);
 
 	auto* pp = new PostColorGrading();
-	pp->SetContribution(0.5f);
+	pp->SetContribution(0.7f);
 	pp->SetLUT(L"Resources/Textures/LUT.png");
 	AddPostProcessingEffect(pp);
 }

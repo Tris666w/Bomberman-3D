@@ -9,7 +9,7 @@ class BombPrefab final : public GameObject
 {
 public:
 	BombPrefab();
-
+	~BombPrefab();
 	/**
 	 * .Activates the bomb
 	 *

@@ -16,8 +16,8 @@
 #include "../../../Materials/Shadow/DiffuseMaterial_Shadow.h"
 
 BombermanCharPrefab::BombermanCharPrefab(const std::wstring& meshFilePath, const std::wstring& materialFilePath,
-                                         const std::vector<int>& controlKeyVect, GamepadIndex playerIndex,
-                                         bool useGamePad)
+										 const std::vector<int>& controlKeyVect, GamepadIndex playerIndex,
+										 bool useGamePad)
 	:m_IsDead(false),
 	m_Health(m_StartHealth),
 	m_pController(nullptr),

@@ -101,6 +101,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CourseObjects\Examproject\PowerUpManager.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanUI.cpp" />
     <ClCompile Include="CourseObjects\Examproject\BombermanGameSettings.cpp" />
@@ -113,6 +114,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="CourseObjects\Examproject\Scenes\MainMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\InGameMenu.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Scenes\EndScreen.cpp" />
+    <ClCompile Include="CourseObjects\Examproject\ExplosionManager.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="CourseObjects\Week 10\PostProcessingScene.cpp" />
@@ -164,7 +166,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ClCompile>
     <ClCompile Include="CourseObjects\Week 3\TutorialScene.cpp" />
     <ClCompile Include="CourseObjects\Week 4\UberScene.cpp" />
-    <ClCompile Include="CourseObjects\Examproject\TestScene.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Prefabs\StumpPrefab.cpp" />
     <ClCompile Include="CourseObjects\Examproject\UiButton.cpp" />
     <ClCompile Include="CourseObjects\Examproject\Text.cpp" />
@@ -175,6 +176,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CourseObjects\Examproject\PowerUpManager.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\BonfirePrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanUI.h" />
     <ClInclude Include="CourseObjects\Examproject\BombermanGameSettings.h" />
@@ -187,6 +189,7 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="CourseObjects\Examproject\Scenes\MainMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\InGameMenu.h" />
     <ClInclude Include="CourseObjects\Examproject\Scenes\EndScreen.h" />
+    <ClInclude Include="CourseObjects\Examproject\ExplosionManager.h" />
     <ClInclude Include="Materials\Post\PostBlur.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />
     <ClInclude Include="CourseObjects\Week 10\PostProcessingScene.h" />
@@ -226,7 +229,6 @@ xcopy "$(OV_LIBS)Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="CourseObjects\Week 3\TutorialScene.h" />
     <ClInclude Include="CourseObjects\Week 4\UberScene.h" />
-    <ClInclude Include="CourseObjects\Examproject\TestScene.h" />
     <ClInclude Include="CourseObjects\Examproject\Prefabs\StumpPrefab.h" />
     <ClInclude Include="CourseObjects\Examproject\UiButton.h" />
     <ClInclude Include="CourseObjects\Examproject\Text.h" />

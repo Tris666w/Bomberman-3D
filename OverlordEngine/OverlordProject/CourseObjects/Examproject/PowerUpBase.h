@@ -6,6 +6,8 @@ class ParticleEmitterComponent;
 class PowerUpBase : public GameObject
 {
 public:
+	PowerUpBase() = default;
+	
 	virtual void ExecuteEffect(BombermanCharPrefab* pChar) = 0;
 	void SetParticleEmitter (ParticleEmitterComponent* pEmitter);
 	void SetSound(FMOD::Sound* sound);

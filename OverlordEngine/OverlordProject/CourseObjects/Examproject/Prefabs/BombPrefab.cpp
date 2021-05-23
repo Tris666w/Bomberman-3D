@@ -17,10 +17,16 @@
 #include "BombermanCharPrefab.h"
 #include "SoundManager.h"
 #include "StumpPrefab.h"
+#include "../ExplosionManager.h"
 
 BombPrefab::BombPrefab() :GameObject(),
 m_ExplosionReach()
 {
+}
+
+BombPrefab::~BombPrefab()
+{
+
 }
 
 void BombPrefab::Activate(const DirectX::XMFLOAT3& spawnPos, int reach)
@@ -38,7 +44,7 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 
 	auto const physx = PhysxManager::GetInstance()->GetPhysics();
 	auto pDiffuseMaterial = new DiffuseMaterial();
-	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Bomb.jpg");
+	pDiffuseMaterial->SetDiffuseTexture(L"./Resources/Textures/Bomberman/Bomb.jpg");
 	auto const matID = gameContext.pMaterialManager->AddMaterial(pDiffuseMaterial);
 
 	m_pModelComponent = new ModelComponent(L"./Resources/Meshes/Bomb.ovm");
@@ -60,7 +66,7 @@ void BombPrefab::Initialize(const::GameContext& gameContext)
 	m_pRigidBody->GetTransform()->Translate(0, 10.f, 0.f);
 
 	//Smoke emitter
-	m_pSmokeEmitter = new ParticleEmitterComponent(L"Resources/Textures/smoke_04.png");
+	m_pSmokeEmitter = new ParticleEmitterComponent(L"Resources/Textures/Particles/smoke_04.png");
 	m_pSmokeEmitter->SetShape(EmitterShape::Cone);
 	m_pSmokeEmitter->SetStartingColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.f));
 	m_pSmokeEmitter->SetVelocity(6.f);
@@ -146,7 +152,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 	auto const pos = ToPxVec3(m_ExplodePos) + distance / 2.f * dir;
 
 
-	for (physx::PxReal i = 1; i < static_cast<physx::PxReal>(reach) + 1; ++i)  // NOLINT(cert-flp30-c)
+	for (physx::PxReal i = 1; i < static_cast<physx::PxReal>(reach) + 1; ++i)
 	{
 		physx::PxHitBuffer<physx::PxRaycastHit> hit{};
 		distance = i * blockSize;
@@ -156,7 +162,7 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 		}
 		else
 		{
-			auto const pOther = static_cast<BaseComponent*>(hit.getAnyHit(0).actor->userData)->GetGameObject();
+			auto const pOther = reinterpret_cast<BaseComponent*>(hit.getAnyHit(0).shape->getActor()->userData)->GetGameObject();
 			if (pOther == nullptr)
 			{
 				Logger::LogError(L"BombPrefab::CreateExplosion, hit RigidBody has no user data!");
@@ -181,10 +187,20 @@ void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 direction, int reach)
 
 void BombPrefab::CreateExplosion(DirectX::XMFLOAT3 spawnPos)
 {
-	//Todo Make this more optimized (Object pool)
-	auto* pObj = new Explosion();
-	pObj->GetTransform()->Translate(spawnPos);
-	AddChild(pObj);
+	auto* pObj = ExplosionManager::GetInstance()->GetExplosion();
+	if (pObj)
+	{
+		pObj->GetTransform()->Translate(spawnPos);
+		pObj->SetIsEnabled(true);
+	}
+	else
+	{
+		pObj = new Explosion();
+		AddChild(pObj);
+		pObj->GetTransform()->Translate(spawnPos);
+		pObj->SetIsEnabled(true);
+	}
+
 }
 
 void BombPrefab::CreateExplosion(const physx::PxVec3& spawnPos)
